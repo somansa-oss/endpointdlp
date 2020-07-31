@@ -163,7 +163,6 @@ bool CPWDiskStub::getDiskVolumePath(std::string& volumePath) {
 }
 
 bool CPWDiskStub::quarantineFile(std::string filePath, std::string& qtFilePath) {
-	// check 3
 	bool bSuc = false;
 	int  nOutQtFilePath=0;
 	char czFilePath[MAX_PATH];
@@ -189,7 +188,6 @@ bool CPWDiskStub::quarantineFile(std::string filePath, std::string& qtFilePath) 
 }
 
 bool CPWDiskStub::releaseQuarantinedFile(std::string qtFilePath, std::string dstPath, std::string& relFilePath) {
-	// check 2
 	bool bSuc = false;
 	int  nRetFilePath = 0;
 	char czQtFilePath[MAX_PATH];
@@ -218,7 +216,6 @@ bool CPWDiskStub::releaseQuarantinedFile(std::string qtFilePath, std::string dst
 }
 
 bool CPWDiskStub::deleteQuarantinedFile(std::string qtFilePath) {
-	// check 1
 	bool bSuc = false;
 	int nErrCode = 0;
 	char czQtFilePath[MAX_PATH];
