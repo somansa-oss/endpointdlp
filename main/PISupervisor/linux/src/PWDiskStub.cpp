@@ -163,7 +163,6 @@ bool CPWDiskStub::getDiskVolumePath(std::string& volumePath) {
 }
 
 bool CPWDiskStub::quarantineFile(std::string filePath, std::string& qtFilePath) {
-
 	bool bSuc = false;
 	int  nOutQtFilePath=0;
 	char czFilePath[MAX_PATH];
