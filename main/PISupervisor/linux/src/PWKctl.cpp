@@ -36,6 +36,7 @@ int CPWKctl::KernelControl_Init()
         return -1;
     }
     
+    // Event Queue Listener Thread Create.
     nRet = pthread_attr_init( &Attr );
     if(nRet != 0)
     {
@@ -60,6 +61,8 @@ int CPWKctl::KernelControl_Init()
     
     pthread_attr_destroy( &Attr );
     DEBUG_LOG("[DLP][%s] Event Receiver thread Created. \n", __FUNCTION__ );
+    // 이 시점에
+    // 위에서 생성한 이벤트 큐 listener 쓰레드는 kext에 자신을 이벤트 리시버로 등록한 상태에서 kext로부터의 이벤트나 명령 수신을 대기 중임.
     return 0;
 }
 
@@ -101,6 +104,14 @@ int CPWKctl::ConnectKernelControl()
     return nSock;
 }
 
+//
+// 소켓 연결을 해제하는 함수.
+//
+// Parameter
+//      sock : 소켓 descriptor.
+// Return value
+//      성공이면 0을 리턴. 실패이면 -1을 리턴하며, 상세 오류는 errno 참조.
+//
 int CPWKctl::CloseKernelControl(int nSock)
 {
     if(close(nSock) < 0)
@@ -110,6 +121,17 @@ int CPWKctl::CloseKernelControl(int nSock)
     }
     return 0;
 }
+
+
+//
+// Kernel control의 ID를 구하여 리턴하는 함수.
+// "com.somansa.MyKext"(가칭) 이름으로 등록한 kernel control의 ID를 구하여 리턴함.
+// 이 control은 kext 초기화 과정에서 등록해 놓은 상태임.
+//
+// Return value
+//      성공이면 kernel control ID를 리턴.
+//      실패하면 0을 리턴함. 이 경우 상세 오류는 errno 참조.
+//
 
 u_int32_t
 CPWKctl::GetKernelControlId()
@@ -140,6 +162,14 @@ CPWKctl::GetKernelControlId()
     return ctl_info.ctl_id;
 }
 
+//
+// Kernel control 채널을 해제하는 함수.
+// Kernel control 자체를 없애는 것이 아니고, 리시버 등록을 해제한 것임.
+// 이로써 등록된 에이전트 리시버가 없으므로 kext는 이벤트 발생해도 패킷을 전송하지 않게 됨.
+//
+// Return value
+//      성공이면 0을 리턴함. 실패하면 errno을 리턴함.
+//
 int CPWKctl::QuitKernelControl()
 {
     int   nSock = 0;
@@ -193,6 +223,7 @@ int CPWKctl::SendCommand_PWKctl( PMSG_COMMAND pCmdMsg )
         return errno;
     }
     CloseKernelControl( nSock );
+    // printf("[DLP] SendCommand_PWKctl Success. \n" );
     return 0;
 }
 
@@ -235,6 +266,7 @@ int CPWKctl::SendRecvCommand_PWKctl( PMSG_COMMAND pCmdMsg )
 
 void* CPWKctl::ListenEventQueueThread_PWKctl(void* pParam)
 {
+    // Kext에 소켓으로 연결함.
     ssize_t           nRecv=0;
     size_t            nDataSize=0, nTotalSize=0;
     int               nListenSock=0, nReturn=0;
@@ -254,6 +286,7 @@ void* CPWKctl::ListenEventQueueThread_PWKctl(void* pParam)
         return NULL;
     }
     
+    // 이벤트 리시버로 등록하도록 kext에 PWEventQueue_BEGIN 명령 전송함.
     nDataSize = sizeof(UKP_AGENT) + (MAXPATHLEN-1);
     nTotalSize = sizeof(MSG_COMMAND) + nDataSize;
     pCmdInitNew = (PMSG_COMMAND)malloc( nDataSize );
@@ -271,6 +304,7 @@ void* CPWKctl::ListenEventQueueThread_PWKctl(void* pParam)
     {
         pAgentInfo->nPID = getpid();
         proc_pidpath( pAgentInfo->nPID, pAgentInfo->pBuf, MAXPATHLEN );
+        // printf("[DLP] pCmdInitNew->pBuf=%s \n", pAgentInfo->pBuf );
     }
     
     if(send( nListenSock, pCmdInitNew, nTotalSize, 0 ) < 0)
@@ -281,16 +315,18 @@ void* CPWKctl::ListenEventQueueThread_PWKctl(void* pParam)
         return NULL;
     }
     
+    // 이벤트 큐 리시버로서의 동작을 시작함.
     nRecv = 0;
     nPacketSize = 0;
     while( (nRecv = recv( nListenSock, &nPacketSize, sizeof(nPacketSize), MSG_PEEK)) )
     {
         if(nRecv < 0)
-        {
+        {   // 오류 발생. 로그 남긴 후 다시 대기 상태로..
             DEBUG_LOG("recv(%ldbyte) 01 failed(%d)\n", sizeof(nPacketSize), errno );
             continue;
         }
         
+        // 이벤트 큐에서 패킷 길이만큼 이벤트 메시지를 읽어냄.
         pPacket = (char*)malloc( nPacketSize );
         if(pPacket == NULL)
         {
@@ -305,13 +341,16 @@ void* CPWKctl::ListenEventQueueThread_PWKctl(void* pParam)
             continue;
         }
         
+        
+        // PWEventQueue_DESTROY 명령 수신 시 루프 종료하고 리턴함.
         pCmdMsg = (PMSG_COMMAND)pPacket;
         if(pCmdMsg->Command == PWEventQueue_DESTROY)
         {
             free( pPacket);
             break;
         }
-		
+        
+        // 이벤트를 처리할 쓰레드를 생성해서 이벤트 패킷을 넘김. 이벤트 패킷을 넘겨 받은 쓰레드는 이벤트를 처리한 후 종료함.
         nReturn = pthread_attr_init( &Attr );
         if(nReturn != 0)
         {
@@ -340,12 +379,29 @@ void* CPWKctl::ListenEventQueueThread_PWKctl(void* pParam)
         
         pthread_attr_destroy( &Attr );
         pPacket = NULL;
+        // 다시 이벤트 수신 대기 상태로 들어감.
     }
     
     g_PWKctl.CloseKernelControl( nListenSock );
     if(pCmdInitNew) free( pCmdInitNew );
     return NULL;
 }
+
+
+
+
+
+
+//
+// Kernel control API를 kext와의 통신 수단으로 사용하는 경우에,
+// 단위 이벤트 처리를 담당하는 쓰레드의 실행 함수.
+// 파라미터로 전달받은 이벤트 패킷에 대한 처리를 마치면 쓰레드는 종료함.
+// Kext가 100개의 이벤트를 전송하면 100개의 쓰레드를 생성하여 각각의 이벤트를 처리하는 개념.
+// CPU 개수 두 배 만큼의 쓰레드들이 번갈아가며 이벤트를 처리하는 system control 모델과의 차이점임.
+//
+// Parameter
+//		param : 이벤트 패킷 포인터. 즉, struct event_proto 구조체의 포인터.
+//
 
 
 void*
@@ -389,6 +445,11 @@ CPWKctl::JobEventThread_PWKctl(void* pPacket)
     if(pPacket) free( pPacket );
     return NULL;
 }
+
+
+/*******************************************************************************************************************/
+// EventCallback Function
+/*******************************************************************************************************************/
 
 void CPWKctl::GetLogTime(char* pczCurTime, int nTimeBufSize)
 {
@@ -483,19 +544,21 @@ CPWKctl::QtCopyFileUser(PMSG_COMMAND pCmdMsg)
     
     nQtFile = open( pNotify->czFilePathDst, O_RDWR | O_TRUNC | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO );
     if(nQtFile < 0)
-    {
+    {   // 임시 파일 만들기 실패. '권한 없음'을 리턴함.
         printf("[DLP] open() failed(%d)\n", errno);
         return FALSE;
     }
     
+    // 3. 파일 읽기/쓰기에 사용할 버퍼 할당하기
     pczBuf = (char*)malloc( nFileSize );
     if(pczBuf == NULL)
-    {
+    {   // 버퍼를 할당하는데 실패함. '권한 없음'을 리턴함.
         close( nQtFile );
-        unlink( pNotify->czFilePathDst );
+        unlink( pNotify->czFilePathDst ); // 임시 파일 지움.
         return FALSE;
     }
     
+    // 4. 원본 파일 내용 읽어오기
     nFile = open( pNotify->czFilePath, O_RDONLY );
     if(nFile < 0)
     {
@@ -515,8 +578,9 @@ CPWKctl::QtCopyFileUser(PMSG_COMMAND pCmdMsg)
     }
     close( nFile );
     
+    // 5. 원본 파일 내용을 임시 파일에 쓰기
     if(write( nQtFile, pczBuf, nFileSize) < 0)
-    {
+    {   // 임시 파일에 쓰기 실패. '권한 없음'을 리턴함.
         printf("[DLP] write() failed(%d)\n", errno);
         free( pczBuf );
         close( nQtFile );
@@ -537,6 +601,7 @@ CPWKctl::QtCopyFileUser(PMSG_COMMAND pCmdMsg)
         }
         else
         {
+            // Watermark Test
             nLength = JobCopyFile( PRT_FILE, pNotify->czFilePath );
         }
     }
@@ -558,11 +623,12 @@ int CPWKctl::JobCopyFile( const char* pczSrc, const char* pczDst )
     
     nDstFile = open( pczDst, O_RDWR | O_TRUNC | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO );
     if(nDstFile < 0)
-    {
+    {   // 임시 파일 만들기 실패. '권한 없음'을 리턴함.
         printf("[DLP] open() failed(%d)\n", errno);
         return 0;
     }
     
+    // 원본 파일 내용 읽어오기
     nSrcFile = open( pczSrc, O_RDONLY );
     if(nSrcFile < 0)
     {

@@ -23,8 +23,8 @@ public:
     int KernelControl_Init();
     int KernelControl_Uninit();
     
-    int ConnectKernelControl();
-    int CloseKernelControl(int nSock);
+    int ConnectKernelControl();       // 소켓 연결을 설정하는 함수
+    int CloseKernelControl(int nSock);// 소켓 연결을 해제하는 함수.
     
     int SendCommand_PWKctl( PMSG_COMMAND pCmdMsg );
     int SendRecvCommand_PWKctl( PMSG_COMMAND pCmdMsg );

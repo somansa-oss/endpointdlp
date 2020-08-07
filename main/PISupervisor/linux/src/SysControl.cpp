@@ -38,12 +38,16 @@ int CSysControl::SystemControl_Init()
     
     printf("[DLP] logical cpus: %d \n", nCpu );
     
+    // Kext 에서 등록한 system control 의 이름으로 ID를 구함.
+    // 이후의 모든 sysctl() 호출은 이 ID 르 키로 호출함
     
     nLength = 2;
     sysctlnametomib( sysctl_name_somansa, nMib, &nLength );
     
+    // (CPU 개수 * 2)개의 쓰레드 생성함.
     for(int i=0; i<nCpu*2; i++)
     {
+        // CreateThread
         nRet = pthread_attr_init( &Attr );
         if(nRet != 0)
         {
@@ -97,6 +101,13 @@ int CSysControl::SystemControl_Uninit()
     return nRet;
 }
 
+
+// System control 채널을 해제하는 함수.
+// Kernel control 자체를 없애는 것이 아니고, 쓰레드 풀을 해제함.
+// 이벤트 수신 대기 중인 쓰레드들이 없으므로 kext는 이벤트 발생해도 패킷을 전송하지 않게 됨.
+//
+// Return value
+//      성공이면 0을 리턴함. 실패하면 errno을 리턴함.
 int CSysControl::QuitSystemControl()
 {
     printf("waiting for threads exit\n");
@@ -120,6 +131,18 @@ int CSysControl::QuitSystemControl()
     return 0;
 }
 
+
+// System control API를 kext와의 통신 수단으로 사용할 때
+// kext에 진입하여 쓰레드 풀에 참여할 쓰레들들의 실행 함수임.
+// CPU 개수의 두 배에 해당하는 쓰레드들이 생성되어 이 함수를 통해 kext의 쓰레드 풀에 대기하게 됨.
+// 이 때 쓰레드 풀에 참여한다는 명령이 BEGIN_WAIT_THREAD임.
+// 쓰레드 풀에서 대기하다가 이벤트를 수신한 쓰레드는 유저 모드로 돌아와서 이벤트 처리를 진행함.
+// 이벤트 처리를 마치면 다시 쓰레드 풀로 들어가 대기 상태가 됨.
+// DESTROY_THREAD_POOL 이벤트를 수신하여 돌아온 경우에만 루프를 종료하고 리턴함.
+//
+// Parameter
+//		param : 사용하지 않음.
+//
 void* CSysControl::HandlerEventThread_SysCtl(void* pParam)
 {
 #ifdef _FIXME_
@@ -134,6 +157,8 @@ void* CSysControl::HandlerEventThread_SysCtl(void* pParam)
     
     for( int64_t wait_count = 0; ; wait_count++)
     {
+        // BEGIN_WAIT_THREAD 명령을 sysctl()을 통해 전송하면
+        // sysctl() 함수는 이벤트 수신 전에는 리턴하지 않고 kext의 쓰레드 풀에 대기함.
         int16_t proto_size = sizeof(struct event_proto) + MAXPATHLEN - 1 + MAXPATHLEN;
         struct event_proto* proto = (struct event_proto*)malloc(proto_size);
         proto->size = proto_size;
@@ -153,11 +178,16 @@ void* CSysControl::HandlerEventThread_SysCtl(void* pParam)
             break;
         }
         
+        // 이 시점은 kext의 쓰레드 풀에 대기 중이던 이 쓰레드가 이벤트 수신하여 리턴한 상태임.
+        // 이제 이벤트 처리 과정을 진행하게 됨.
+        
         int command = proto->command;
         int event_owner_pid = proto->pid;
         
         if (command == DESTROY_THREAD_POOL)
         {
+            // 쓰레드 풀 종료 명령을 받음.
+            // 이 쓰레드는 일을 끝마치고 드디어 리턴함.
             free(proto);
             break;
         }
@@ -212,9 +242,11 @@ void* CSysControl::HandlerEventThread_SysCtl(void* pParam)
             size_t filesize = (size_t)proto->param;
             boolean_t accessible = FALSE;
             
+            // 1. 파일 경로 복사
             char path[MAXPATHLEN];
             strcpy(path, proto->buf);
             
+            // 2. 임시 파일 만들기
             char path_tempfile[MAXPATHLEN];
             strcpy(path_tempfile, path);
             char* p = path_tempfile + strlen(path_tempfile);
@@ -227,67 +259,86 @@ void* CSysControl::HandlerEventThread_SysCtl(void* pParam)
             int tempfile = open(path_tempfile, O_RDWR | O_TRUNC | O_CREAT, S_IRWXU);
             if (tempfile < 0)
             {
+                // 임시 파일 만들기 실패. '권한 없음'을 리턴함.
                 printf("open() failed(%d)\n", errno);
             }
             else
             {
+                // 3. 파일 읽기/쓰기에 사용할 버퍼 할당하기
                 char* buf = (char*)malloc(filesize);
                 if (buf == NULL)
                 {
+                    // 버퍼를 할당하는데 실패함. '권한 없음'을 리턴함.
                     close(tempfile);
-                    unlink(path_tempfile);
+                    unlink(path_tempfile); // 임시 파일 지움.
                 }
                 else
                 {
+                    // 4. 원본 파일 내용 읽어오기
                     proto->size = sizeof(struct event_proto);
                     proto->command = GET_FILEDATA;
                     proto->param = (void*)buf;
-                    proto->param2 = (void*)0;
+                    proto->param2 = (void*)0; // offset
                     proto->param3 = (void*)filesize;
                     
                     if (sysctl( nMib, 2, NULL, NULL, &newv_cmd, sizeof(newv_cmd)) < 0)
                     {
+                        // 원본 파일 내용 읽기 실패. '권한 없음'을 리턴함.
                         printf("sysctl(GET_FILEDATA) failed(%d)\n", errno);
                         free(buf);
                         close(tempfile);
-                        unlink(path_tempfile);
+                        unlink(path_tempfile); // 임시 파일을 지움.
                     }
                     else
                     {
+                        // 5. 원본 파일 내용을 임시 파일에 쓰기
                         if (write(tempfile, buf, filesize) < 0)
                         {
+                            // 임시 파일에 쓰기 실패. '권한 없음'을 리턴함.
                             printf("write() failed(%d)\n", errno);
                             free(buf);
                             close(tempfile);
-                            unlink(path_tempfile);
+                            unlink(path_tempfile); // 임시 파일을 지움.
                         }
                         else
                         {
                             free(buf);
                             close(tempfile);
                             
+                            // 6. 콜백 함수 호출
                             if (g_AppCallback == NULL)
                             {
-                                unlink(path_tempfile);
+                                // 콜백 함수 없음. '권한 없음'을 리턴함.
+                                // 콜백 함수를 등록한 후 파일 모니터링을 시작하기 때문에 발생하지 않을 오류임.
+                                unlink(path_tempfile); // 임시 파일을 지움.
                             }
                             else
                             {
+                                // 콜백 함수 호출
+                                // 임시 파일은 콜백 함수에서 따로 사용할 수도 있으므로
+                                // 임시 파일을 지우는 작업은 콜백 함수에 일임함.
                                 EVT_PARAM  EvtInfo;
                                 memset( &EvtInfo, 0, sizeof(EvtInfo) );
                                 EvtInfo.Command = command;
                                 EvtInfo.ProcessId = event_owner_pid;
                                 EvtInfo.pFilePath = path;
                                 EvtInfo.pQtFilePath = path_tempfile;
-                               
+                                
+                               //  int err = g_AppCallback(command, event_owner_pid, path, path_tempfile, &accessible);
+                                
                                 int err = g_AppCallback( &EvtInfo );
                                 accessible = EvtInfo.bAccess;
                                 if(accessible)
                                 {
+                                    // 콜백 함수가 '권한 있음'으로 판단했음.
                                 }
                                 else
                                 {
+                                    // 콜백 함수가 '권한 없음'으로 판단했거나, 오류 발생함.
                                     if (err != 0)
                                     {
+                                        // 콜백 함수에서 권한 판단하는 과정에서 API 오류 발생함.
+                                        // 이 경우도 '권한 없음'을 리턴함.
                                         printf("callback() failed(%d), file not accessible\n", err);
                                     }
                                 }
@@ -297,14 +348,20 @@ void* CSysControl::HandlerEventThread_SysCtl(void* pParam)
                 }
             }
             
+            // 파일 검색 과정이 끝났음을 kext에 알림.
+            // Kext는 최대 10초 동안 에이전트의 응답을 기다림.
             proto->size = sizeof(struct event_proto);
             proto->command = REPORT_DIRTY;
             if (accessible)
             {
+                // '권한 있음'을 리턴함.
+                // 파일이 잘 저장됨.
                 proto->param = (void*)1;
             }
             else
             {
+                // '권한 없음'을 리턴함.
+                // Kext가 파일 내용을 다 지우게 됨.
                 proto->param = NULL;
             }
             
@@ -315,6 +372,10 @@ void* CSysControl::HandlerEventThread_SysCtl(void* pParam)
         }
         else if (command == NOTIFY_NO_READ || command == NOTIFY_NO_WRITE)
         {
+            // 1,2번 정책 적용 중일 때, kauth listener로부터 받는 명령임.
+            // 응용프로그램에서 removable 디바이스의 파일을 읽거나 쓰려고 할 때
+            // kauth listener가 접근을 차단한 후 결과를 에이전트에 통지하는 중.
+            // Kext에 처리 결과를 리턴하지 않는 단방향 이벤트임.
             if (g_AppCallback != NULL)
             {
                 EVT_PARAM EvtInfo;
@@ -323,10 +384,12 @@ void* CSysControl::HandlerEventThread_SysCtl(void* pParam)
                 EvtInfo.ProcessId = event_owner_pid;
                 EvtInfo.pFilePath = proto->buf;
                 
+                // g_AppCallback(command, event_owner_pid, proto->buf, NULL, NULL);
                 g_AppCallback( &EvtInfo );
             }
         }
         free(proto);
+        // 이벤트 처리 과정을 마치고 다시 쓰레드 풀에 대기하러 가는 중..
     }
 #endif
 
@@ -363,3 +426,27 @@ int CSysControl::SendCommand_SysCtl( PCOMMAND_MESSAGE pCmdMsg )
     printf("SendCommand_SysCtl Success. \n" );
     return 0;
 }
+
+/*
+int CSysControl::SendCommand_SysCtl_EP(struct event_proto* pProto)
+{
+    int64_t  ullCommand = 0;
+    
+    if(!pProto)
+    {
+        printf( "SetSendCommand_SysCtl() Invalid Parameter \n" );
+        return -1;
+    }
+    
+    ullCommand = (int64_t)pProto;
+    
+    if(sysctlbyname( sysctl_name_somansa, NULL, NULL, &ullCommand, sizeof(ullCommand) ) < 0)
+    {
+        printf("SetSendCommand_SysCtl sysctl failed(%d) \n", errno );
+        return errno;
+    }
+    
+    printf("SendCommand_SysCtl Success. \n" );
+    return 0;
+}
+*/

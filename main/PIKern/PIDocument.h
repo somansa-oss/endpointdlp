@@ -12,6 +12,13 @@ class CPIDocument : public CPIObject {
 		bool stop;
 
 	public:
+//		CPIConfigMan configMan;
+//		CPIPolicyMan policyMan;
+//		CPIDeviceMan deviceMan;
+//		CPIAgentStub piagentStub;
+//		CPISQLiteStub pisqliteStub;
+//		CPITickCount pitickCount;
+//		CPIWallMan wallMan;
 
 	public:
 		virtual bool initialize(void);
@@ -26,5 +33,12 @@ class CPIDocument : public CPIObject {
 		static CPIDocument& getInstance(void);
 };
 #define Doc 		CPIDocument::getInstance()
+//#define ConfigMan 	CPIDocument::getInstance().configMan
+//#define PolicyMan 	CPIDocument::getInstance().policyMan
+//#define DeviceMan 	CPIDocument::getInstance().deviceMan
+//#define PIAgentStub CPIDocument::getInstance().piagentStub
+//#define PISQLiteStub CPIDocument::getInstance().pisqliteStub
+//#define PITickCount CPIDocument::getInstance().pitickCount
+//#define WallMan		CPIDocument::getInstance().wallMan
 
 #endif // #ifndef _PIDOCUMENT_H

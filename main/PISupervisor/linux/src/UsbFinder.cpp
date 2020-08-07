@@ -12,6 +12,7 @@
 #include <sys/param.h>
 
 #include <iostream>
+//#include "LogWriter.h"
 
 using namespace std;
 
@@ -39,6 +40,7 @@ void USBInfo::USBInfoInit()
     memset( &m_Iface, 0, sizeof(m_Iface) );
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
 
 UsbFinder::UsbFinder()
 {
@@ -119,6 +121,7 @@ UsbFinder::CFURLRefToCString(CFURLRef pCFUrl)
     memset( czFilePath, 0, sizeof(czFilePath) );
     CFStringGetCString( CFURLGetString( pCFUrl ), czFilePath, MAXPATHLEN, kCFStringEncodingUTF8 );
     
+    // End '/' eliminate
     nLength = (int)strlen( czFilePath );
     pczEnd = strrchr( czFilePath, '/' );
     if(pczEnd)
@@ -286,6 +289,7 @@ void UsbFinder::UsbDevice_Callback(void* pRefCon, io_iterator_t Iter)
         for(nIndex=0; nIndex<5; nIndex++)
         {
             memset( czBsdNameBuf, 0, sizeof(czBsdNameBuf) );
+            // sprintf( czBsdNameBuf, "/dev/%ss1", CFStringRefToCString(pBsdName) );
             if(!nIndex)
             {
                 sprintf( czBsdNameBuf, "/dev/%s", CFStringRefToCString(pBsdName) );
@@ -553,15 +557,15 @@ bool UsbFinder::IsUsbDeviceUsbMobile( USBInfo& usbInfo )
         if(!pIface) continue;
         
         if(0 == strncasecmp( pIface->m_czIfaceName, "MTP", strlen("MTP") ))
-        {
+        {   // MTP
             return true;
         }
         else if(0x06 == pIface->m_nClass && 0x01 == pIface->m_nSubClass && 0x01 == pIface->m_nProtocol)
-        {
+        {  // PTP
             return true;
         }
         else if(0xFF == pIface->m_nClass && 0x42 == pIface->m_nSubClass && 0x01 == pIface->m_nProtocol)
-        {
+        {  // ADB
             return true;
         }
     }
@@ -618,6 +622,7 @@ bool UsbFinder::UsbDeviceSetVolumePath( char* pczBsdNamePos, io_service_t UsbDev
 		CFStringRef value = CFStringCreateWithCString(kCFAllocatorDefault, pczVolPath, kCFStringEncodingUTF8);
 		CFStringRef temp = CFURLCreateStringByReplacingPercentEscapes(kCFAllocatorDefault, value, CFSTR(""));
 		pczVolPath = CFStringRefToCString(temp);
+		//DEBUG_LOG("test - volume:%s", pczVolPath);
 	
 		if(pczVolPath && strlen(pczVolPath))
         {
@@ -637,7 +642,9 @@ bool UsbFinder::UsbDeviceSetVolumePath( char* pczBsdNamePos, io_service_t UsbDev
     {
 		CFStringRef temp = CFURLCreateStringByReplacingPercentEscapes(kCFAllocatorDefault, pCFString, CFSTR(""));
 		pczVolume = CFStringRefToCString(temp);
-		
+		//DEBUG_LOG("test - volume:%s", pczVolume);
+
+        //pczVolume = CFStringRefToCString( pCFString );
         if(pczVolume && strlen(pczVolume))
         {
             memset( usbInfo.m_czVolumePath, 0, sizeof(usbInfo.m_czVolumePath) );

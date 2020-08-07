@@ -1,10 +1,10 @@
-﻿
+
 #ifndef __KERNELCOMMAND_H__
 #define __KERNELCOMMAND_H__
 
 
 ///*
-#define SET_POLICY              
+#define SET_POLICY              6       // 정책(1,2,3)을 설정하라는 명령 (agent -> kext)
 #define SET_DEBUG               7       // 디버그 메시지를 출력할지 말지를 설정하는 명령 (agent -> kext)
 #define GET_FILEDATA            8       // Vnode를 키로 사용하여 파일 내용을 읽을 때 사용 (agent -> kext)
 #define NOTIFY_DIRTY            9       // 정책 3번 사용 시, 내용 기반 검색을 요청하는 명령 (kext -> agent)

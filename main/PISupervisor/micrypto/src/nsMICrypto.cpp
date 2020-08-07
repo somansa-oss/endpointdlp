@@ -17,7 +17,7 @@ namespace nsMICrypto
 
 	void CRC4::Init()
 	{
-		unsigned char szKey[] = {'o', 'p', 'e', 'n', 's', 'o', 'u', ' ', 'r', 'c', 'e', 'A', '!', '9'};
+		unsigned char szKey[] = {'S', 'O', 'M', 'A', 'N', 'S', 'A', ' ', 'C', 'S', ' ', 'K', 'E', 'Y'};
 		prepare_key(szKey, sizeof(szKey), &key);
 	}
 

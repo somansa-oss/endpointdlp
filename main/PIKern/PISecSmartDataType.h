@@ -9,6 +9,8 @@
 
 #define lck_mtx_lock        pthread_mutex_lock
 #define lck_mtx_unlock      pthread_mutex_unlock
+#define lck_rw_lock_exclusive        pthread_mutex_lock
+#define lck_rw_unlock_exclusive      pthread_mutex_unlock
 
 
 #define kern_ctl_ref        int
@@ -56,55 +58,69 @@
 
 #endif
 
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #include <stdlib.h>
 #include <mach/mach_types.h>
+//#include <libkern/libkern.h>
 #include <libkern/OSTypes.h>
+//#include <sys/systm.h>
+//#include <sys/sysctl.h>
+//#include <sys/types.h>
+//#include <sys/kauth.h>
+//#include <sys/kern_control.h>
+//#include <sys/kpi_mbuf.h>
 #include <pthread.h>
 
+
+//#include <KernelProtocol.h>
+
+
 #include "DataType.h"
-#include "event_proto.h"
+#include "event_proto_esf.h"
 #include "command.h"
-    
+#include "KernelCommand.h"
+
 //////////////////////////////////////////////////////////////////////////////////
 //            Need to convert
 //////////////////////////////////////////////////////////////////////////////////
-typedef enum _STORAGE_BUS_TYPE
-{
-    BusTypeUnknown            = 0x00,
-    BusTypeScsi               = 0x1,
-    BusTypeAtapi              = 0x2,
-    BusTypeAta                = 0x3,
-    BusType1394               = 0x4,
-    BusTypeSsa                = 0x5,
-    BusTypeFibre              = 0x6,
-    BusTypeUsb                = 0x7,
-    BusTypeRAID               = 0x8,
-    BusTypeiScsi              = 0x9,
-    BusTypeSas                = 0xA,
-    BusTypeSata               = 0xB,
-    BusTypeSd                 = 0xC,
-    BusTypeMmc                = 0xD,
-    BusTypeVirtual            = 0xE,
-    BusTypeFileBackedVirtual  = 0xF,
-    BusTypeMax                = 0x10,
-    
-    BusTypeSFolder            = 0x21,
-    BusTypeThunderBolt        = 0x31,
-    
-    BusTypeMaxReserved        = 0x7F
-} STORAGE_BUS_TYPE, *PSTORAGE_BUS_TYPE;
-
-typedef enum _ACTION_TYPE
-{
-    ActionTypePrint           = 0x80,
-    ActionTypeUpload,
-} ACTION_TYPE, *PACTION_TYPE;
+//#ifndef _STORAGE_BUS_TYPE
+//
+//typedef enum _STORAGE_BUS_TYPE
+//{
+//    BusTypeUnknown            = 0x00,
+//    BusTypeScsi               = 0x1,
+//    BusTypeAtapi              = 0x2,
+//    BusTypeAta                = 0x3,
+//    BusType1394               = 0x4,
+//    BusTypeSsa                = 0x5,
+//    BusTypeFibre              = 0x6,
+//    BusTypeUsb                = 0x7,
+//    BusTypeRAID               = 0x8,
+//    BusTypeiScsi              = 0x9,
+//    BusTypeSas                = 0xA,
+//    BusTypeSata               = 0xB,
+//    BusTypeSd                 = 0xC,
+//    BusTypeMmc                = 0xD,
+//    BusTypeVirtual            = 0xE,
+//    BusTypeFileBackedVirtual  = 0xF,
+//    BusTypeMax                = 0x10,
+//
+//    BusTypeSFolder            = 0x21,
+//    BusTypeThunderBolt        = 0x31,
+//
+//    BusTypeMaxReserved        = 0x7F
+//} STORAGE_BUS_TYPE, *PSTORAGE_BUS_TYPE;
+//
+//#endif
+//
+//#ifndef _ACTION_TYPE
+//
+//typedef enum _ACTION_TYPE
+//{
+//    ActionTypePrint           = 0x80,
+//    ActionTypeUpload,
+//} ACTION_TYPE, *PACTION_TYPE;
+//
+//#endif
 
 #define FILE_DEVICE_8042_PORT           0x00000027
 #define FILE_DEVICE_ACPI                0x00000032
@@ -187,7 +203,8 @@ typedef enum _ACTION_TYPE
 // 0x%08x%08x
 #define P64(X)   (unsigned int)(X>>32)&0xFFFFFFFF,(unsigned int)X&0xFFFFFFFF
 
-   
+/* ********************************************************************************************************** */
+    
 #define MAX_DRIVE          26
 #define MAX_DEVICE         36
 
@@ -230,7 +247,7 @@ typedef struct _DEVICE_TYPE_V6
 
     
 #define MAX_POLICY  36
-    
+
 
 typedef struct _DRV_EXCEPT
 {
@@ -255,6 +272,46 @@ typedef struct _DRV_CTX
     lck_mtx_t   _DrvLock; // LOCK;
     
 } DRV_CTX, *PDRV_CTX;
+
+
+#if 0
+typedef struct _ALLOWPROCESSNAME
+{
+    char  czAllowedProcessName[NT_PROCNAMELEN + 1];	 // ?ÄÎ¨∏ÏûêÎ°? ( ?? EXECEL.EXE )
+} ALLOWPROCESSNAME, *PALLOWPROCESSNAME;
+
+typedef struct _ALLOWFOLDERNAME
+{
+    char  czAllowedFolderName[NT_PROCNAMELEN + 1];	 // ?ÄÎ¨∏ÏûêÎ°? ( ?? EXECEL.EXE )
+} ALLOWFOLDERNAME, *PALLOWFOLDERNAME;
+
+
+typedef struct _ALLOWFILEEXTNAME
+{
+    char   czAllowedExtName[NT_FILE_EXT_LEN];	 // ?ÄÎ¨∏ÏûêÎ°? ( ?? .EXE )
+} ALLOWFILEEXTNAME, *PALLOWFILEEXTNAME;
+
+
+typedef struct _ALLOWPROCESSID
+{
+    ULONG  nAllowedProcessId;	 // ProcessID. ( ?? 350)
+} ALLOWPROCESSID, *PALLOWPROCESSID;
+
+typedef struct _ALLOW_DEVICE
+{
+    WCHAR   DeviceNames[DEVICE_NAME_SZ];
+    int     nReserved1;
+} ALLOW_DEVICE, *PALLOW_DEVICE;
+
+
+typedef struct _COMMAND_MESSAGE
+{
+    SMARTDRV_COMMAND Command;
+    ULONG  Reserved;  // Alignment on IA64, DataSize
+    UCHAR  Data[];
+} COMMAND_MESSAGE, *PCOMMAND_MESSAGE;
+
+#endif
 
 
 typedef struct _VOLUME_DEVICE
@@ -291,6 +348,10 @@ typedef struct _MOBILE_CTX
     // Android, Syscallhook
     lck_grp_t* RwLockGrp;
     lck_rw_t*  RwLock;
+    
+    lck_grp_t _RwLockGrp;
+    lck_rw_t  _RwLock;
+
     MB_POLICY  Policy;
     MB_NODE*   pNewMBNodes[MB_NODE_COUNT];
     MB_PERMIT* pNewPermitList[USBMOBILE_PERMIT_COUNT];
@@ -437,7 +498,18 @@ typedef struct _UPLOAD_CTX
     lck_mtx_t     _pPrtMtxFileAccessTime;
     lck_mtx_t     _pPrtMtxFileAccessInfo;
 } UPLOAD_CTX, *PUPLOAD_CTX;
+
+
+// From PISecSmartDrv/inc/event_proto.h
+//
+typedef struct _BLUETOOTH_POLICY
+{
+    // MTP
+    BOOLEAN  bBluetoothLog;
+    BOOLEAN  bBluetoothBlock;
+    BOOLEAN  bSelectedBluetoothBlock;
     
+} BLUETOOTH_POLICY, *PBLUETOOTH_POLICY;
     
 typedef struct _MEDIA_CTX
 {
@@ -506,6 +578,12 @@ typedef enum _DLP_POLICY_TYPE_ENUM
 
 /* ********************************************************************************************************** */
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+
 char*
 sms_strstr2(const char* pczStr, const char* pczToken);
     
@@ -518,10 +596,8 @@ sms_strnstr(const char *s, const char *find, size_t slen);
 char*
 sms_strrchr(char* pczStr, int ch);
 
-
 #ifdef __cplusplus
 };
 #endif
-
 
 #endif /* PISecSmart_DataType_H */

@@ -15,6 +15,12 @@ CPIClientStub::~CPIClientStub() {
 bool CPIClientStub::initialize() {
 	CPICommunicator::initialize();
 
+    /*
+	support.bigEndian = ConfigMan.socket.bigEndian;
+	support.savePacket = ConfigMan.socket.savePacket;
+	support.savePacketPath = ConfigMan.path.dlpLogPath;
+	*/
+    
 	return true;
 }
 

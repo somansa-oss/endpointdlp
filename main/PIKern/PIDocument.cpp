@@ -18,6 +18,13 @@ bool CPIDocument::initialize(void) {
 }
 
 bool CPIDocument::finalize(void) {
+//	configMan.finalize();
+//	policyMan.finalize();
+//	piagentStub.finalize();
+//	pisqliteStub.finalize();
+//	wallMan.finalize();
+//	deviceMan.finalize();
+
 	return true;
 }
 
