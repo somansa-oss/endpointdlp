@@ -2,6 +2,15 @@ Contributing Guide
 ==================
 소만사 오픈소스 프로젝트에는 누구나 기여자가 될 수 있습니다.
 
+버그 리포팅 방법
+-----------
+GitHub의 [Issue]() 를 이용하여 프로젝트에서 발견된 버그를 리포팅 할 수 있습니다. 
+리포팅 시에는 다음의 내용이 포함되어야 합니다.
+* 버그 요약
+* 재현 방법(가능한 구체적으로)
+* 예상 결과 및 실제 현상
+* 기타 참고 사항
+
 Pull Request 체크리스트
 -------------------------
 Pull Request를 보내기 전에, 다음의 체크리스트가 충족되었는지 확인 해야합니다.
@@ -9,6 +18,13 @@ Pull Request를 보내기 전에, 다음의 체크리스트가 충족되었는�
 * [Code of Conduct](https://github.com/sim1st/endpointdlp/blob/master/CODE_OF_CONDUCT.md) 읽기
 * [기여자 라이선스 동의서(CLA, Contributor License Agreement)](https://github.com/sim1st/endpointdlp/blob/master/CONTRIBUTOR_LICENSE_AGREEMENT.md)를 읽고 동의하기
 * 소만사 코딩 가이드라인 읽기
+
+Pull Request 시작하기
+--------
+1. 'Fork'를 통해 원본 Repository를 나의 Repository로 가져옵니다.
+2. 'Clone'을 통해 내 Repository를 로컬 저장소로 가져옵니다.
+3. 로컬에서 작업한 결과를 'Commit'하고, 'Push'를 통해 나의 Repository에 업로드 합니다.
+4. 'Pull Request'를 통해 나의 작업 내용을 원본 Repository에 반영 요청합니다.
 
 소만사 코딩 가이드라인(C 언어) - Naming Rules
 ------------------
@@ -30,6 +46,3 @@ Pull Request를 보내기 전에, 다음의 체크리스트가 충족되었는�
   >* 상수 이름은 k로 시작하고, 대소문자가 섞인 형태를 사용한다.
   >#### 7. 함수 이름
   >* 함수 이름은 대문자로 시작하고 각 단어의 첫글자를 대문자로 쓰며, 언더바는 사용하지 않는다.
-  
-
-
