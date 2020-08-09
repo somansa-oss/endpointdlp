@@ -9,7 +9,16 @@
 
 프로젝트 기여하기
 --------------------
+프로젝트에는 다음의 방법으로 참여할 수 있습니다.
+* 버그 리포트
+* 수정사항 제출
+* 새로운 기능 제안
+* 문서
+* 자세한 내용은 [Contributing Guide](https://github.com/sim1st/endpointdlp/blob/master/CONTRIBUTUNG.md)를 참고하시기 바랍니다.
+
+
+프로젝트 정보
+----------
 * 개발 언어: C
 * 개발 환경: VSCode
 * 라이선스: Apache 2.0
-* 자세한 내용은 Contributing Guide를 참고하시기 바랍니다.
