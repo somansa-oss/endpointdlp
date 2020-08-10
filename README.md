@@ -14,7 +14,7 @@
 * 수정사항 제출
 * 새로운 기능 제안
 * 문서
-* 자세한 내용은 [Contributing Guide](https://github.com/sim1st/endpointdlp/blob/master/CONTRIBUTUNG.md)를 참고하시기 바랍니다.
+* 자세한 내용은 [Contributing Guide](https://github.com/SomansaOpenSource/endpointdlp/blob/master/CONTRIBUTUNG.md)를 참고하시기 바랍니다.
 
 
 프로젝트 정보
