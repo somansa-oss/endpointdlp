@@ -26,4 +26,4 @@
 
 Getting Started
 =================
-Install
+업데이트 예정
