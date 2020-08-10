@@ -1,4 +1,4 @@
-SOMANSA Contributing License Agreement
+SOMANSA Contributor License Agreement
 ==============================
 By signing this contributor license agreement, I understand and agree that this project and contributions to it are public and that a record of the contribution (including all personal information I submit with it, including my full name and email address) is maintained indefinitely and may be redistributed consistent with this project, compliance with the open source license(s) involved, and maintenance of authorship attribution.
 
