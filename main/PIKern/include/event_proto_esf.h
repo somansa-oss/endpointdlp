@@ -2,10 +2,13 @@
 #ifndef _event_proto_h
 #define _event_proto_h
 
+#ifdef LINUX
+#else
 #include <sys/kernel_types.h>
 #include <sys/vnode.h>
 #include <sys/mount.h>
-//#include "command.h"
+#endif
+
 #include "KernelCommand.h"
 #include "DataType.h"
 

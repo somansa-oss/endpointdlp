@@ -2,8 +2,12 @@
 #define _KAUTH_EVENT_FUNC_H_
 
 #include "PISecSmartDataType.h"
+
+#ifdef LINUX
+#else
 #include <mach/mach_types.h>
 #include <sys/vnode.h>
+#endif
 
 #ifdef __cplusplus
 extern "C"
@@ -17,8 +21,10 @@ extern "C"
     boolean_t Kauth_FileOp_FileRename( int nPID, char* pczProcName, char* pczPrevPath, char* pczNextPath, LOG_PARAM* pLog );
     boolean_t Kauth_FileOp_FileDelete( int nPID, char* pczProcName, char* pczFilePath, LOG_PARAM* pLog);
     
+#ifndef LINUX    
     // Process Callback.
     boolean_t Kauth_FileOp_ProcessExecute( kauth_cred_t pCred, int nPID, char* pczProcName, vnode_t pVnode, char* pczFilePath, LOG_PARAM* pLog );
+#endif
     
     boolean_t IsProtect_HideProc( char* pczProcName );
     boolean_t IsProtect_DefProc( char* pczProcName );

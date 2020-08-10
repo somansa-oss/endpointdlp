@@ -1,6 +1,13 @@
 #include <stdio.h>
 
-#include "../../PISupervisor/PISupervisor/apple/include/KernelProtocol.h"
+#ifdef LINUX
+    #include "../../PISupervisor/apple/include/KernelProtocol.h"
+    #include <sys/time.h>
+    #include <unistd.h>    
+#else
+    #include "../../PISupervisor/PISupervisor/apple/include/KernelProtocol.h"
+#endif
+
 #include "SmartCmd.h"
 
 #include <stdlib.h>
@@ -389,7 +396,7 @@ SmartCmd_SetQtLimit( PCOMMAND_MESSAGE pCmdMsg )
 }
 
 
-bool USBMobilePermitList_Append( MB_PERMIT* pPermit )
+boolean_t USBMobilePermitList_Append( MB_PERMIT* pPermit )
 {
     int  i=0, nLength=0;
     PMB_PERMIT pNewPermit = NULL;
@@ -1561,20 +1568,6 @@ IsAllowedFolderFileExt(char* pczPath, BOOLEAN bOpen)
     strncpy( czFilePath, pczPath, nLength );
     sms_strupr( czFilePath );
 
-    // spotlight
-    if(sms_strstr(czFilePath, "/VOLUMES/") && sms_strstr(czFilePath, "/.SPOTLIGHT"))
-    {
-        return TRUE;
-    }
-
-    // /Volumes/test/.fseventsd/fsevent-uuid
-    // /Volumes/test/.fseventsd/00000000006eae7f
-    if(sms_strstr(czFilePath, "/VOLUMES/") && sms_strstr(czFilePath, "/.FSEVENTSD/"))
-    {
-        LOG_MSG("\n\n[DLP][%s] czFilePath=%s \n\n", __FUNCTION__, czFilePath );
-        return TRUE;
-    }
-
     nCount = g_DrvKext.nAllowFolder;
     for(nPos=0; nPos<nCount; nPos++)
     {
@@ -1686,7 +1679,7 @@ LogCheckSearchParent( LOG_PARAM* pParam )
 }
 
 
-bool IsExistParentLogCheck( LOG_PARAM* pParam )
+boolean_t IsExistParentLogCheck( LOG_PARAM* pParam )
 {
     if(LogCheckSearchParent( pParam ))
     {
@@ -1787,7 +1780,7 @@ IsDirDuplicateLog( LOG_PARAM* pParam )
 }
 
 
-bool IsLogByPassProcess( LOG_PARAM* pLogParam )
+boolean_t IsLogByPassProcess( LOG_PARAM* pLogParam )
 {
     if(!pLogParam || !pLogParam->pczProcName) return false;
     if(0 == strncasecmp(pLogParam->pczProcName, "mds", strlen(pLogParam->pczProcName)) ||

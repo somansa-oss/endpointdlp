@@ -1,12 +1,19 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifdef LINUX
+#else
 #import <Foundation/Foundation.h>
 #import <IOKit/IOKitLib.h>
 #import <IOKit/usb/IOUSBLib.h>
 #import <IOKit/hid/IOHIDKeys.h>
+#endif
 
-#include "../../PISupervisor/PISupervisor/apple/include/KernelProtocol.h"
+#ifdef LINUX
+    #include "../../PISupervisor/apple/include/KernelProtocol.h"
+#else
+    #include "../../PISupervisor/PISupervisor/apple/include/KernelProtocol.h"
+#endif
 
 #include "KextDeviceNotify.h"
 #include "PISecSmartDrv.h"
@@ -16,8 +23,11 @@
 #define VFS_RETURNED    0
 #endif
 
+#ifdef LINUX
+int EnumMountCallback(void* pMount, void* pParam);
+#else
 int EnumMountCallback(mount_t pMount, void* pParam);
-
+#endif
 
 void FetchVolumes()
 {
@@ -25,7 +35,11 @@ void FetchVolumes()
     EnumMountCallback(NULL, NULL);
 }
 
+#ifdef LINUX
+int EnumMountCallback(void *pMount, void* pParam)
+#else
 int EnumMountCallback(mount_t pMount, void* pParam)
+#endif
 {
     int       nBusType = 0;
     boolean_t bUsbStor = FALSE;
@@ -33,6 +47,10 @@ int EnumMountCallback(mount_t pMount, void* pParam)
     boolean_t bSFolder = FALSE;
     boolean_t bTBStor  = FALSE;
 
+#ifdef LINUX
+//FIXME_MUST
+    return 0;
+#else
     // Get all mounted path
     NSArray *mounted = [[NSFileManager defaultManager] mountedVolumeURLsIncludingResourceValuesForKeys:nil options:0];
     
@@ -98,6 +116,7 @@ int EnumMountCallback(mount_t pMount, void* pParam)
     }
 
     return (VFS_RETURNED);  //VFS_RETURENED_DONE
+#endif    
 }
 
 
@@ -258,7 +277,6 @@ boolean_t IsVolumesDirectory(const char* path)
     }
     return volumesDir;
 }
-
 
 void SetProtectUsbMobileNotify(void)
 {

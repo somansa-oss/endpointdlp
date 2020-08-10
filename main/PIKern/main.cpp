@@ -1,12 +1,23 @@
+#ifdef LINUX
+#include <string>
+#include <sstream>
+#else
 #import <Foundation/Foundation.h>
 #import <EndpointSecurity/EndpointSecurity.h>
 #import <bsm/libbsm.h>
 #import <signal.h>
 #import <mach/mach_time.h>
+#endif
 
 #include <stdio.h>
 #include <sys/mount.h>
-#include "../../PISupervisor/PISupervisor/apple/include/KernelProtocol.h"
+
+#ifdef LINUX
+    #include "../../PISupervisor/apple/include/KernelProtocol.h"
+#else
+    #include "../../PISupervisor/PISupervisor/apple/include/KernelProtocol.h"
+#endif
+
 #include "DataType.h"
 #include "KernelCommand.h"
 #include "kernel_control.h"

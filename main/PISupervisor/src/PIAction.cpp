@@ -1,7 +1,11 @@
 #ifndef	_PIACTION_CPP
 #define	_PIACTION_CPP
 
-#include"PIAction.h"
+#ifdef LINUX
+#include <string>
+#endif
+
+#include "PIAction.h"
 
 ////////////////////////////////////////
 // IPIAction

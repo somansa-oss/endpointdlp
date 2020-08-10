@@ -40,7 +40,7 @@ void MobileNode_Remove(PMB_NODE pNode);
 void MobileNode_RemoveAll(void);
 
 
-bool USBMobilePermitList_Append( MB_PERMIT* pPermit );
+boolean_t USBMobilePermitList_Append( MB_PERMIT* pPermit );
 void USBMobilePermitList_RemoveAll(void);
 
 errno_t SmartCmd_SetMobilePermitList( PCOMMAND_MESSAGE pCmdMsg );
@@ -120,8 +120,8 @@ boolean_t
 SmartDrv_LogAppend( LOG_PARAM* pLogParam, int nVnodeType );
 
 
-bool IsLogByPassProcess( LOG_PARAM* pLogParam );
-bool IsExistParentLogCheck( LOG_PARAM* pParam );
+boolean_t IsLogByPassProcess( LOG_PARAM* pLogParam );
+boolean_t IsExistParentLogCheck( LOG_PARAM* pParam );
 
     
 #ifdef __cplusplus

@@ -1,6 +1,22 @@
 #ifndef _PISecSmart_DataType_H_
 #define _PISecSmart_DataType_H_
 
+#ifdef LINUX
+
+typedef int             SInt32;
+typedef int             kern_return_t;
+typedef int             errno_t;
+
+typedef void            kmod_info_t;
+
+#define KERN_SUCCESS                    0
+#define KERN_INVALID_ARGUMENT           4
+#define KERN_FAILURE                    5
+#define KERN_INVALID_VALUE              18
+
+#endif
+
+
 #ifndef lck_grp_t
 
 #define lck_grp_t           pthread_mutex_t
@@ -59,15 +75,13 @@
 #endif
 
 #include <stdlib.h>
+
+#ifdef LINUX
+#else
 #include <mach/mach_types.h>
-//#include <libkern/libkern.h>
 #include <libkern/OSTypes.h>
-//#include <sys/systm.h>
-//#include <sys/sysctl.h>
-//#include <sys/types.h>
-//#include <sys/kauth.h>
-//#include <sys/kern_control.h>
-//#include <sys/kpi_mbuf.h>
+#endif
+
 #include <pthread.h>
 
 
@@ -263,8 +277,8 @@ typedef struct _DRV_POLICY
 
 typedef struct _DRV_CTX
 {
-    DRV_POLICY  Policy; // ?úÏñ¥?ïÏ±Ö
-    DRV_EXCEPT  Except; // ?àÏô∏?ïÏ±Ö
+    DRV_POLICY  Policy; // ?ÔøΩÏñ¥?ÔøΩÏ±Ö
+    DRV_EXCEPT  Except; // ?ÔøΩÏô∏?ÔøΩÏ±Ö
     lck_grp_t*  DrvLockGroup;
     lck_mtx_t*  DrvLock; // LOCK;
     
@@ -277,18 +291,18 @@ typedef struct _DRV_CTX
 #if 0
 typedef struct _ALLOWPROCESSNAME
 {
-    char  czAllowedProcessName[NT_PROCNAMELEN + 1];	 // ?ÄÎ¨∏ÏûêÎ°? ( ?? EXECEL.EXE )
+    char  czAllowedProcessName[NT_PROCNAMELEN + 1];	 // ?ÔøΩÎ¨∏ÏûêÔøΩ? ( ?? EXECEL.EXE )
 } ALLOWPROCESSNAME, *PALLOWPROCESSNAME;
 
 typedef struct _ALLOWFOLDERNAME
 {
-    char  czAllowedFolderName[NT_PROCNAMELEN + 1];	 // ?ÄÎ¨∏ÏûêÎ°? ( ?? EXECEL.EXE )
+    char  czAllowedFolderName[NT_PROCNAMELEN + 1];	 // ?ÔøΩÎ¨∏ÏûêÔøΩ? ( ?? EXECEL.EXE )
 } ALLOWFOLDERNAME, *PALLOWFOLDERNAME;
 
 
 typedef struct _ALLOWFILEEXTNAME
 {
-    char   czAllowedExtName[NT_FILE_EXT_LEN];	 // ?ÄÎ¨∏ÏûêÎ°? ( ?? .EXE )
+    char   czAllowedExtName[NT_FILE_EXT_LEN];	 // ?ÔøΩÎ¨∏ÏûêÔøΩ? ( ?? .EXE )
 } ALLOWFILEEXTNAME, *PALLOWFILEEXTNAME;
 
 
@@ -320,7 +334,7 @@ typedef struct _VOLUME_DEVICE
     ULONG ulDeviceType;
     CHAR  czBasePath  [MAX_BASE_SIZE];
     CHAR  czDriverName[MAX_DRIVER_SIZE];
-    CHAR  czDeviceName[MAX_DEVICE_SIZE]; // Í∏∞Ï?Í∞?
+    CHAR  czDeviceName[MAX_DEVICE_SIZE]; // Í∏∞ÔøΩ?ÔøΩ?
     
     LARGE_INTEGER  ullTotalSize;
     LARGE_INTEGER  ullFreeSize;
@@ -427,8 +441,8 @@ typedef struct _KAUTH_CTX
 // Agent info
 typedef struct _AGENT_CTX
 {
-    int      nAgentPID;   // ?êÏù¥?ÑÌä∏ ?ÑÎ°ú?∏Ïä§??pid
-    vnode_t  pAgentVnode; // ?êÏù¥?ÑÌä∏ ?§Ìñâ ?åÏùº??vnode
+    int      nAgentPID;   // ?ÔøΩÏù¥?ÔøΩÌä∏ ?ÔøΩÎ°ú?ÔøΩÏä§??pid
+    vnode_t  pAgentVnode; // ?ÔøΩÏù¥?ÔøΩÌä∏ ?ÔøΩÌñâ ?ÔøΩÏùº??vnode
     
 } AGENT_CTX;
     

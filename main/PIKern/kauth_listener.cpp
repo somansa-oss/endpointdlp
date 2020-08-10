@@ -1,12 +1,20 @@
 #include <stdio.h>
 
+#ifdef LINUX
+#include "KernelDataType.h"
+#else
 #include <libproc.h>
+#endif
 
 #include <stdint.h>
 #include <string.h>
 #include <errno.h>
 
-#include "../../PISupervisor/PISupervisor/apple/include/KernelProtocol.h"
+#ifdef LINUX
+    #include "../../PISupervisor/apple/include/KernelProtocol.h"
+#else
+    #include "../../PISupervisor/PISupervisor/apple/include/KernelProtocol.h"
+#endif
 
 #include "KauthEventFunc.h"
 #include "SmartCmd.h"
@@ -570,8 +578,13 @@ bool GetProcessName( int nPID, char* pczOutPath, uint32_t nMaxOutPath )
 {
     int    nRet = 0;
     size_t nLength = 0;
-    char   czProcPath[PROC_PIDPATHINFO_MAXSIZE];
+    char   czProcPath[PROC_PIDPATHINFO_MAXSIZE] = {0};
     
+#ifdef LINUX
+
+// FIXME_MUST
+
+#else    
     memset( czProcPath, 0, sizeof(czProcPath) );
     nRet = proc_pidpath( nPID, czProcPath, sizeof(czProcPath) );
     if(nRet <= 0)
@@ -583,10 +596,27 @@ bool GetProcessName( int nPID, char* pczOutPath, uint32_t nMaxOutPath )
     nLength = MIN( strlen(czProcPath), nMaxOutPath );
     strncpy( pczOutPath, czProcPath, nLength );
     
+#endif
+
     printf( "[%s] ProcessId=%d, ProcessPath=%s \n", __FUNCTION__, nPID, czProcPath );
     return true;
 }
 
+#ifdef LINUX
+int
+Kauth_Callback_FileOp( int nPID,
+                       int   credential,
+                       void*          pData,
+                       int action,
+                       void*      arg0,
+                       void*      arg1,
+                       void*      arg2,
+                       void*      arg3  )
+{
+    // FIXME_MUST
+    return 0;
+}
+#else
 int
 Kauth_Callback_FileOp(int nPID, kauth_cred_t pCred, void* pData, kauth_action_t Action, uintptr_t arg0, uintptr_t arg1, uintptr_t arg2, uintptr_t arg3)
 {
@@ -632,6 +662,8 @@ Kauth_Callback_FileOp(int nPID, kauth_cred_t pCred, void* pData, kauth_action_t 
     OSDecrementAtomic( &g_DrvKext.KauthCtx.nFileOpCount );
     return KAUTH_RESULT_DEFER;
 }
+#endif
+
 
 kern_return_t
 InstallKauthListener(void)

@@ -1,14 +1,20 @@
+#ifdef LINUX
+#else
 #import <Foundation/Foundation.h>
 
 #import <IOKit/IOKitLib.h>
 #import <IOKit/usb/IOUSBLib.h>
 #import <IOKit/hid/IOHIDKeys.h>
+#endif
 
 #include <stdio.h>
 #include <sys/mount.h>
 
-
-#include "../../PISupervisor/PISupervisor/apple/include/KernelProtocol.h"
+#ifdef LINUX
+    #include "../../PISupervisor/apple/include/KernelProtocol.h"
+#else
+    #include "../../PISupervisor/PISupervisor/apple/include/KernelProtocol.h"
+#endif
 
 #include "SmartCmd.h"
 #include "PISecSmartDrv.h"
@@ -68,7 +74,7 @@ PISecSmartDrv_start(kmod_info_t* pKmodInfo, void* pData)
     int version_major = 0;
     int version_minor = 0;
     
-    printf("[DLP][%s] Kernel Version Info: [%s] [%d] [%d]",__FUNCTION__, version, version_major, version_minor);
+    printf("[DLP][%s] Kernel Version Info: [%d] [%d] [%d]",__FUNCTION__, version, version_major, version_minor);
     
     if (version_major < 19)
         g_bMoreRecentThanCatalina = false;
@@ -222,6 +228,9 @@ void GetMountPath(const char* pczPath, char* pczDevPath, int nBufferSize1, char*
     if (pczPath == NULL || pczDevPath == NULL)
         return;
 
+#ifdef LINUX
+//FIXME_MUST
+#else
     // e.g. /Volumes/tmp/1.doc -> /Volumes/tmp
     
     NSString *temp = @(pczPath);
@@ -263,6 +272,7 @@ void GetMountPath(const char* pczPath, char* pczDevPath, int nBufferSize1, char*
     if(cfstr) {
         snprintf(pczBSDPath, nBufferSize2, "%s", [(__bridge NSString *)cfstr UTF8String]);
     }
+#endif    
 }
 
 int
@@ -384,6 +394,9 @@ IsMediaPath_SFolder(const char* pczDevice, const char* pczBasePath, const char* 
     if (pczBasePath == NULL)
         return bSFolder;
     
+#ifdef LINUX
+//FIXME_MUST
+#else    
     NSString *volume = @(pczBasePath);
     DASessionRef dasess = DASessionCreate(nil);
     CFURLRef cfurl = CFURLCreateFromFileSystemRepresentation(nil, (const uint8*)[volume UTF8String], strlen([volume UTF8String]), TRUE);
@@ -402,7 +415,8 @@ IsMediaPath_SFolder(const char* pczDevice, const char* pczBasePath, const char* 
             bSFolder = true;
         }
     }
-    
+#endif
+
     return bSFolder;
 }
 
@@ -417,6 +431,9 @@ IsMediaPath_UsbStor( const char* pczPath )
     if (pczPath == NULL)
         return bUsbStor;
     
+#ifdef LINUX
+//FIXME_MUST
+#else    
     NSString *volume = @(pczPath);
     DASessionRef dasess = DASessionCreate(nil);
     CFURLRef cfurl = CFURLCreateFromFileSystemRepresentation(nil, (const uint8*)[volume UTF8String], strlen([volume UTF8String]), TRUE);
@@ -442,7 +459,8 @@ IsMediaPath_UsbStor( const char* pczPath )
             }
         }
     }
-    
+#endif
+
     return bUsbStor;
 }
 
@@ -455,6 +473,9 @@ IsMediaPath_CDStor(const char* pczPath)
     if (pczPath == NULL)
         return bCDStor;
     
+#ifdef LINUX
+//FIXME_MUST
+#else    
     NSString *volume = @(pczPath);
     DASessionRef dasess = DASessionCreate(nil);
     CFURLRef cfurl = CFURLCreateFromFileSystemRepresentation(nil, (const uint8*)[volume UTF8String], strlen([volume UTF8String]), TRUE);
@@ -475,6 +496,7 @@ IsMediaPath_CDStor(const char* pczPath)
             bCDStor = true;
         }
     }
-    
+#endif
+
     return bCDStor;
 }

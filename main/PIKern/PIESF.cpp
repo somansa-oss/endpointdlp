@@ -1,23 +1,35 @@
 #include <string>
 #include <string.h>
 
+#ifdef LINUX
+#else
 #import <Foundation/Foundation.h>
 #import <EndpointSecurity/EndpointSecurity.h>
 #import <bsm/libbsm.h>
+#endif
 
 #define BOOL_VALUE(x) x ? "Yes" : "No"
 #define LOG_INFO(fmt, ...) NSLog(@#fmt, ##__VA_ARGS__)
 #define LOG_ERROR(fmt, ...) NSLog(@"ERROR: " @#fmt, ##__VA_ARGS__)
 
 #include "PIESF.h"
-#include "../../PISupervisor/PISupervisor/apple/include/KernelProtocol.h"
+
+#ifdef LINUX
+    #include "../../PISupervisor/apple/include/KernelProtocol.h"
+#else
+    #include "../../PISupervisor/PISupervisor/apple/include/KernelProtocol.h"
+#endif
+
 #include "DataType.h"
 #include "KernelCommand.h"
 #include "kernel_control.h"
 #include "PISecSmartDrv.h"
 #include "KauthEventFunc.h"
 
+#ifdef LINUX
+#else
 es_client_t *g_client = nil;
+#endif
 
 CPIESF::CPIESF()
 {
@@ -41,7 +53,12 @@ bool CPIESF::isActive()
     return m_bIsContinue;
 }
 
-
+#ifdef LINUX
+void CPIESF::run(void)//int argc, const char * argv[])
+{
+    //FIXME_MUST
+}
+#else
 NSString* esstring_to_nsstring(const es_string_token_t *es_string_token) {
     if (es_string_token && es_string_token->data && es_string_token->length > 0) {
         return [NSString stringWithUTF8String:es_string_token->data];
@@ -351,6 +368,7 @@ void CPIESF::run(void)//int argc, const char * argv[])
     
     
 }
+#endif
 
 #ifdef __cplusplus
 extern "C" {

@@ -1,8 +1,11 @@
 #ifndef _KEXT_DEVICE_NOTIFY_H_
 #define _KEXT_DEVICE_NOTIFY_H_
 
+#ifdef LINUX
+#else
 #include <mach/mach_types.h>
 #include <sys/vnode.h>
+#endif
 
 #include "PISecSmartDataType.h"
 

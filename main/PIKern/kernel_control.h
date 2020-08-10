@@ -6,16 +6,32 @@
 #define kern_ctl_ref int
 #endif
 
+
+#ifdef LINUX
+#include "KernelDataType.h"
+#else
 #include <mach/mach_types.h>
 #include <sys/kernel_types.h>
 #include <sys/kern_control.h>
 #include <sys/types.h>
+#endif
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
+
+#ifdef LINUX
+typedef struct _PARAM_KCTL
+{
+    kern_ctl_ref pKctlRef;
+    void*        pMsgBuf;
+    void*          pUnitInfo;
+    uint32_t      nUnit;
+    uint32_t      nFlags;
+} PARAM_KCTL;
+#else
 typedef struct _PARAM_KCTL
 {
     kern_ctl_ref pKctlRef;
@@ -24,7 +40,7 @@ typedef struct _PARAM_KCTL
     uint32_t      nUnit;
     uint32_t      nFlags;
 } PARAM_KCTL;
-    
+#endif
 
 
 kern_return_t

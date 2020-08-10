@@ -1,6 +1,12 @@
 #include <stdio.h>
 
-#include "../../PISupervisor/PISupervisor/apple/include/KernelProtocol.h"
+#ifdef LINUX
+    #include <string>
+    #include "../../PISupervisor/apple/include/KernelProtocol.h"
+#else
+    #include "../../PISupervisor/PISupervisor/apple/include/KernelProtocol.h"
+#endif
+
 #include "KauthEventFunc.h"
 
 
@@ -41,6 +47,7 @@ Kauth_FileOp_FileClose( int nPID, char* pczProcName, vnode_t pVnode, char* pczFi
                       __FUNCTION__, pczProcName, g_czCupsSpoolPath, g_czCupsTempPath, bDirty );
         }
         
+#ifndef LINUX        
         // "/private/etc/cups/cups-files.conf" modify?
         if(IsCupsdConfigFile( pczFilePath ))
         {
@@ -49,6 +56,7 @@ Kauth_FileOp_FileClose( int nPID, char* pczProcName, vnode_t pVnode, char* pczFi
             printf( "[DLP][%s] KAUTH_FILEOP_CLOSE CupsdConfigFile pczName=%s, g_czCupsSpoolPathDump=%s, g_czCupsTempPath=%s, bDirty=%d\n ",
                       __FUNCTION__, pczProcName, g_czCupsSpoolPathDump, g_czCupsTempPath, bDirty);
         }
+#endif
         
         // temp path write?
         if(0 == strncasecmp( pczProcName, PROC_CUPSD, strlen(PROC_CUPSD)))

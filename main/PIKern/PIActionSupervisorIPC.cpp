@@ -1,7 +1,15 @@
 #ifndef	_PIACTIONSUPERVISORIPC_CPP
 #define	_PIACTIONSUPERVISORIPC_CPP
 
-#include "../../PISupervisor/PISupervisor/apple/include/KernelProtocol.h"
+#include <string>
+
+#ifdef LINUX
+	#include <sstream>
+    #include "../../PISupervisor/apple/include/KernelProtocol.h"
+#else
+    #include "../../PISupervisor/PISupervisor/apple/include/KernelProtocol.h"
+#endif
+
 #include "SmartCmd.h"
 
 #include "PIActionSupervisorIPC.h"

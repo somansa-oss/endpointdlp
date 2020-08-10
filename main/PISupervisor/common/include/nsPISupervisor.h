@@ -8,6 +8,7 @@ namespace nsPISupervisor {
 
 	const unsigned short PIAGENT_PORT = 7789; 
 	const unsigned short PISUPERVISOR_PORT = 7790; 
+	const unsigned short PIESF_PORT = 7791;
 
 	typedef enum _EM_EVENTID {
 		EVENT_NONE = 0

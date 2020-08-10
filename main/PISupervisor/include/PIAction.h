@@ -1,7 +1,10 @@
 #ifndef	_PIACTION_H
 #define	_PIACTION_H
 
+#ifdef LINUX
+#else
 #include <string>
+#endif
 
 class IPIAction {
 	public:

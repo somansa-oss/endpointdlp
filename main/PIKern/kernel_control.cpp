@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include <sys/mount.h>
 
-#include "../../PISupervisor/PISupervisor/apple/include/KernelProtocol.h"
+#ifdef LINUX
+    #include "../../PISupervisor/apple/include/KernelProtocol.h"
+#else
+    #include "../../PISupervisor/PISupervisor/apple/include/KernelProtocol.h"
+#endif
 
 #include "DataType.h"
 #include "KernelCommand.h"
