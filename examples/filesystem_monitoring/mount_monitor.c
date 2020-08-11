@@ -41,7 +41,7 @@ main (int argc, char *argv[])
     
     loop = g_main_loop_new (NULL, FALSE);
     
-    /* Run the main loop, program can be ended with CTRL+C */
+    // Run the main loop, program can be ended with CTRL+C
     g_main_loop_run (loop);
     g_main_loop_unref (loop);
     
