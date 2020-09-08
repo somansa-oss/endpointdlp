@@ -45,21 +45,6 @@ class CPIActionSupervisorIPC : public IPIAction, public CPIObject {
 		bool parseClientPacket( CPIClientStub* pClient, CPIPacket& packet);
 		bool sendResponse(CPIClientStub* pClient, const int command, const int resultCode, const std::string& resultValue);
 		bool processPacket(CPIPacket& packet, int& resultCode, std::string& resultValue);
-/*
-		bool onSyncRegister(CPIPacket& packet, int& resultCode, std::string& resultValue);
-		bool onAsyncUnresiter(CPIPacket& packet, int& resultCode, std::string& resultValue);
-		bool onAsyncOnChangeOnOffline(CPIPacket& packet, int& resultCode, std::string& resultValue);
-		bool onAsyncOnChangePolicy(CPIPacket& packet, int& resultCode, std::string& resultValue);
-		bool onAsyncTTL(CPIPacket& packet, int& resultCode, std::string& resultValue);
-		bool onTest(CPIPacket& packet, int& resultCode, std::string& resultValue);
-		bool onSyncQuarantineFile(CPIPacket& packet, int& resultCode, std::string& resultValue);
-		bool onSyncDeleteQuarantinedFile(CPIPacket& packet, int& resultCode, std::string& resultValue);
-		bool onSyncReleaseQuarantinedFile(CPIPacket& packet, int& resultCode, std::string& resultValue);
-		bool onSyncQuarantineAddPid(CPIPacket& packet, int& resultCode, std::string& resultValue);
-		bool onSyncQuarantineRemovePid(CPIPacket& packet, int& resultCode, std::string& resultValue);
-		bool onSyncGetQuarantineRootPath(CPIPacket& packet, int& resultCode, std::string& resultValue);
-		bool onSyncGetQuarantineDiskSize(CPIPacket& packet, int& resultCode, std::string& resultValue);
-*/
     
 	public:
 		virtual bool initialize(void);

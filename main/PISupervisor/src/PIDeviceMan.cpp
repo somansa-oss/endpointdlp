@@ -1911,7 +1911,7 @@ bool CPIDeviceMan::reloadUSBSerial(void) {
 }
 
 bool CPIDeviceMan::monitorVolums(void) {
-	
+#ifndef LINUX	
 	std::string command, temp;
 	command = "ls /Volumes";
 	temp = util.readCommandOutput(command);
@@ -1925,6 +1925,7 @@ bool CPIDeviceMan::monitorVolums(void) {
 	}
 
 	lastVolumes = temp;
+#endif	
 	return true;
 }
 

@@ -2,6 +2,8 @@
 #include <string.h>
 
 #ifdef LINUX
+#include <glib.h>
+#include <gio/gio.h>
 #else
 #import <Foundation/Foundation.h>
 #import <EndpointSecurity/EndpointSecurity.h>
@@ -25,8 +27,12 @@
 #include "kernel_control.h"
 #include "PISecSmartDrv.h"
 #include "KauthEventFunc.h"
+#include "KextDeviceNotify.h"
+
 
 #ifdef LINUX
+monitored_t* CPIESF::monitors = NULL;
+int CPIESF::n_monitors = 0;
 #else
 es_client_t *g_client = nil;
 #endif
@@ -34,13 +40,37 @@ es_client_t *g_client = nil;
 CPIESF::CPIESF()
 {
     m_bIsContinue = true;
+    monitors = (monitored_t*)malloc (MAX_DEVICE * sizeof (monitored_t));
 }
 
 CPIESF::~CPIESF()
 {
     m_bIsContinue = false;
+    if (monitors != NULL)
+    {
+        for(int i = 0; i < n_monitors; i++)
+        {
+            if (monitors[i].path != NULL)
+            {
+                free (monitors[i].path);
+            }
+        }        
+        free( monitors );
+    }
 }
 
+bool CPIESF::finalize(void)
+{
+    pthread_mutex_destroy( &mutexClient); 
+    pthread_cond_destroy( &condClient); 
+
+    if (fanotify_fd != 0)
+    {
+        close (fanotify_fd);
+    }
+
+    return true;
+}
 
 CPIESF& CPIESF::getInstance()
 {
@@ -53,10 +83,367 @@ bool CPIESF::isActive()
     return m_bIsContinue;
 }
 
+bool CPIESF::initialize(void) {
+
+	if( true == isInitialized() ) {
+		return true;
+	}
+
+	pthread_mutex_init( &mutexClient, 0 );
+	pthread_cond_init( &condClient, 0 );
+
+
+    fanotify_fd = 0;
+    memset(fds, 0, sizeof(fds));
+
+    if ((fanotify_fd = fanotify_init (FAN_CLOEXEC| FAN_CLASS_CONTENT,
+                                      O_RDONLY | O_CLOEXEC | O_LARGEFILE | O_NOATIME)) < 0)
+    {
+        ERROR_LOG ("Couldn't setup new fanotify device: %s\n", strerror (errno));
+        return -1;
+    }    
+    fds[FD_POLL_FANOTIFY].fd = fanotify_fd;
+    fds[FD_POLL_FANOTIFY].events = POLLIN;
+
+	return CPIObject::initialize();
+}
+
+bool CPIESF::isRunningServerThread(void) {
+    return runningServerThread;
+}
+
+bool CPIESF::isRunningClientThread(void) {
+    return runningClientThread;
+}
+
+
+void CPIESF::waitThreads(void) {
+
+	DEBUG_LOG1("mount_monitor_thread - begin");
+
+	if( true == isRunningServerThread() ) {
+		pthread_join( serverThread, (void**)NULL );
+	}
+
+	if( true == isRunningClientThread() ) {
+		pthread_join( clientThread, (void**)NULL );
+	}
+	
+	DEBUG_LOG1("mount_monitor_thread - end");
+}
+
+int CPIESF::stop(void) {
+	DEBUG_LOG1("mount_monitor_thread - begin");
+	
+	isContinue = false;
+		
+	pthread_cond_signal(&condClient);
+	waitThreads();
+	finalize();
+
+	DEBUG_LOG1("mount_monitor_thread - end");
+	return 0;
+}
+
+static gboolean
+proc_mounts_changed (GIOChannel   *channel,
+                     GIOCondition  cond,
+                     gpointer      user_data)
+{
+    if (cond & G_IO_ERR)
+    {
+        DEBUG_LOG1 ("MOUNTS CHANGED!");
+
+        FetchVolumes();
+    }
+
+    return TRUE;
+}
+
+void* CPIESF::fnWaitClient(void* pzArg) {
+	DEBUG_LOG1("mount_monitor_thread - begin");
+
+	CPIESF* instance;
+	instance = reinterpret_cast<CPIESF*>(pzArg);
+	instance->runningServerThread = true;
+
+    GIOChannel *proc_mounts_channel = NULL;
+    GSource *proc_mounts_watch_source = NULL;
+    GError *error = NULL;
+    GMainLoop *loop = NULL;
+
+    //proc_mounts_channel = g_io_channel_new_file ("/proc/self/mountinfo", "r", &error);
+    proc_mounts_channel = g_io_channel_new_file ("/proc/mounts", "r", &error);
+    if (proc_mounts_channel == NULL)
+    {
+        INFO_LOG ("Error creating IO channel for %s: %s (%s, %d)", "/proc/mounts",
+                error->message, g_quark_to_string (error->domain), error->code);
+        g_error_free (error);
+        return NULL;
+    }
+    
+    proc_mounts_watch_source = g_io_create_watch (proc_mounts_channel, G_IO_ERR);
+    g_source_set_callback (proc_mounts_watch_source,
+                        (GSourceFunc) proc_mounts_changed,
+                        NULL, NULL);
+    g_source_attach (proc_mounts_watch_source,
+                    g_main_context_get_thread_default ());
+    g_source_unref (proc_mounts_watch_source);
+    g_io_channel_unref (proc_mounts_channel);
+    
+    loop = g_main_loop_new (NULL, FALSE);
+    g_main_loop_run (loop);
+    g_main_loop_unref (loop);
+
+    while(instance->isContinue) {
+        sleep(3);
+    }
+    
+	instance->runningServerThread = false;
+	DEBUG_LOG1("mount_monitor_thread - end");
+	return NULL;
+}
+
+static char *
+get_program_name_from_pid (int     pid,
+                           char   *buffer,
+                           size_t  buffer_size)
+{
+    int fd = 0;
+    ssize_t len = 0;
+    char *aux = NULL;
+    
+    // Try to get program name by PID
+    sprintf (buffer, "/proc/%d/cmdline", pid);
+    if ((fd = open (buffer, O_RDONLY)) < 0)
+        return NULL;
+    
+    if ((len = read (fd, buffer, buffer_size - 1)) <= 0)
+    {
+        close (fd);
+        return NULL;
+    }
+    close (fd);
+    
+    buffer[len] = '\0';
+    aux = strstr (buffer, "^@");
+    if (aux)
+        *aux = '\0';
+    
+    return buffer;
+}
+
+static char *
+get_file_path_from_fd (int     fd,
+                       char   *buffer,
+                       size_t  buffer_size)
+{
+    ssize_t len = 0;
+    
+    if (fd <= 0)
+        return NULL;
+    
+    sprintf (buffer, "/proc/self/fd/%d", fd);
+    if ((len = readlink (buffer, buffer, buffer_size - 1)) < 0)
+        return NULL;
+    
+    buffer[len] = '\0';
+    return buffer;
+}
+
+std::string base_name(std::string const &path)
+{
+    return path.substr(path.find_last_of("/") + 1);
+}
+
+static void
+event_process (struct fanotify_event_metadata *event,
+               int                             fanotify_fd)
+{
+    char file_path[PATH_MAX] = {0};
+    char program_path[PATH_MAX] = {0};
+    
+    if (NULL == get_file_path_from_fd (event->fd, file_path, PATH_MAX))
+    {
+        struct fanotify_response access = {0};
+        access.fd = event->fd;
+        access.response = FAN_ALLOW;
+        write (fanotify_fd, &access, sizeof (access));
+        return;
+    }
+    
+    // if (strncmp(file_path, "/media/", sizeof("/media/")) != 0)
+    // {
+    //   struct fanotify_response access = {0};
+    //   access.fd = event->fd;
+    //   access.response = FAN_ALLOW;
+    //   write (fanotify_fd, &access, sizeof (access));
+    //   return;
+    // }
+    
+    printf ("Received event in path '%s'=>[%lld]", file_path, event->mask);
+    printf (" pid=%d (%s): \n",
+            event->pid,
+            (get_program_name_from_pid (event->pid, program_path, PATH_MAX) ?
+             program_path :
+             "unknown"));
+    
+    LOG_PARAM  LogParam = {0};
+    
+    bool modified = true;
+    int nProcessId = event->pid;
+    std::string process_path = program_path;
+    std::string process_name = base_name( process_path );
+    std::string target_file_path = file_path;
+    int nFlag = KAUTH_FILEOP_CLOSE_MODIFIED;
+    
+    printf("ES_EVENT_TYPE_NOTIFY_CLOSE\n");
+    printf("pid-[%d]\n", nProcessId);
+    printf("proc.name-[%s]\n", process_name.c_str());
+    printf("targe_file_path-[%s]\n", target_file_path.c_str());
+    printf("targe_modified-[%d]\n", modified);
+    fflush(stdout);
+
+    // if (msg->event.close.modified == false ||
+    //     msg->event.close.target == NULL
+    //     || msg->event.close.target->path.data == NULL)
+    //     break;
+
+    LogParam.nLogType    = LOG_FILEOP;
+    LogParam.nProcessId  = nProcessId;
+    LogParam.pczProcName = (char*)process_name.c_str();
+    LogParam.nAction = KAUTH_FILEOP_CLOSE;
+
+    bool bAllow = false;
+    struct fanotify_response access = {0};
+    access.fd = event->fd;
+    bAllow = Kauth_FileOp_FileClose(nProcessId,
+                            (char*)process_name.c_str(),
+                            NULL,
+                            (char*)target_file_path.c_str(),
+                            nFlag,
+                            &LogParam);    
+    // if (bAllow == true)
+    // {
+    //     access.response = FAN_ALLOW;
+    // }
+    // else
+    // {
+    //     access.response = FAN_DENY;
+    // }
+    access.response = FAN_ALLOW;
+    write (fanotify_fd, &access, sizeof (access));
+    close (event->fd);
+
+    // if (bAllow == true)
+    // {
+    //     // do nothing.
+    // }
+    // else
+    // {
+    //     unlink( file_path );
+    // }
+    
+    //fflush (stdout);
+}
+
+void* CPIESF::fnCommunicateClient(void* pzArg) {
+	DEBUG_LOG1("mount_monitor_thread - begin");
+
+	CPIESF* instance;
+	instance = reinterpret_cast<CPIESF*>(pzArg);
+	instance->runningClientThread = true;
+
+    while(instance->isContinue)
+    {
+        if (poll (instance->fds, FD_POLL_MAX, -1) < 0)
+        {
+            fprintf (stderr,
+                     "Couldn't poll(): '%s'\n",
+                     strerror (errno));
+            exit (EXIT_FAILURE);
+        }
+        
+        if (instance->fds[FD_POLL_FANOTIFY].revents & POLLIN)
+        {
+            char buffer[FANOTIFY_BUFFER_SIZE];
+            ssize_t length;
+            
+            // Read from the FD. It will read all events available up to
+            // the given buffer size.
+            if ((length = read (instance->fds[FD_POLL_FANOTIFY].fd,
+                                buffer,
+                                FANOTIFY_BUFFER_SIZE)) > 0)
+            {
+                struct fanotify_event_metadata *metadata = NULL;
+                
+                metadata = (struct fanotify_event_metadata *)buffer;
+                while (FAN_EVENT_OK (metadata, length))
+                {
+                    event_process (metadata, instance->fanotify_fd);
+                    if (metadata->fd > 0)
+                    {
+                        close (metadata->fd);
+                    }
+                    metadata = FAN_EVENT_NEXT (metadata, length);
+                }
+            }
+        }
+    }
+
+	instance->runningClientThread = false;
+	DEBUG_LOG1("mount_monitor_thread - end");
+	return NULL;
+}
+
+bool CPIESF::startThreads(void) {
+
+	DEBUG_LOG1("mount_monitor_thread - begin");
+
+	int result = 0;
+
+    isContinue = true;
+
+	if( false == isRunningServerThread() ) {
+		pthread_attr_init( &serverThreadAttr);
+		pthread_attr_setscope( &serverThreadAttr, PTHREAD_SCOPE_SYSTEM );
+		result = pthread_create( &serverThread, &serverThreadAttr, CPIESF::fnWaitClient, (void*)this);
+		if( result ) {
+			ERROR_LOG1( "Unable to start thread for monitoring the mount event" );
+			return false;
+		}
+	}
+	else {
+		DEBUG_LOG1("mount_monitor_thread - skip - already running - mount event thread");
+	}
+
+	if( false == isRunningClientThread() ) {
+		pthread_attr_init( &clientThreadAttr);
+		pthread_attr_setscope( &clientThreadAttr, PTHREAD_SCOPE_SYSTEM );
+		result = pthread_create( &clientThread, &clientThreadAttr, CPIESF::fnCommunicateClient, (void*)this);
+		if( result ) {
+			ERROR_LOG1( "Unable to start thread for monitoring the file-system" );
+			return false;
+		}
+	}
+	else {
+		DEBUG_LOG1("mount_monitor_thread - skip - already running - file-system event thread");
+	}
+
+	DEBUG_LOG1("mount_monitor_thread - end");
+	return true;
+}
+
 #ifdef LINUX
 void CPIESF::run(void)//int argc, const char * argv[])
 {
-    //FIXME_MUST
+	initialize();
+
+	if( false == startThreads() ) {
+		ERROR_LOG1("open_client_ipc - create_thread failed");
+	}
+
+
 }
 #else
 NSString* esstring_to_nsstring(const es_string_token_t *es_string_token) {
@@ -377,6 +764,118 @@ extern "C" {
 errno_t SmartCmd_SetQtPathExt( PCOMMAND_MESSAGE pCmdMsg );
 
 errno_t SmartCmd_SetDrivePolicy( PCOMMAND_MESSAGE pCmdMsg );
+
+#ifdef LINUX
+
+
+static uint64_t event_mask =
+//(FAN_OPEN_PERM);      // Open permission control
+(
+ //FAN_MARK_MOUNT |
+ //FAN_OPEN_PERM|
+ // FAN_ACCESS |         /* File accessed */
+ //  FAN_MODIFY |         /* File modified */
+ FAN_CLOSE_WRITE |    /* Writtable file closed */
+ //FAN_CLOSE_NOWRITE |  /* Unwrittable file closed */
+ //  FAN_OPEN |           /* File was opened */
+ FAN_ONDIR |           /* We want to be reported of events in the directory */
+ FAN_EVENT_ON_CHILD); /* We want to be reported of events in files of the directory */
+
+
+void CPIESF::fnAddNotify(void* pzArg)
+{
+    if (pzArg == NULL || monitors == NULL)
+        return;
+    
+    PVOLUME_DEVICE pDevice = (PVOLUME_DEVICE)pzArg;
+
+    pthread_mutex_lock( &(CPIESF::getInstance().mutexClient) );
+
+    // e.g.
+    // [VolCtx_Update] NewAdd BusType=7, Device=/dev/disk2s2, BasePath=/Volumes/새 볼륨. Count=2
+
+    monitors[ n_monitors ].path = strdup ( pDevice->czBasePath );
+    if (monitors[ n_monitors ].path != NULL)
+    {
+        // Add new fanotify mark
+        if (fanotify_mark (fanotify_fd,
+                            FAN_MARK_ADD | FAN_MARK_MOUNT,
+                            event_mask,
+                            AT_FDCWD,
+                            monitors[ n_monitors ].path) < 0)
+        {
+            fprintf (stderr,
+                        "Add monitor in mount '%s' [%d] FAIL: '%s'\n",
+                        monitors[ n_monitors ].path,
+                        n_monitors,
+                        strerror (errno));
+
+            free( monitors[ n_monitors ].path );
+        }
+        else
+        {
+            fprintf (stdout,
+                        "Add monitor in mount '%s' [%d] SUCCESS\n",
+                        monitors[ n_monitors ].path,
+                        n_monitors);        
+            n_monitors++;
+        }
+    }
+    else
+    {
+        fprintf (stderr,
+                    "Add monitor in mount '%s' FAIL: '%s'\n",
+                    monitors[ n_monitors ].path,
+                    strerror (errno));        
+    }
+
+    pthread_mutex_unlock( &(CPIESF::getInstance().mutexClient) );
+}
+
+void CPIESF::fnRemoveNotify(void* pzArg)
+{
+    if (n_monitors <= 0 || monitors == NULL)
+    {
+        return;
+    }
+
+    pthread_mutex_lock( &(CPIESF::getInstance().mutexClient) );
+
+    for(int i = 0; i < n_monitors; i++)
+    {
+        //monitors = (monitored_t*)malloc (n_monitors * sizeof (monitored_t));    
+        if (monitors[i].path == NULL)
+        {
+            continue;
+        }
+        int ret = fanotify_mark (fanotify_fd,
+                           FAN_MARK_REMOVE,
+                           event_mask,
+                           AT_FDCWD,
+                           monitors[i].path);
+        fprintf (stdout,
+                    "fanotify_mark()-REMOVE-'%s':'%d'\n",
+                    monitors[i].path,
+                    ret);
+        free (monitors[i].path);
+    }
+    n_monitors = 0;
+
+    pthread_mutex_unlock( &(CPIESF::getInstance().mutexClient) );
+}
+
+
+void CPIESF_fnAddNotify(void* pzArg)
+{
+    return CPIESF::getInstance().fnAddNotify(pzArg);
+}
+
+void CPIESF_fnRemoveNotify(void* pzArg)
+{
+    return CPIESF::getInstance().fnRemoveNotify(pzArg);
+}
+
+#endif
 
 #ifdef __cplusplus
 }

@@ -4,7 +4,7 @@
 #include "PIAction.h"
 #include "PIObject.h"
 #include "PIClientStub.h"
-
+#include "ESFControl.h"
 
 class CPIActionOpenClientIPC : public IPIAction, public CPIObject {
 	public:

@@ -4,6 +4,8 @@ project(PIKern)
 
 set(CMAKE_VERBOSE_MAKEFILE "YES")
 
+#ADD_DEFINITIONS ( -DLINUX -DWSL )
+
 ADD_DEFINITIONS ( -DLINUX )
 
 LINK_LIBRARIES ( -pthread -ldl )

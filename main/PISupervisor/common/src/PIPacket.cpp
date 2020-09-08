@@ -2,6 +2,10 @@
 #ifndef	_PIPACKET_CPP
 #define	_PIPACKET_CPP
 
+#ifdef LINUX
+#include <string>
+#endif
+
 #include "PIPacket.h"
 #include <arpa/inet.h>
 

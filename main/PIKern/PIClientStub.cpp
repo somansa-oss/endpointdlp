@@ -1,6 +1,10 @@
 #ifndef	_PICLIENTSTUB_CPP
 #define _PICLIENTSTUB_CPP
 
+#ifdef LINUX
+#include <string>
+#endif
+
 #include "PIClientStub.h"
 #include "PIDocument.h"
 

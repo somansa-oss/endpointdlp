@@ -1,6 +1,10 @@
 #ifndef	_PIEVENTHANDLER_CPP
 #define	_PIEVENTHANDLER_CPP
 
+#ifdef LINUX
+#include <string>
+#endif
+
 #include "PIEventHandler.h"
 #include "PIDocument.h"
 #include "PIActionInitializeData.h"

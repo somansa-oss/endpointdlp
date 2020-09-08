@@ -1,6 +1,10 @@
 #ifndef	_PIKERNELSTUB_CPP
 #define _PIKERNELSTUB_CPP
 
+#ifdef LINUX
+#include <string>
+#endif
+
 #include "PIKernelStub.h"
 
 ////////////////////////////////////////////////////////////////////////////////

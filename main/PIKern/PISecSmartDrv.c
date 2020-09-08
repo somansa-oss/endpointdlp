@@ -229,7 +229,43 @@ void GetMountPath(const char* pczPath, char* pczDevPath, int nBufferSize1, char*
         return;
 
 #ifdef LINUX
-//FIXME_MUST
+    // e.g. /Volumes/tmp/1.doc -> /Volumes/tmp
+    if (pczPath[0] != '/')
+        return;
+
+    char *pszDelim1 = strstr(pczPath + 1, "/");
+    if (pszDelim1 != NULL)
+    {
+        char *pszDelim2 = strstr(pszDelim1 + 1, "/");
+        if (pszDelim2 != NULL)
+        {
+#ifndef WSL
+            pszDelim2 = strstr(pszDelim2 + 1, "/");
+            if (pszDelim2 != NULL)
+            {
+#endif            
+                int size = pszDelim2 - pczPath;
+                if (size > 1)
+                {
+                    strncpy(pczDevPath, pczPath, size);
+                }
+                else
+                {
+                    return;
+                }
+#ifndef WSL
+            }
+#endif            
+        }
+        else
+        {
+            return;
+        }
+    }
+    else
+    {
+        return;
+    }
 #else
     // e.g. /Volumes/tmp/1.doc -> /Volumes/tmp
     
@@ -368,6 +404,12 @@ VolCtx_Update(char* pczDeviceName, char* pczBasePath, ULONG ulBusType)
     g_DrvKext.VolCtx.nCount++;
     DrvCtx_Policy_Update_DriveName( &g_DrvKext.VolCtx.VolumeDevice[nPos] );
     
+#ifdef LINUX
+
+    CPIESF_fnAddNotify((void*)(&(g_DrvKext.VolCtx.VolumeDevice[nPos])));
+
+#endif
+
     // e.g.
     // [VolCtx_Update] NewAdd BusType=7, Device=/dev/disk2s2, BasePath=/Volumes/새 볼륨. Count=2
     //
@@ -381,8 +423,16 @@ VolCtx_Update(char* pczDeviceName, char* pczBasePath, ULONG ulBusType)
 void VolCtx_Clear(void)
 {
     lck_mtx_lock( g_DrvKext.VolCtx.VolLock );
+
     g_DrvKext.VolCtx.nCount = 0;
     memset( &g_DrvKext.VolCtx.VolumeDevice, 0, sizeof(g_DrvKext.VolCtx.VolumeDevice) );
+
+#ifdef LINUX
+
+    CPIESF_fnRemoveNotify(NULL);
+
+#endif
+
     lck_mtx_unlock( g_DrvKext.VolCtx.VolLock );
 }
 

@@ -3,7 +3,11 @@
 
 #include "PIObject.h"
 #include "DLPPolicy.h"
+#ifdef LINUX
+#include "PIESFStub.h"
+#else
 #include "PISecSmartDrvStub.h"
+#endif
 #include "PIDeviceLog.h"
 #include "PIApplicationControl.h"
 #include "PCSecurity.h"
@@ -41,7 +45,11 @@ class CPIDeviceMan : public CPIObject
 		std::string lastVolumes;
 
 	public:
+#ifdef LINUX	
+		CPIESFStub	smartDrvStub;
+#else		
 		CPISecSmartDrvStub smartDrvStub;
+#endif		
         CPCSecurity m_cPCSecurity;
 #ifndef LINUX		
         CPIFullDiskAccess m_cFDA;

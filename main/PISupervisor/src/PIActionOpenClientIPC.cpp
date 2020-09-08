@@ -430,6 +430,24 @@ bool CPIActionOpenClientIPC::processPacket(CPIPacket& packet, int& resultCode, s
 		case nsPISupervisor::PIPE_COMMAND_PISUPERVISOR_SYNC_GET_QUARANTINE_DISKSIZE_N :
 			onSyncGetQuarantineDiskSize(packet, resultCode, resultValue);
 			break;
+
+// for ESF
+        case SmartLogNotify:
+            CESFControl::JobEvent_SmartLogNotify(1, (PCOMMAND_MESSAGE)packet.getBinary(0) );
+            break;
+            
+        case FileScan:
+            CESFControl::JobEvent_FileScan(1, (PCOMMAND_MESSAGE)packet.getBinary(0), resultCode, resultValue);
+            break;
+            
+        case FileDelete:
+            CESFControl::JobEvent_FileDelete(1, (PCOMMAND_MESSAGE)packet.getBinary(0), resultCode, resultValue);
+            break;
+            
+        case GetPrintSpoolPath:
+            CESFControl::JobEvent_GetPrintSpoolPath(1, (PCOMMAND_MESSAGE)packet.getBinary(0), resultCode, resultValue);
+            break;
+
 		//end: Redmine #148385 ----------
 		default : break;
 	}

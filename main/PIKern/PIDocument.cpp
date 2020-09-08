@@ -1,6 +1,10 @@
 #ifndef	_PIDOCUMENT_CPP
 #define	_PIDOCUMENT_CPP
 
+#ifdef LINUX
+#include <string>
+#endif
+
 #include"PIDocument.h"
 
 ////////////////////////////////////////

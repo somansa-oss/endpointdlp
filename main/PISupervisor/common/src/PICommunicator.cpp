@@ -1,6 +1,10 @@
 #ifndef	_PICOMMUNICATOR_CPP
 #define _PICOMMUNICATOR_CPP
 
+#ifdef LINUX
+#include <string>
+#endif
+
 #include"PICommunicator.h"
 
 ////////////////////////////////////////////////////////////////////////////////

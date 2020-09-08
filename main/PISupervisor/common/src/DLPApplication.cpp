@@ -1,6 +1,10 @@
 #ifndef	_DLPAPPLICATION_CPP
 #define	_DLPAPPLICATION_CPP
 
+#ifdef LINUX
+#include <string>
+#endif
+
 #include "DLPApplication.h"
 
 ////////////////////////////////////////////////////////////////////////////////

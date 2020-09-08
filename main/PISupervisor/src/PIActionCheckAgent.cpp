@@ -1,6 +1,11 @@
 #ifndef	_PIACTIONCHECKAGENT_CPP
 #define	_PIACTIONCHECKAGENT_CPP
 
+#ifdef LINUX
+#include <string>
+#else
+#endif
+
 #include "PIActionCheckAgent.h"
 #include "PIDocument.h"
 #include "PIEventHandler.h"

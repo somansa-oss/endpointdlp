@@ -1,6 +1,10 @@
 #ifndef	_LOGWRITER_CPP
 #define	_LOGWRITER_CPP
 
+#ifdef LINUX
+#include <string>
+#endif
+
 #include "LogWriter.h"
 #include <sys/types.h>
 #include <sys/stat.h>

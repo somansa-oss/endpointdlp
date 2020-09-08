@@ -43,8 +43,10 @@ add_executable(PISupervisor src/PISuperivorMain.cpp
         sqlite/src/sqlite3.c 
         linux/src/SysControl.cpp            linux/src/KernControl.cpp               linux/src/PIUSBDrive.cpp          
         linux/src/UsbFinder.cpp
-        linux/src/KextManager.cpp           linux/src/PIKernelStub.cpp              linux/src/PISecSmartDrvStub.cpp )
+        linux/src/KextManager.cpp           linux/src/PIKernelStub.cpp              linux/src/PISecSmartDrvStub.cpp 
+        apple/src/ESFControl.cpp            apple/src/ESFManager.cpp                apple/src/PIESFStub.cpp
+        )
 
         #INCLUDE_DIRECTORIES ( include common/include sqlite/include linux/include )
 target_include_directories(PISupervisor PUBLIC
-    . include common/include sqlite/include linux/include )
+    . include common/include sqlite/include linux/include apple/include )

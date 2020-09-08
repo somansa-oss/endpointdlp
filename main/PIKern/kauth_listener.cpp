@@ -80,6 +80,9 @@ boolean_t
 QtFetchValidPath(char* pczPath, char* pczOutQtPath, size_t nMaxQtPath, int nPolicyType)
 {
     char*         pczToken = NULL;
+#ifdef LINUX    
+    char*         pczExt = NULL;
+#endif    
     long          nCurTime = 0;
 
     if(!pczPath || !pczOutQtPath)
@@ -92,13 +95,24 @@ QtFetchValidPath(char* pczPath, char* pczOutQtPath, size_t nMaxQtPath, int nPoli
     {
         return FALSE;
     }
+#ifdef LINUX    
+    pczExt = strstr(pczToken, ".");
+#endif
 
     nCurTime = GetCurrentlongTime();
     if(MEDIA_PRINTPREVENT == nPolicyType)
         snprintf( pczOutQtPath, nMaxQtPath, "%s/Print/%012ld_%s", g_DrvKext.QtCtx.Entry[0].czBuffer, nCurTime, pczToken+1 );
     else
+#ifdef LINUX
+    {
+        if (pczExt == NULL)
+            snprintf( pczOutQtPath, nMaxQtPath, "%s/%012ld", g_DrvKext.QtCtx.Entry[0].czBuffer, nCurTime);
+        else
+            snprintf( pczOutQtPath, nMaxQtPath, "%s/%012ld%s", g_DrvKext.QtCtx.Entry[0].czBuffer, nCurTime, pczExt);
+    }
+#else    
         snprintf( pczOutQtPath, nMaxQtPath, "%s/%012ld_%s", g_DrvKext.QtCtx.Entry[0].czBuffer, nCurTime, pczToken+1 );
-
+#endif
     return TRUE;
 }
 
@@ -579,13 +593,30 @@ bool GetProcessName( int nPID, char* pczOutPath, uint32_t nMaxOutPath )
     int    nRet = 0;
     size_t nLength = 0;
     char   czProcPath[PROC_PIDPATHINFO_MAXSIZE] = {0};
-    
+
+    memset( czProcPath, 0, sizeof(czProcPath) );
+
 #ifdef LINUX
 
-// FIXME_MUST
+    sprintf(czProcPath, "/proc/%d/cmdline", nPID);
+    FILE* f = fopen(czProcPath, "r");
+    if(f)
+    {
+        size_t size;
+        size = fread(czProcPath, sizeof(char), PROC_PIDPATHINFO_MAXSIZE, f);
+        if(size > 0)
+        {
+            if('\n'== czProcPath[size - 1])
+                czProcPath[size - 1]='\0';
+        }
+        fclose(f);
+    }
+    else
+    {
+        printf( "[%s] pid=%d, err=%d, err-msg=%s \n", __FUNCTION__, nPID, errno, strerror(errno) );
+    }
 
 #else    
-    memset( czProcPath, 0, sizeof(czProcPath) );
     nRet = proc_pidpath( nPID, czProcPath, sizeof(czProcPath) );
     if(nRet <= 0)
     {
@@ -605,20 +636,17 @@ bool GetProcessName( int nPID, char* pczOutPath, uint32_t nMaxOutPath )
 #ifdef LINUX
 int
 Kauth_Callback_FileOp( int nPID,
-                       int   credential,
+                       int   pCred,
                        void*          pData,
-                       int action,
+                       int Action,
                        void*      arg0,
                        void*      arg1,
-                       void*      arg2,
+                       int      arg2,
                        void*      arg3  )
-{
-    // FIXME_MUST
-    return 0;
-}
 #else
 int
 Kauth_Callback_FileOp(int nPID, kauth_cred_t pCred, void* pData, kauth_action_t Action, uintptr_t arg0, uintptr_t arg1, uintptr_t arg2, uintptr_t arg3)
+#endif
 {
     // 현재 프로세스의 pid, proc_name를 구함
     char     czProcName[MAX_PROC_NAME] = { 0, };
@@ -662,7 +690,6 @@ Kauth_Callback_FileOp(int nPID, kauth_cred_t pCred, void* pData, kauth_action_t 
     OSDecrementAtomic( &g_DrvKext.KauthCtx.nFileOpCount );
     return KAUTH_RESULT_DEFER;
 }
-#endif
 
 
 kern_return_t

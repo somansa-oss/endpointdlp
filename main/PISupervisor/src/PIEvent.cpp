@@ -1,6 +1,10 @@
 #ifndef	_PIEVENT_CPP
 #define	_PIEVENT_CPP
 
+#ifdef LINUX
+#include <string>
+#endif
+
 #include"PIEvent.h"
 
 ////////////////////////////////////////

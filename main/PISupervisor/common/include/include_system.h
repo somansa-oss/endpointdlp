@@ -61,7 +61,11 @@
 #include <vector>
 #include <list>
 //#include <map>
+
+#ifndef LINUX
 #include <stdexcept>
+#endif
+
 //#include <algorithm>
 
 #endif

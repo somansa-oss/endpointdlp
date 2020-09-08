@@ -1,6 +1,10 @@
 #ifndef	_SCHEDULER_CPP
 #define	_SCHEDULER_CPP
 
+#ifdef LINUX
+#include <string>
+#endif
+
 #include"PIScheduler.h"
 #include"PIEventHandler.h"
 

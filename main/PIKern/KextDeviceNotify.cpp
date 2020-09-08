@@ -2,6 +2,9 @@
 #include <string.h>
 
 #ifdef LINUX
+#include <stdlib.h>
+#include <mntent.h>
+#include <libudev.h>
 #else
 #import <Foundation/Foundation.h>
 #import <IOKit/IOKitLib.h>
@@ -18,7 +21,6 @@
 #include "KextDeviceNotify.h"
 #include "PISecSmartDrv.h"
 
-
 #ifndef VFS_RETURNED
 #define VFS_RETURNED    0
 #endif
@@ -29,6 +31,20 @@ int EnumMountCallback(void* pMount, void* pParam);
 int EnumMountCallback(mount_t pMount, void* pParam);
 #endif
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+void CPIESF_fnAddNotify(void* pzArg);
+
+void CPIESF_fnRemoteNotify(void* pzArg);
+
+#ifdef __cplusplus
+};
+#endif
+
+
 void FetchVolumes()
 {
     VolCtx_Clear();
@@ -36,6 +52,84 @@ void FetchVolumes()
 }
 
 #ifdef LINUX
+int get_storage_type(struct udev* udev, char* mnt_fsname)
+{
+  int ret = BusTypeUnknown;
+
+  struct udev_enumerate* enumerate = NULL;
+  if (udev == NULL || mnt_fsname == NULL)
+    return ret;
+  
+  enumerate = udev_enumerate_new(udev);
+  if (enumerate == NULL)
+    return ret;
+
+  printf("DEVNAME = %s\n", mnt_fsname);
+
+  udev_enumerate_add_match_property(enumerate, "DEVNAME", mnt_fsname);
+  udev_enumerate_scan_devices(enumerate);
+
+  struct udev_list_entry *devices = udev_enumerate_get_list_entry(enumerate);
+  struct udev_list_entry *entry = NULL;
+
+  udev_list_entry_foreach(entry, devices) 
+  {
+    const char* path = udev_list_entry_get_name(entry);
+    if (path == NULL)
+        continue;
+
+     struct udev_device* parent = udev_device_new_from_syspath(udev, path);
+     if (parent == NULL)
+         continue;
+
+    //  {
+    //     struct udev_list_entry *props = NULL;
+    //     struct udev_list_entry *props_list_entry = NULL;
+    //
+    //     printf("path = %s\n", path);
+    //
+    //     props = udev_device_get_properties_list_entry( parent );
+    //     udev_list_entry_foreach( props_list_entry, props )
+    //     {
+    //         const char *attr = udev_list_entry_get_name( props_list_entry );
+    //         const char *value = udev_device_get_property_value(parent, attr);
+    //         printf("\tproperty [%s][%s]\n", attr, value);
+    //     }
+    //  }
+
+    const char *id_cdrom = udev_device_get_property_value(parent, "ID_CDROM");
+    //printf("\tproperty [ID_CDROM][%s]\n", id_cdrom);
+
+    const char *devtype = udev_device_get_property_value(parent, "DEVTYPE");
+    //printf("\tproperty [DEVTYPE][%s]\n", devtype);
+
+    if (id_cdrom != NULL)
+    {
+        ret = BusTypeAtapi;
+    }
+    else if (devtype != NULL)
+    {
+        ret = BusTypeUsb;
+    }
+
+    break;
+  }
+
+  udev_enumerate_unref(enumerate);
+
+  if (ret == BusTypeUnknown)
+  {
+#ifdef WSL
+        ret = BusTypeUsb;
+#else
+      ret = BusTypeSFolder;
+#endif      
+  }
+
+  return ret;
+}
+
+
 int EnumMountCallback(void *pMount, void* pParam)
 #else
 int EnumMountCallback(mount_t pMount, void* pParam)
@@ -48,7 +142,85 @@ int EnumMountCallback(mount_t pMount, void* pParam)
     boolean_t bTBStor  = FALSE;
 
 #ifdef LINUX
-//FIXME_MUST
+    struct mntent *ent = NULL;
+    FILE *aFile = NULL;
+    struct udev* udev = NULL;
+
+    aFile = setmntent("/proc/mounts", "r");
+    if (aFile == NULL) 
+    {
+        printf("[DLP][%s] setmntent() failed \n", __FUNCTION__);
+        return -1;
+    }
+
+    udev = udev_new();
+    if (udev == NULL)
+    {
+        printf("[DLP][%s] udev_new() failed \n", __FUNCTION__);
+        endmntent(aFile);
+        return -1;
+    }
+
+    while (NULL != (ent = getmntent(aFile))) 
+    {
+        // e.g.
+        // f_mntonname     /media/somansa/PRIVACY-I
+        // f_mntfromname   /dev/sdb1
+        //        
+        // ent->mnt_fsname, ent->mnt_dir, ent->mnt_type, ent->mnt_opts
+        //  /dev/sdb1  /media/somansa/PRIVACY-I  vfat  rw,nosuid,nodev,relatime,uid=1001,gid=1001,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,showexec,utf8,flush,errors=remount-ro
+        //  /dev/sda3 / ext4  rw,relatime,errors=remount-ro 
+#ifdef WSL
+        if (strstr(ent->mnt_dir, "/dev/") == NULL && strstr(ent->mnt_dir, "/mnt/") == NULL)
+#else
+        if (strstr(ent->mnt_fsname, "/dev/") == NULL && strstr(ent->mnt_fsname, "/mnt/") == NULL)
+#endif
+        {
+#ifdef WSL
+            if (ent->mnt_fsname[0] == '/' && ent->mnt_fsname[1] == '/')
+#else            
+            if (ent->mnt_dir[0] == '/' && ent->mnt_dir[1] == '/')
+#endif            
+            {
+                // //192.168.181.1/tmp
+            }
+            else
+            {
+                continue;
+            }
+        }
+        else
+        {
+#ifdef WSL
+#else
+            // /dev/sda3  /  
+            if (ent->mnt_dir[0] == '/' && ent->mnt_dir[1] == 0)
+            {
+                continue;
+            }
+#endif            
+        }
+
+#ifdef WSL
+        if (strlen(ent->mnt_dir) <= 1)
+#else        
+        if (strlen(ent->mnt_fsname) <= 1)
+#endif        
+        {
+            continue;
+        }
+        //printf("%s %s %s %s \n", ent->mnt_fsname, ent->mnt_dir, ent->mnt_type, ent->mnt_opts);
+
+//#ifdef WSL
+        int type = get_storage_type(udev, ent->mnt_fsname);
+//#else        
+//        int type = get_storage_type(udev, ent->mnt_dir);
+//#endif        
+        VolCtx_Update( ent->mnt_fsname, ent->mnt_dir, type );
+    }
+    endmntent(aFile);
+    udev_unref(udev);
+
     return 0;
 #else
     // Get all mounted path
@@ -261,6 +433,9 @@ boolean_t IsVolumesDirectory(const char* path)
 {
     boolean_t volumesDir = FALSE;
 
+#ifdef LINUX
+    volumesDir = TRUE;
+#else
     if (path != NULL &&
         strlen(path) >= strlen("/Volumes/") &&
         *(path+0) == '/' &&
@@ -275,6 +450,7 @@ boolean_t IsVolumesDirectory(const char* path)
     {
         volumesDir = TRUE;
     }
+#endif    
     return volumesDir;
 }
 

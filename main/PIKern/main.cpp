@@ -59,6 +59,10 @@ boolean_t supervisorWorking()
 
 int main(int argc, const char * argv[])
 {
+#ifdef LINUX    
+    CPIESF::getInstance().initialize();
+#endif
+
     PISecSmartDrv_start(NULL, NULL);
     
     CPIActionSupervisorIPC::getInstance().run("");
@@ -69,7 +73,7 @@ int main(int argc, const char * argv[])
     {
         if (CPIESF::getInstance().isActive() == false)
             break;
-        sleep(1);
+        sleep(3);
     }
     
     PISecSmartDrv_stop(NULL, NULL);

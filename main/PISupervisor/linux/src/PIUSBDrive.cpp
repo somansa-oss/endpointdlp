@@ -1,6 +1,10 @@
 #ifndef	_PIUSBDRIVE_CPP 
 #define _PIUSBDRIVE_CPP
 
+#ifdef LINUX
+#include <string>
+#endif
+
 #include "PIUSBDrive.h"
 #include "UsbFinder.h"
 

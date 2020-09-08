@@ -69,7 +69,7 @@ Kauth_Callback_FileOp( int nPID,
                        int action,
                        void*      arg0,
                        void*      arg1,
-                       void*      arg2,
+                       int      arg2,
                        void*      arg3  );
 #else
 int
