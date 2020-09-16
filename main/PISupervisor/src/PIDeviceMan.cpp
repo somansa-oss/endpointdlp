@@ -1439,7 +1439,7 @@ int CPIDeviceMan::getMaxTimeSpan(void) const
 
 bool CPIDeviceMan::MediaPolicyExistSet(CPISecRule& rule, EXIST_POLICY& Policy)
 {
-	if (false == rule.disableAll) {
+	if (false == rule.disableAll && "Device\\CD/DVD" != rule.virtualType) {
 		return false;
 	}
 
@@ -1484,11 +1484,31 @@ bool CPIDeviceMan::MediaPolicyExistPost(EXIST_POLICY& Policy)
     {
 #ifndef LINUX		
         g_DRDevice.ClearDRDevicePolicy();
+#else
+		CPISecRule rule;
+		CPIDeviceController controller(rule);
+		controller.deviceControl.enableWriteCDDVD();
 #endif		
     }
     
-    if(false == Policy.bExistWLan) {}
-    if(false == Policy.bExistWwan) {}
+    if(false == Policy.bExistWLan)
+	{
+#ifndef LINUX		
+#else
+		CPISecRule rule;
+		CPIDeviceController controller(rule);
+		controller.deviceControl.enableWLAN();
+#endif	
+	}
+    if(false == Policy.bExistWwan) 
+	{
+#ifndef LINUX		
+#else
+		CPISecRule rule;
+		CPIDeviceController controller(rule);
+		controller.deviceControl.enableWWLAN();
+#endif	
+	}
     if(false == Policy.bExistCamera) {}
     
     if(false == Policy.bExistAirDrop)
@@ -1500,6 +1520,13 @@ bool CPIDeviceMan::MediaPolicyExistPost(EXIST_POLICY& Policy)
     
     if(false == Policy.bExistFileSharing) {}
     if(false == Policy.bExistRemoteManagement) {}
+
+	if (false == Policy.bExistBth)
+	{
+		CPISecRule rule;
+		CPIDeviceController controller(rule);
+		controller.deviceControl.enableBluetooth();
+	}
     return true;
 }
 

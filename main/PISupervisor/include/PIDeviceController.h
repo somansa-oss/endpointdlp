@@ -65,14 +65,23 @@ class CPIDeviceControlLinux : public IPIDeviceControl
 	public:
 		CPIDeviceControlLinux(CPISecRule& rule): IPIDeviceControl(rule) {};
 		virtual ~CPIDeviceControlLinux() {};
+	
+        bool enableBluetooth();
+        bool enableWriteCDDVD();
+        bool enableWLAN();
+        bool enableWWLAN();
 
+    protected:
+        bool enableDevice(const char * media_type);
+        bool controlDevice(const char * media_type, const char *pvi_media_type);
+        
 	public:
         virtual bool controlWLANSSID( std::vector<std::string> vecWLanPermitList ) { return false; }
-		virtual bool controlWLAN(void) { return false; };
-		virtual bool controlWWAN(void) { return false; };
-		virtual bool controlBluetooth(void) { return false; };
+		virtual bool controlWLAN(void);
+		virtual bool controlWWAN(void);
+		virtual bool controlBluetooth(void);
         virtual bool controlCamera(void) { return false; };
-        virtual bool controlWriteCDDVD(void) { return false; }
+        virtual bool controlWriteCDDVD(void);
         virtual bool controlFileSharing(void) { return false; }
         virtual bool controlRemoteManagement(void) { return false; }
         virtual bool controlAirDrop(void) { return false; }

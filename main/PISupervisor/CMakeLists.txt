@@ -11,7 +11,7 @@ set(CMAKE_VERBOSE_MAKEFILE "YES")
 
 ADD_DEFINITIONS ( -DLINUX )
 
-LINK_LIBRARIES ( -pthread -ldl )
+LINK_LIBRARIES ( -pthread -ldl -llsf-media )
 
 # add the executable
 # not supported for Linux:
