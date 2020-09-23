@@ -21,6 +21,84 @@
 #include <arpa/inet.h>
 
 
+// DataRead
+boolean_t
+Kauth_Vnode_IsProtectRead(int nPID, char* pczProcName, int nAction, int nVType, vnode_t pVnode, char* pczVnodePath, LOG_PARAM* pLog )
+{
+    boolean_t bProtect = FALSE;
+
+    //if(!pczProcName || !pVnode || !pczVnodePath || !pLog)
+    if(!pczProcName || !pczVnodePath || !pLog)    
+    {
+        return FALSE;
+    }
+    
+#ifdef FIXME
+    bProtect = IsProtect_KextUnload( nPID, pczProcName, pczVnodePath );
+    if(TRUE == bProtect)
+    {
+        printf( "[DLP][%s] Deny. IsProtect_KextUnload pid=%d proc=%s, Path=%s \n", __FUNCTION__, nPID, pczProcName, pczVnodePath );
+        return TRUE;
+    }
+#endif
+
+    if(IsControlDeviceType( pVnode, pczVnodePath ))
+    {
+        pLog->nAction = ACTION_READ;
+        pLog->pczPath1 = pczVnodePath;
+        //bProtect = CtrlCheck_Read( nPID, pczProcName, nVType, pczVnodePath, pLog );
+        bProtect = IsPolicyExist_BlockRead( nPID, pczProcName, nVType, pczVnodePath, pLog );
+        if(TRUE == bProtect)
+        {
+            // printf( "[DLP][%s] Deny. log=%d, pid=%d proc=%s, Path=%s \n", __FUNCTION__, (int)pLog->bLog, nPID, pczProcName, pczVnodePath );
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+
+// Write
+boolean_t
+Kauth_Vnode_IsProtectWrite( int nPID, char* pczProcName, int nAction, int nVType, vnode_t pVnode, char* pczVnodePath, LOG_PARAM* pLog )
+{
+    boolean_t bProtect = FALSE;
+    
+    //if(!pczProcName || !pVnode || !pczVnodePath || !pLog)
+    if(!pczProcName || !pczVnodePath || !pLog)
+    {
+        return FALSE;
+    }
+    
+#ifdef FIXME    
+    if(TRUE == IsProtect_FilePath( pczVnodePath ))
+    {
+        return TRUE;
+    }
+    
+    bProtect = IsProtect_Service( pczVnodePath );
+    if(TRUE == bProtect)
+    {
+        // printf( "[DLP][%s] Deny.  IsProtect_Service pid=%d, proc=%s, Vnode=%s \n", __FUNCTION__, nPID, pczProcName, pczVnodePath );
+        return TRUE;
+    }
+#endif
+    
+    if(IsControlDeviceType( pVnode, pczVnodePath ))
+    {
+        pLog->nAction = ACTION_WRITE;
+        pLog->pczPath1 = pczVnodePath;
+        //bProtect = CtrlCheck_Write( nPID, pczProcName, nVType, pczVnodePath, pLog );
+        bProtect = IsPolicyExist_BlockWrite(nPID, pczProcName, nVType, pczVnodePath, pLog );
+        if(TRUE == bProtect)
+        {
+            // printf( "[DLP][%s] Deny. log=%d, pid=%d proc=%s, Vnode=%s \n", __FUNCTION__, (int)pLog->bLog, nPID, pczProcName, pczVnodePath );
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 boolean_t
 Kauth_FileOp_FileClose( int nPID, char* pczProcName, vnode_t pVnode, char* pczFilePath, int nFlag, LOG_PARAM* pLog )
 {

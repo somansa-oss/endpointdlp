@@ -13,6 +13,13 @@
 extern "C"
 {
 #endif
+
+    // Read
+    boolean_t
+    Kauth_Vnode_IsProtectRead(int nPID, char* pczProcName, int nAction, int nVType, vnode_t pVnode, char* pczVnode, LOG_PARAM* pLog );
+    // Write
+    boolean_t
+    Kauth_Vnode_IsProtectWrite( int nPID, char* pczProcName, int nAction, int nVType, vnode_t pVnode, char* pczVnode, LOG_PARAM* pLog );
     
     boolean_t Kauth_FileOp_FileClose( int nPID, char* pczProcName, vnode_t pVnode, char* pczFilePath, int nFlags, LOG_PARAM* pLog );
     boolean_t Kauth_FileOp_FileOpen(  int nPID, char* pczProcName, vnode_t pVnode, char* pczFilePath, LOG_PARAM* pLog );

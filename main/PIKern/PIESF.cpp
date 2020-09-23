@@ -2,6 +2,16 @@
 #include <string.h>
 
 #ifdef LINUX
+#include <unistd.h>     // getuid
+#include <lsf-api/media-api.h>
+#include <assert.h>
+#include <stdio.h>
+#endif
+
+#define LSF_MEDIA_USB_MEMORY       "usb_memory"
+
+
+#ifdef LINUX
 #include <glib.h>
 #include <gio/gio.h>
 #else
@@ -28,6 +38,7 @@
 #include "PISecSmartDrv.h"
 #include "KauthEventFunc.h"
 #include "KextDeviceNotify.h"
+#include "SmartCmd.h"
 
 
 #ifdef LINUX
@@ -256,12 +267,109 @@ std::string base_name(std::string const &path)
     return path.substr(path.find_last_of("/") + 1);
 }
 
-static void
-event_process (struct fanotify_event_metadata *event,
-               int                             fanotify_fd)
+static bool enableDevice(const char * media_type)
 {
-    char file_path[PATH_MAX] = {0};
+	bool result = false;
+
+	lsf_media_error_t *error = NULL;
+	LSF_MEDIA_STATE state = LSF_MEDIA_NONE; 
+	LSF_MEDIA_RESULT r = LSF_MEDIA_FAIL;
+
+	if (media_type == NULL)
+	{
+		return result;
+	}
+
+	r = lsf_media_get_state( media_type, &state, &error);
+	if (r == LSF_MEDIA_SUCCESS)
+	{
+		if (state == LSF_MEDIA_ALLOW)
+		{
+			if (error != NULL)
+			{
+				DEBUG_LOG( "command:lsf_media_get_state(%d),result-error[%s]", media_type, error->message);
+				lsf_media_free_error(error);
+			}
+
+			return false;
+		}
+	}
+	if (error != NULL)
+	{
+		DEBUG_LOG( "command:lsf_media_get_state(%d),result-error[%s]", media_type, error->message);
+		lsf_media_free_error(error);
+	}
+
+	r = lsf_media_set_state( media_type, LSF_MEDIA_ALLOW, &error );
+	if (r == LSF_MEDIA_SUCCESS)
+	{
+		result = true;
+	}
+	if (error != NULL)
+	{
+		DEBUG_LOG( "command:lsf_media_set_state(%d),result-error[%s]", media_type, error->message);
+		lsf_media_free_error(error);
+	}
+
+	return result;
+}
+
+static bool controlDevice(const char *media_type, const char *pvi_media_type, int target_state)
+{
+	bool result = false;
+
+	lsf_media_error_t *error = NULL;
+	LSF_MEDIA_STATE state = LSF_MEDIA_NONE; 
+	LSF_MEDIA_RESULT r = LSF_MEDIA_FAIL;
+
+	if (media_type == NULL || pvi_media_type == NULL)
+	{
+		return result;
+	}	
+
+	r = lsf_media_get_state( media_type, &state, &error);
+	if (r == LSF_MEDIA_SUCCESS)
+	{
+		//DEBUG_LOG( "command:lsf_media_get_state(%d),result-success,state-%d", LSF_MEDIA_BLUETOOTH, state);
+		if (state == target_state)
+		{
+			if (error != NULL)
+			{
+				DEBUG_LOG( "command:lsf_media_get_state(%d),result-error[%s]", media_type, error->message);
+				lsf_media_free_error(error);
+			}
+
+			return false;
+		}
+	}
+	if (error != NULL)
+	{
+		DEBUG_LOG( "command:lsf_media_get_state(%d),result-error[%s]", media_type, error->message);
+		lsf_media_free_error(error);
+	}
+
+	r = lsf_media_set_state( media_type, (LSF_MEDIA_STATE)target_state, &error );
+	if (r == LSF_MEDIA_SUCCESS)
+	{
+		result = true;
+	}
+	if (error != NULL)
+	{
+		DEBUG_LOG( "command:lsf_media_set_state(%d),result-error[%s]", media_type, error->message);
+		lsf_media_free_error(error);
+	}
+
+	return result;
+}
+
+
+static int
+event_process (struct fanotify_event_metadata *event,
+               int                             fanotify_fd,
+               char *file_path)
+{
     char program_path[PATH_MAX] = {0};
+    int change_mod_value = 0;
     
     if (NULL == get_file_path_from_fd (event->fd, file_path, PATH_MAX))
     {
@@ -269,24 +377,14 @@ event_process (struct fanotify_event_metadata *event,
         access.fd = event->fd;
         access.response = FAN_ALLOW;
         write (fanotify_fd, &access, sizeof (access));
-        return;
+        return change_mod_value;
     }
-    
-    // if (strncmp(file_path, "/media/", sizeof("/media/")) != 0)
-    // {
-    //   struct fanotify_response access = {0};
-    //   access.fd = event->fd;
-    //   access.response = FAN_ALLOW;
-    //   write (fanotify_fd, &access, sizeof (access));
-    //   return;
-    // }
     
     printf ("Received event in path '%s'=>[%lld]", file_path, event->mask);
     printf (" pid=%d (%s): \n",
             event->pid,
             (get_program_name_from_pid (event->pid, program_path, PATH_MAX) ?
-             program_path :
-             "unknown"));
+             program_path : "unknown"));
     
     LOG_PARAM  LogParam = {0};
     
@@ -297,59 +395,78 @@ event_process (struct fanotify_event_metadata *event,
     std::string target_file_path = file_path;
     int nFlag = KAUTH_FILEOP_CLOSE_MODIFIED;
     
-    printf("ES_EVENT_TYPE_NOTIFY_CLOSE\n");
+    //printf("ES_EVENT_TYPE_NOTIFY_CLOSE\n");
     printf("pid-[%d]\n", nProcessId);
     printf("proc.name-[%s]\n", process_name.c_str());
     printf("targe_file_path-[%s]\n", target_file_path.c_str());
-    printf("targe_modified-[%d]\n", modified);
-    fflush(stdout);
 
-    // if (msg->event.close.modified == false ||
-    //     msg->event.close.target == NULL
-    //     || msg->event.close.target->path.data == NULL)
-    //     break;
-
-    LogParam.nLogType    = LOG_FILEOP;
     LogParam.nProcessId  = nProcessId;
     LogParam.pczProcName = (char*)process_name.c_str();
     LogParam.nAction = KAUTH_FILEOP_CLOSE;
 
     bool bAllow = false;
+    bool bBlock = false;
     struct fanotify_response access = {0};
     access.fd = event->fd;
-    bAllow = Kauth_FileOp_FileClose(nProcessId,
-                            (char*)process_name.c_str(),
-                            NULL,
-                            (char*)target_file_path.c_str(),
-                            nFlag,
-                            &LogParam);    
-    // if (bAllow == true)
-    // {
-    //     access.response = FAN_ALLOW;
-    // }
-    // else
-    // {
-    //     access.response = FAN_DENY;
-    // }
     access.response = FAN_ALLOW;
-    write (fanotify_fd, &access, sizeof (access));
-    close (event->fd);
 
-    // if (bAllow == true)
-    // {
-    //     // do nothing.
-    // }
-    // else
-    // {
-    //     unlink( file_path );
-    // }
+    if (event->mask & FAN_OPEN_PERM)
+    {
+        bBlock = Kauth_Vnode_IsProtectRead( LogParam.nProcessId, LogParam.pczProcName, 0, 0, NULL, (char*)target_file_path.c_str(), &LogParam );
+        printf( "[DLP][%s] Kauth_Vnode_IsProtectRead(), bBlock=%d \n", __FUNCTION__, bBlock );
     
-    //fflush (stdout);
+        if (bBlock)
+        {
+            access.response     = FAN_DENY;
+        }
+        else
+        {
+            if (IsControlDeviceType( NULL, (char*)target_file_path.c_str() ))
+            {
+                bBlock = Kauth_Vnode_IsProtectWrite( LogParam.nProcessId, LogParam.pczProcName, 0, 0, NULL, (char*)target_file_path.c_str(), &LogParam );
+                printf( "[DLP][%s] Kauth_Vnode_IsProtectWrite(), bBlock=%d \n", __FUNCTION__, bBlock );
+                
+                if (bBlock)
+                {
+                    if (controlDevice(LSF_MEDIA_USB_MEMORY, "RemovableDrive", LSF_MEDIA_READONLY))
+                    {
+                        LogParam.nLogType   = LOG_VNODE;
+                        SmartDrv_LogAppend( &LogParam, 0 );
+                    }
+                }
+                else
+                {
+                    enableDevice(LSF_MEDIA_USB_MEMORY);
+                }
+            }            
+        }
+    }
+    else if (event->mask & FAN_CLOSE_WRITE)
+    {
+        LogParam.nLogType    = LOG_FILEOP;
+
+        bAllow = Kauth_FileOp_FileClose(nProcessId,
+                                (char*)process_name.c_str(),
+                                NULL,
+                                (char*)target_file_path.c_str(),
+                                nFlag,
+                                &LogParam);
+        printf( "[DLP][%s] Kauth_FileOp_FileClose(), bAllow=%d \n", __FUNCTION__, bAllow );
+    }
+    else
+    {
+        // do nothing!!!
+    }
+
+    write (fanotify_fd, &access, sizeof (access));
+
+    return change_mod_value;
 }
 
 void* CPIESF::fnCommunicateClient(void* pzArg) {
 	DEBUG_LOG1("mount_monitor_thread - begin");
 
+    char file_path[PATH_MAX] = {0};
 	CPIESF* instance;
 	instance = reinterpret_cast<CPIESF*>(pzArg);
 	instance->runningClientThread = true;
@@ -380,11 +497,17 @@ void* CPIESF::fnCommunicateClient(void* pzArg) {
                 metadata = (struct fanotify_event_metadata *)buffer;
                 while (FAN_EVENT_OK (metadata, length))
                 {
-                    event_process (metadata, instance->fanotify_fd);
+                    int change_mod_value = event_process (metadata, instance->fanotify_fd, file_path);
                     if (metadata->fd > 0)
                     {
                         close (metadata->fd);
                     }
+
+                    if (change_mod_value > 0 && file_path[0] != 0)
+                    {
+                        int ret = chmod((char*)file_path, change_mod_value);
+                    }
+
                     metadata = FAN_EVENT_NEXT (metadata, length);
                 }
             }
@@ -772,12 +895,13 @@ static uint64_t event_mask =
 //(FAN_OPEN_PERM);      // Open permission control
 (
  //FAN_MARK_MOUNT |
- //FAN_OPEN_PERM|
+ //FAN_ACCESS_PERM |
+ FAN_OPEN_PERM|
  // FAN_ACCESS |         /* File accessed */
- //  FAN_MODIFY |         /* File modified */
+ FAN_MODIFY |         /* File modified */
  FAN_CLOSE_WRITE |    /* Writtable file closed */
  //FAN_CLOSE_NOWRITE |  /* Unwrittable file closed */
- //  FAN_OPEN |           /* File was opened */
+ FAN_OPEN |           /* File was opened */
  FAN_ONDIR |           /* We want to be reported of events in the directory */
  FAN_EVENT_ON_CHILD); /* We want to be reported of events in files of the directory */
 
@@ -880,3 +1004,85 @@ void CPIESF_fnRemoveNotify(void* pzArg)
 #ifdef __cplusplus
 }
 #endif
+
+
+    //     struct stat sb = {0};
+    //     //int t = fstat(event->fd, &sb);
+    //     int t = stat((char*)target_file_path.c_str(), &sb);
+    //     if (0 == t && 0 == (sb.st_mode & S_IFDIR))
+    //     {
+    //         time_t t = time(NULL);
+    //         struct tm *ctime = localtime(&t);
+    //         time_t t1 = 0;
+    //         time_t t2 = 0;
+            
+    //         if (ctime != NULL)
+    //         {
+    //             t1 = mktime(ctime);
+    //         }
+
+    //         ctime = localtime(&sb.st_mtime);
+    //         if (ctime != NULL)
+    //         {
+    //             t2 = mktime(ctime);
+    //         }
+
+    //         if (t1 > 0 && t2 > 0)
+    //         {
+    //             double diff_secs = difftime(t1, t2);
+    //             printf( "[DLP][%s] [%ld][%ld],diff_secs=%f \n", __FUNCTION__, t1, t2, diff_secs );
+
+    //             // new file
+    //             if (t1 > t2 && diff_secs <= 1)
+    //             {
+    //                 //not check directory
+    //                 {
+    //                 }
+    //             }
+    //             else
+    //             {
+    //                 if (sb.st_mode & S_IWUSR)
+    //                 {
+    //                     change_mod_value = S_IRUSR;
+    //                 }
+    //                 if (sb.st_mode & S_IWGRP)
+    //                 {
+    //                     change_mod_value |= S_IRGRP;
+    //                 }
+    //                 if (sb.st_mode & S_IWOTH)
+    //                 {
+    //                     change_mod_value |= S_IROTH;
+    //                 }
+
+    //                 access.response = FAN_ALLOW;
+    //             }
+    //         }
+    //         else
+    //         {
+    //             printf("localtime(%s)-error!!!,[%d]\n", (char*)target_file_path.c_str(), errno);
+    //             access.response = FAN_ALLOW;   
+    //         }
+    //     }
+    //     else
+    //     {
+    //         printf("fstat(%s)-error!!!,[%d]\n", (char*)target_file_path.c_str(), errno);
+    //         access.response = FAN_ALLOW;            
+    //     }
+    // }
+    //if (event->mask & FAN_OPEN_PERM)
+    // if (event->mask & FAN_MODIFY)
+    // {
+    //     LogParam.nLogType   = LOG_VNODE;
+    //     bBlock = Kauth_Vnode_IsProtectWrite( LogParam.nProcessId, LogParam.pczProcName, 0, 0, NULL, (char*)target_file_path.c_str(), &LogParam );
+    //     printf( "[DLP][%s] Kauth_Vnode_IsProtectWrite(), bBlock=%d \n", __FUNCTION__, bBlock );
+
+    //     if (bBlock)
+    //     {
+    //         access.response     = FAN_DENY;
+    //     }
+    //     else
+    //     {
+    //         access.response = FAN_ALLOW;
+    //     }
+    // }
+    // else 

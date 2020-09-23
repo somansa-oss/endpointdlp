@@ -305,6 +305,77 @@ CtrlCheck_Contents(int nPID, char* pczProcName, vnode_t pVnode, const char* pczP
 }
 
 boolean_t
+IsPolicyExist_BlockRead( int nPID, char* pczProcName, int nVnodeType, const char* pczFilePath, LOG_PARAM* pLogParam )
+{
+    boolean_t bSafe = TRUE;
+    boolean_t bLog  = FALSE;
+    int  nPos=0, nMaxPos=0, nLength=0;
+    char*     pczTargetBase = NULL;
+    
+    if(!pLogParam || !pczFilePath)
+    {
+        return FALSE;
+    }
+    
+    nMaxPos = (int)g_DrvKext.nDeviceCount;
+    for(nPos=0; nPos<nMaxPos; nPos++)
+    {
+        nLength = (int)strlen(g_DrvKext.CtrlDeviceEx[nPos].cDevice.DeviceNames);
+        pczTargetBase = sms_strnstr( pczFilePath, g_DrvKext.CtrlDeviceEx[nPos].cDevice.DeviceNames, nLength );
+        if(pczTargetBase != NULL && (pczFilePath[nLength] == '/' || pczFilePath[nLength] == 0))
+        {
+            if(g_DrvKext.CtrlDeviceEx[nPos].cDevice.bDisableAll || g_DrvKext.CtrlDeviceEx[nPos].cDevice.bDisableRead)
+            {
+                bSafe = FALSE;
+                bLog = (boolean_t)g_DrvKext.CtrlDeviceEx[nPos].cDevice.bLoggingOn;
+                pLogParam->bLog = bLog;
+                pLogParam->nPolicyType = g_DrvKext.CtrlDeviceEx[nPos].ulStorDevType;
+            }
+            break;
+        }
+    }
+    
+    //[DLP][Kauth_Vnode_IsProtectRead] Deny. log=1, pid=280 proc=Finder, Path=/Volumes/2 1
+    if(FALSE == bSafe && (0 == strncasecmp(pczProcName, "sharedfilelistd", strlen("sharedfilelistd"))
+       || 0 == strncasecmp(pczProcName, "Finder", strlen("Finder"))
+       || 0 == strncasecmp(pczProcName, "lsd", strlen("lsd"))))
+    {
+        if (pczProcName != NULL
+            && strlen(pczFilePath) >= strlen("/Volumes/")
+            && pczFilePath == sms_strnstr(pczFilePath, "/Volumes/", strlen("/Volumes/")))
+        {
+            boolean_t bAllow = TRUE;
+            for(size_t i = strlen("/Volumes/") ; i < strlen(pczFilePath); i++)
+            {
+                if(pczFilePath[i] == '/')
+                {
+                    bAllow = FALSE;
+                    break;
+                }
+            }
+
+            if(bAllow)
+            {
+                bSafe = TRUE;
+                printf( "[DLP][%s] ByPass1. GetVnodePath != 0 pid=%d, proc=%s pczVnodePath=%s\n", __FUNCTION__, nPID, pczProcName, pczFilePath );
+                return KAUTH_RESULT_DEFER;
+            }
+        }
+    }
+    
+    if(FALSE == bSafe && IsAllowedFolderFileExt((char*)pczFilePath, TRUE) == FALSE)
+    {   // if(bLog && (VDIR != nVnodeType))
+        if(bLog)
+        {
+            SmartDrv_LogAppend( pLogParam, nVnodeType );
+        }
+        // LOG_MSG("[DLP][%s] ExistPolicy \n", __FUNCTION__);
+        return TRUE;
+    }
+    return FALSE;
+}
+
+boolean_t
 IsPolicyExist_BlockWrite( int nPID, char* pczProcName, int nVnodeType, const char* pczFilePath, LOG_PARAM* pLogParam )
 {
     boolean_t bSafe = TRUE;
@@ -345,10 +416,14 @@ IsPolicyExist_BlockWrite( int nPID, char* pczProcName, int nVnodeType, const cha
 
     if(FALSE == bSafe && IsAllowedFolderFileExt((char*)pczFilePath, TRUE) == FALSE)
     {   // if(bLog && (VDIR != nVnodeType))
+
+#ifndef LINUX    
         if(bLog)
         {
+            pLogParam->nLogType   = LOG_VNODE;
             SmartDrv_LogAppend( pLogParam, nVnodeType );
         }
+#endif        
         // LOG_MSG("[DLP][%s] ExistPolicy \n", __FUNCTION__);
         return TRUE;
     }

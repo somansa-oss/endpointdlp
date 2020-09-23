@@ -1975,7 +1975,6 @@ bool CPIDeviceMan::adjustSmartLog(void*& param) {
 			return true;
 		}
 
-#ifndef LINUX		
 		if (true == policyCopy->isBlockReadAll()) {
 			const int EXCEPTION_FLAG = GET_EXCEPTION_FLAG(pLogEx->PolicyType);
 			const ULONG POLICYTYPE_OLD = pLogEx->PolicyType;
@@ -1983,7 +1982,6 @@ bool CPIDeviceMan::adjustSmartLog(void*& param) {
 			DEBUG_LOG("policy_type - old:0x%08x - new:0x%08x", POLICYTYPE_OLD, pLogEx->PolicyType);
 			return true;
 		}
-#endif		
 	}
 
 	return true;

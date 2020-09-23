@@ -230,6 +230,7 @@ void GetMountPath(const char* pczPath, char* pczDevPath, int nBufferSize1, char*
 
 #ifdef LINUX
     // e.g. /Volumes/tmp/1.doc -> /Volumes/tmp
+    // e.g. /Volumes/tmp -> /Volumes/tmp
     if (pczPath[0] != '/')
         return;
 
@@ -241,9 +242,9 @@ void GetMountPath(const char* pczPath, char* pczDevPath, int nBufferSize1, char*
         {
 #ifndef WSL
             pszDelim2 = strstr(pszDelim2 + 1, "/");
+#endif            
             if (pszDelim2 != NULL)
             {
-#endif            
                 int size = pszDelim2 - pczPath;
                 if (size > 1)
                 {
@@ -253,9 +254,11 @@ void GetMountPath(const char* pczPath, char* pczDevPath, int nBufferSize1, char*
                 {
                     return;
                 }
-#ifndef WSL
             }
-#endif            
+            else
+            {
+                strcpy(pczDevPath, pczPath);
+            }
         }
         else
         {
