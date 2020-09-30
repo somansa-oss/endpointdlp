@@ -39,4 +39,4 @@ bool CPIDiskSize::getSystemDiskSize(void) {
 void CPIDiskSize::getUsedBytes(void) {
 	usedBytes = totalBytes - freeBytes;
 }
-#endif // #ifndef _PIDISKSIZE_CPP
+#endif

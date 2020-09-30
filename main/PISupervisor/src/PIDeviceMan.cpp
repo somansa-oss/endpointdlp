@@ -1700,14 +1700,12 @@ bool CPIDeviceMan::applyPolicyPrintPrevent(void) {
 	}
 	PolicyMan.releaseLock();
 
-	// ----------
 	DEBUG_LOG("print policy - policy(%d) - policy_type(0x%04x) - watermark(%d) - disable_write(%d) - reserved1(%d)"
 			, print_policy->bPolicy
 			, print_policy->nPolicyType
 			, print_policy->bWatermark
 			, print_policy->bDisableWrite
 			, print_policy->nReserved1);
-	// ----------
 
 	bool result = smartDrvStub.applyPolicy(SetPrintPrevent, (void*) print_policy, sizeof(PRINT_POLICY));
 	INFO_LOG("apply print policy - %s", (true == result) ? "ok" : "failed");

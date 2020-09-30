@@ -29,4 +29,4 @@ void CPIEvent::clear(void) {
 
 	eventId = nsPISupervisor::EVENT_NONE;
 }
-#endif // #ifndef _PIEVENT_CPP
+#endif
