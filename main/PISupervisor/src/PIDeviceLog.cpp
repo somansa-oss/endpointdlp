@@ -315,4 +315,4 @@ void CPIDeviceLog::setDeviceName(std::string value) {
 		}
 	}
 }
-#endif // #ifndef _PIDEVICELOG_CPP
+#endif
