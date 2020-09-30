@@ -49,4 +49,4 @@ void CPIDocument::setStop(void) {
 bool CPIDocument::getStop(void) {
 	return stop;
 }
-#endif // #ifndef _PIDOCUMENT_CPP
+#endif
