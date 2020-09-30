@@ -22,14 +22,8 @@ bool CPIDocument::initialize(void) {
 }
 
 bool CPIDocument::finalize(void) {
-//	configMan.finalize();
-//	policyMan.finalize();
-//	piagentStub.finalize();
-//	pisqliteStub.finalize();
-//	wallMan.finalize();
-//	deviceMan.finalize();
 
-	return true;
+    return true;
 }
 
 void CPIDocument::clear(void) {
@@ -48,4 +42,4 @@ void CPIDocument::setStop(void) {
 bool CPIDocument::getStop(void) {
 	return stop;
 }
-#endif // #ifndef _PIDOCUMENT_CPP
+#endif
