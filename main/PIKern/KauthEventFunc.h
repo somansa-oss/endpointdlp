@@ -44,4 +44,4 @@ extern "C"
 };
 #endif
 
-#endif /* _KEXT_MAC_POLICY_H_ */
+#endif
