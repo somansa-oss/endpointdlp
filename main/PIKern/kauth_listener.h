@@ -30,9 +30,7 @@ boolean_t
 UserModeTo_FileDelete(char* pczFilePath );
 
 
-/*************************************************************************************/
 // Policy Check Function
-/*************************************************************************************/
 
 boolean_t
 IsPolicyExist_BlockRead(int nPID, char* pczProcName, int nVnodeType, const char* pczFilePath, LOG_PARAM* pLog );
@@ -84,9 +82,6 @@ Kauth_Callback_FileOp( int nPID,
 #endif
 
 
-/****************************************************************************************************************************/
-/****************************************************************************************************************************/
-
 // Install
 kern_return_t
 InstallKauthListener(void);
@@ -95,9 +90,6 @@ InstallKauthListener(void);
 kern_return_t
 RemoveKauthListener(void);
 
-
-/****************************************************************************************************************************/
-/****************************************************************************************************************************/
 void UserModeTo_GetPrintSpoolPath(void);
 
 #ifdef __cplusplus
