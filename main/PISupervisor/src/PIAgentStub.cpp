@@ -118,9 +118,12 @@ bool CPIAgentStub::sendToPIAgent(CPIPacket& packet, int& response) {
 	bool returnValue = false;
 	CPICommunicator::COMM_RESULT_T result;
 	CPICommunicator* comm = new CPICommunicator();
+    
+#ifndef LINUX
 	comm->support.bigEndian = ConfigMan.socket.bigEndian;
 	comm->support.savePacket = ConfigMan.socket.savePacket;
 	comm->support.savePacketPath = ConfigMan.path.dlpLogPath;
+#endif
 	comm->ipString = "127.0.0.1";
 	comm->tcpPort = nsPISupervisor::PIAGENT_PORT;
 

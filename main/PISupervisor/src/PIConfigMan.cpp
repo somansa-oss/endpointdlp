@@ -868,4 +868,4 @@ void CPIConfigMan::setAirDropProtectUse(std::string qtAirDropProtectUse)
 }
 
 
-#endif // #ifndef _PICONFIGMAN_CPP
+#endif

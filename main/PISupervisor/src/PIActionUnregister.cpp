@@ -42,4 +42,4 @@ CPIActionUnregister& CPIActionUnregister::getInstance(void) {
 	static CPIActionUnregister instance;
 	return instance;
 }
-#endif // #ifndef _PIACTIONUNREGISTER_CPP
+#endif
