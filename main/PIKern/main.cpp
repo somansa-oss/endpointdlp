@@ -30,7 +30,11 @@ boolean_t supervisorWorking()
 {
     char buffer[1024] = { 0, };
     std::string command, temp, result;
+#ifdef LINUX
+    command = "ps -eaf | grep PISupervisor";
+#else
     command = "launchctl list | grep pisupervisor";
+#endif
     
     FILE* pipe = popen(command.c_str(), "r");
     
