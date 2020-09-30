@@ -702,4 +702,4 @@ bool CPIActionOpenClientIPC::onSyncGetQuarantineDiskSize(CPIPacket& packet, int&
 	
 	return true;
 }
-#endif // #ifndef _PIACTIONOPENCLIENTIPC_CPP
+#endif
