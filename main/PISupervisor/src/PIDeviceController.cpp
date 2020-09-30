@@ -17,25 +17,6 @@
 #include "PIActionProcessDeviceLog.h"
 #include "PIDeviceLog.h"
 
-#ifdef LINUX
-// LSF_MEDIA_TYPE g_media_type[] = {
-//     LSF_MEDIA_USB_MEMORY,
-//     LSF_MEDIA_PRINTER, 
-//     LSF_MEDIA_CD_DVD, 
-//     LSF_MEDIA_CAMERA, 
-//     LSF_MEDIA_SOUND, 
-//     LSF_MEDIA_MICROPHONE, 
-//     LSF_MEDIA_WIRELESS, 
-//     LSF_MEDIA_BLUETOOTH, 
-//     LSF_MEDIA_KEYBOARD, 
-//     LSF_MEDIA_MOUSE, 
-//     LSF_MEDIA_SCREEN_CAPTURE, 
-//     LSF_MEDIA_CLIPBOARD, 
-//     LSF_MEDIA_USB_NETWORK
-// };
-#endif
-
-
 //class IPIDeviceControl
 IPIDeviceControl::IPIDeviceControl(CPISecRule& rule)
 {
@@ -462,17 +443,6 @@ bool CPIDeviceController::control(void)
     {
         result = deviceControl.controlRemoteManagement();
     }
-    
-    /*
-    else if("Share\\AirDrop" == rule.virtualType)
-    {
-        printf("[%s] Log=%d, airdrop_protect=%d \n", __FUNCTION__, rule.enableLog, ConfigMan.getAirDropProtectUse() );
-        if(true == ConfigMan.getAirDropProtectUse())
-        {
-            result = deviceControl.controlAirDrop();
-        }
-    }
-    */
     
 	return result;
 }
