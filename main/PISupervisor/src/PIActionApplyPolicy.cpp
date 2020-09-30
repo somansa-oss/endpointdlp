@@ -27,17 +27,6 @@ int CPIActionApplyPolicy::run(const std::string& param)
     DEBUG_LOG1("apply_policy - begin");
 	INFO_LOG1("apply_policy");
     
-    //
-    // Timing 이슈때문에 주석처리하여 아래와 같이 수정합니다. 2019.02.11
-    //
-/* 	if( true == isRunning() )
-		DEBUG_LOG1("apply_policy - skip");
-	else {
-		if(false == startThreads()) {
-			ERROR_LOG1("apply_policy - create_thread failed");
-		}
-	} */
-     
     if( false == startThreads() )
     {
         ERROR_LOG1("apply_policy - create_thread failed");

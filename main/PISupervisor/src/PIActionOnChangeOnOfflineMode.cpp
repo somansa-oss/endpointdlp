@@ -43,4 +43,4 @@ CPIActionOnChangeOnOfflineMode& CPIActionOnChangeOnOfflineMode::getInstance(void
 	static CPIActionOnChangeOnOfflineMode instance;
 	return instance;
 }
-#endif // #ifndef _PIACTIONONCHANGEONOFFLINEMODE_CPP
+#endif

@@ -96,4 +96,4 @@ void* CPIActionInitializeData::fnInitializeWallMan(void* pzArg) {
 bool CPIActionInitializeData::isRunningWallManThread(void) {
 	return runningWallManThread;
 }
-#endif // #ifndef _PIACTIONINITIALIZEDATA_CPP
+#endif

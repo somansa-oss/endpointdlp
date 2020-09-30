@@ -338,4 +338,4 @@ bool CPIActionProcessDeviceLog::sendSavedDeviceLog(CPIDeviceLog::VECTOR& deviceL
 
 	return true;
 }
-#endif // #ifndef _PIACTIONPROCESSDEVICELOG_CPP
+#endif
