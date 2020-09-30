@@ -713,10 +713,6 @@ void CPIESF::run(void)//int argc, const char * argv[])
     @autoreleasepool {
         
         es_handler_block_t usbHandler = ^(es_client_t *clt, const es_message_t *msg) {
-            /*
-             Ignore background event
-             */
-            
             LOG_PARAM  LogParam = {0};
             
             if([esstring_to_nsstring(&msg->process->executable->path) rangeOfString:@"/System/Library/Frameworks/CoreServices.framework/Versions/"].location == 0)
@@ -892,7 +888,6 @@ errno_t SmartCmd_SetDrivePolicy( PCOMMAND_MESSAGE pCmdMsg );
 
 
 static uint64_t event_mask =
-//(FAN_OPEN_PERM);      // Open permission control
 (
  //FAN_MARK_MOUNT |
  //FAN_ACCESS_PERM |
@@ -1004,85 +999,3 @@ void CPIESF_fnRemoveNotify(void* pzArg)
 #ifdef __cplusplus
 }
 #endif
-
-
-    //     struct stat sb = {0};
-    //     //int t = fstat(event->fd, &sb);
-    //     int t = stat((char*)target_file_path.c_str(), &sb);
-    //     if (0 == t && 0 == (sb.st_mode & S_IFDIR))
-    //     {
-    //         time_t t = time(NULL);
-    //         struct tm *ctime = localtime(&t);
-    //         time_t t1 = 0;
-    //         time_t t2 = 0;
-            
-    //         if (ctime != NULL)
-    //         {
-    //             t1 = mktime(ctime);
-    //         }
-
-    //         ctime = localtime(&sb.st_mtime);
-    //         if (ctime != NULL)
-    //         {
-    //             t2 = mktime(ctime);
-    //         }
-
-    //         if (t1 > 0 && t2 > 0)
-    //         {
-    //             double diff_secs = difftime(t1, t2);
-    //             printf( "[DLP][%s] [%ld][%ld],diff_secs=%f \n", __FUNCTION__, t1, t2, diff_secs );
-
-    //             // new file
-    //             if (t1 > t2 && diff_secs <= 1)
-    //             {
-    //                 //not check directory
-    //                 {
-    //                 }
-    //             }
-    //             else
-    //             {
-    //                 if (sb.st_mode & S_IWUSR)
-    //                 {
-    //                     change_mod_value = S_IRUSR;
-    //                 }
-    //                 if (sb.st_mode & S_IWGRP)
-    //                 {
-    //                     change_mod_value |= S_IRGRP;
-    //                 }
-    //                 if (sb.st_mode & S_IWOTH)
-    //                 {
-    //                     change_mod_value |= S_IROTH;
-    //                 }
-
-    //                 access.response = FAN_ALLOW;
-    //             }
-    //         }
-    //         else
-    //         {
-    //             printf("localtime(%s)-error!!!,[%d]\n", (char*)target_file_path.c_str(), errno);
-    //             access.response = FAN_ALLOW;   
-    //         }
-    //     }
-    //     else
-    //     {
-    //         printf("fstat(%s)-error!!!,[%d]\n", (char*)target_file_path.c_str(), errno);
-    //         access.response = FAN_ALLOW;            
-    //     }
-    // }
-    //if (event->mask & FAN_OPEN_PERM)
-    // if (event->mask & FAN_MODIFY)
-    // {
-    //     LogParam.nLogType   = LOG_VNODE;
-    //     bBlock = Kauth_Vnode_IsProtectWrite( LogParam.nProcessId, LogParam.pczProcName, 0, 0, NULL, (char*)target_file_path.c_str(), &LogParam );
-    //     printf( "[DLP][%s] Kauth_Vnode_IsProtectWrite(), bBlock=%d \n", __FUNCTION__, bBlock );
-
-    //     if (bBlock)
-    //     {
-    //         access.response     = FAN_DENY;
-    //     }
-    //     else
-    //     {
-    //         access.response = FAN_ALLOW;
-    //     }
-    // }
-    // else 
