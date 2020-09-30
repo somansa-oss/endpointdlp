@@ -141,4 +141,4 @@ void* CPIActionControlDevice::fnControlDevice(void* pzArg)
 bool CPIActionControlDevice::isRunning(void) {
 	return running;
 }
-#endif // #ifndef _PIACTIONCONTROLDEVICE_CPP
+#endif
