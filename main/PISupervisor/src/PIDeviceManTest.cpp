@@ -72,4 +72,4 @@ void CPIDeviceManTest::copyPreventPlus(void) {
 	
 	DEBUG_LOG("result:%s(%d)", (1 == result) ? "block" : "allow", result);
 }
-#endif // #ifndef _PIDEVICEMANTEST_CPP
+#endif
