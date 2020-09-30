@@ -82,21 +82,6 @@ int get_storage_type(struct udev* udev, char* mnt_fsname)
      if (parent == NULL)
          continue;
 
-    //  {
-    //     struct udev_list_entry *props = NULL;
-    //     struct udev_list_entry *props_list_entry = NULL;
-    //
-    //     printf("path = %s\n", path);
-    //
-    //     props = udev_device_get_properties_list_entry( parent );
-    //     udev_list_entry_foreach( props_list_entry, props )
-    //     {
-    //         const char *attr = udev_list_entry_get_name( props_list_entry );
-    //         const char *value = udev_device_get_property_value(parent, attr);
-    //         printf("\tproperty [%s][%s]\n", attr, value);
-    //     }
-    //  }
-
     const char *id_cdrom = udev_device_get_property_value(parent, "ID_CDROM");
     //printf("\tproperty [ID_CDROM][%s]\n", id_cdrom);
 
