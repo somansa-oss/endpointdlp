@@ -40,4 +40,4 @@ CPIActionReloadPolicy& CPIActionReloadPolicy::getInstance(void) {
 	static CPIActionReloadPolicy instance;
 	return instance;
 }
-#endif // #ifndef _PIACTIONRELOADPOLICY_CPP
+#endif
