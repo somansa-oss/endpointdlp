@@ -202,7 +202,7 @@ bool CPIApplicationControl::blockWithBinary(CDLPPolicyApplication* pDLPPolicy, s
 			}
 		}
 	
-		//DEBUG_LOG("begin - fd:%d - file:%s", fd, filePath.c_str()); // test
+		//DEBUG_LOG("begin - fd:%d - file:%s", fd, filePath.c_str());
 		found = application.containBinary(fd, CPIApplicationControl::logCallback);
 		//DEBUG_LOG("end:%d - fd:%d", found?1:0, fd); // test
 		if (true == found) {
@@ -316,7 +316,4 @@ bool CPIApplicationControl::ReqeustProcessTerminate( pid_t nPID, char* pczFilePa
     return false;
 }
 
-
-
-
-#endif // #ifndef _PIAPPLICATIONCONTROL_CPP
+#endif
