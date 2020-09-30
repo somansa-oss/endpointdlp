@@ -369,10 +369,7 @@ CPIActionSupervisorIPC& CPIActionSupervisorIPC::getInstance(void) {
 
 								
 bool CPIActionSupervisorIPC::parseClientPacket( CPIClientStub* pClient, CPIPacket& packet) {
-
-	// ----------
 	//DEBUG_LOG("client(%s:%d) - command(%d) - param_count(%d)", pClient->ipString.c_str(), pClient->tcpPort, packet.getCommand(), packet.getParamCount());
-	// ----------
 
 	int resultCode = 0;
 	std::string resultValue = "";
