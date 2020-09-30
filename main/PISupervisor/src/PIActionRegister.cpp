@@ -42,4 +42,4 @@ CPIActionRegister& CPIActionRegister::getInstance(void) {
 	static CPIActionRegister instance;
 	return instance;
 }
-#endif // #ifndef _PIACTIONREGISTER_CPP
+#endif
