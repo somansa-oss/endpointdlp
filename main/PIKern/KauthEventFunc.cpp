@@ -172,9 +172,6 @@ bool SendToPISupervisor(CPIPacket& packet, int& response) {
     bool returnValue = false;
     CPICommunicator::COMM_RESULT_T result;
     CPICommunicator* comm = new CPICommunicator();
-    //comm->support.bigEndian = ConfigMan.socket.bigEndian;
-    //comm->support.savePacket = ConfigMan.socket.savePacket;
-    //comm->support.savePacketPath = ConfigMan.path.dlpLogPath;
     comm->ipString = "127.0.0.1";
     comm->tcpPort = nsPISupervisor::PISUPERVISOR_PORT;
     
@@ -240,9 +237,6 @@ int SendEventDataToPISupervisor( void* pData, size_t nLength)
     PCOMMAND_MESSAGE pCmdNew = (PCOMMAND_MESSAGE)pData;
     
     CPIPacket packet;
-    //packet.support.bigEndian = ConfigMan.socket.bigEndian;
-    //packet.support.unsignedType = ConfigMan.socket.unsignedType;
-    
     packet.setCommand(pCmdNew->Command);
     packet.addBinary(pData, pCmdNew->Size);
     
