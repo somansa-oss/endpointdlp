@@ -16,7 +16,6 @@
 
 #ifndef LINUX
 #include "PIDRDevice.h"
-
 #endif
 
 #include "PIEventHandler.h"
@@ -1567,6 +1566,9 @@ bool CPIDeviceMan::controlDevice(void)
             // ("Share\\AirDrop" == rule.virtualType) ||
             ("Share\\FileSharing" == rule.virtualType) ||
             ("Share\\RemoteManagement" == rule.virtualType) ||
+#ifdef LINUX
+			("Drive\\Removable" == rule.virtualType && true == rule.disableRead) ||
+#endif
             ("Device\\Bluetooth" == rule.virtualType && false == rule.blockSelectedBluetooth) )
         {
 			DEBUG_LOG("device - control - %s", rule.virtualType.c_str() );

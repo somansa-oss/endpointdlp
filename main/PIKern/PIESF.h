@@ -24,6 +24,7 @@
 enum {
 //    FD_POLL_SIGNAL = 0,
     FD_POLL_FANOTIFY = 0,
+//    FD_POLL_FANOTIFY_OPEN_PERM,
     FD_POLL_MAX
 };
 

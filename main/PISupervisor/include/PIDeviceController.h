@@ -31,6 +31,9 @@ class IPIDeviceControl : public CPIObject
         virtual bool controlFileSharing(void) = 0;
         virtual bool controlRemoteManagement(void)=0;
         virtual bool controlAirDrop(void)=0;
+#ifdef LINUX
+        virtual bool controlRemovableStorage(void)=0;
+#endif        
     
 };
 
@@ -85,6 +88,10 @@ class CPIDeviceControlLinux : public IPIDeviceControl
         virtual bool controlFileSharing(void) { return false; }
         virtual bool controlRemoteManagement(void) { return false; }
         virtual bool controlAirDrop(void) { return false; }
+#ifdef LINUX
+        virtual bool controlRemovableStorage(void);
+#endif        
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////
