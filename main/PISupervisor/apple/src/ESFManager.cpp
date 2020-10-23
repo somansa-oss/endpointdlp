@@ -476,7 +476,7 @@ int CESFManager::fnSetQuarantineLimit(boolean_t bQtLimit)
     if(pCmdNew) free( pCmdNew );
     return nRet;
 }
-#endif
+
 
 int CESFManager::fnSetUSBMobilePermit( MB_PERMIT& PermitInfo )
 {
@@ -509,7 +509,7 @@ int CESFManager::fnSetUSBMobilePermit( MB_PERMIT& PermitInfo )
     if(pCmdNew) free( pCmdNew );
     return nRet;
 }
-
+#endif
 
 
 int CESFManager::fnSetUSBMobilePermitList(std::vector<MB_PERMIT>* pPermitList)
