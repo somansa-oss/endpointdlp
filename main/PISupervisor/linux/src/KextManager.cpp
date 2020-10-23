@@ -1648,9 +1648,6 @@ int CKextManager::fnSetUploadPrevent(void* pBuf, int nBufSize )
     if(pPolicy)
     {
         memcpy( pPolicy, pBuf, nBufSize );
-        
-        //printf("applyPolicyUploadPrevent pDLPPolicyUpload->m_sControlList.size == %lu, [%s]",
-        //          pPolicy->lControlListSize, &(pPolicy->szControlList));
     }
     
     if(m_bKctl == true || g_AppKctl.m_nKernCtlId > 0)
@@ -1673,7 +1670,7 @@ int CKextManager::fnSetProcessAccessCheck( BOOLEAN bProcAC, BOOLEAN bLog )
 {
     int nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     PROC_AC_POLICY*  pPolicy = NULL;
@@ -1718,7 +1715,7 @@ int CKextManager::fnSetControlCamera( bool bControl, bool bLog  )
 {
     int nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     CAMERA_POLICY*  pPolicy = NULL;
@@ -1763,7 +1760,7 @@ int CKextManager::fnSetControlRndis( bool bRNdisCtrl, bool bRNdisLog )
 {
     int nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     RNDIS_POLICY* pPolicy = NULL;
@@ -1808,7 +1805,7 @@ int CKextManager::fnSetControlAirDrop( bool bAirDropBlock, bool bAirDropLog )
 {
     int nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     AIRDROP_POLICY* pPolicy = NULL;
@@ -1851,7 +1848,7 @@ int CKextManager::fnSetControlAirDrop( bool bAirDropBlock, bool bAirDropLog )
     return nRet;
 }
 
-#ifdef _NOTUSED_
+#ifndef LINUX
 
 //
 // PWDisk.kext
@@ -3417,7 +3414,7 @@ int CKextManager::fnSetSelfProtect_Commit( boolean_t bProtect, ULONG nCommand )
 {
     int  nRet=0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     ULONG nPID=0;
     ProtectCheck ProcCheck;
