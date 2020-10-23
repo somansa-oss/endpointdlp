@@ -97,7 +97,7 @@ int CKernControl::ConnectKernelControl()
 //
 int CKernControl::CloseKernelControl(int nSock)
 {
-#ifdef _FIXME_    
+#ifndef LINUX
 
     if(close(nSock) < 0)
     {
@@ -124,7 +124,7 @@ u_int32_t CKernControl::GetKernelControlId()
 {
     int nSock = 0;
 
-#ifdef _FIXME_    
+#ifndef LINUX
     
     nSock = socket( PF_SYSTEM, SOCK_DGRAM, SYSPROTO_CONTROL);
     if(nSock < 0)
@@ -167,7 +167,7 @@ int CKernControl::QuitKernelControl()
     int   nSock = 0;
     COMMAND_MESSAGE CmdMsg;
     
-#ifdef _FIXME_    
+#ifndef LINUX 
 
     nSock = ConnectKernelControl();
     if(nSock < 0)
