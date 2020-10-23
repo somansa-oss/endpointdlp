@@ -848,7 +848,6 @@ int CESFManager::fnSetPermitFolderName(void* pBuf, int nBufSize)
     return nRet;
 
 }
-#endif
 
 int CESFManager::fnSetPermitFileExtName(void* pBuf, int nBufSize)
 {
@@ -888,7 +887,6 @@ int CESFManager::fnSetPermitFileExtName(void* pBuf, int nBufSize)
     return nRet;
 
 }
-
 
 int CESFManager::fnGetSmartLogEx()
 {
@@ -1234,6 +1232,7 @@ int CESFManager::fnSetSelfProtect_CommitComplete( void* pBuf, int nBufSize, ULON
     if(pCmdNew) free( pCmdNew );
     return nRet;
 }
+#endif
 
 
 int CESFManager::fnSetSelfProtect_Commit( boolean_t bProtect, ULONG nCommand )
