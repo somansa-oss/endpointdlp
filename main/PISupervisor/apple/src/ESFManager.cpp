@@ -78,9 +78,6 @@ int CESFManager::EventNotify_PostProcess( PEVT_PARAM pEvtInfo )
     return nRet;
 }
 
-
-/*****************************************************************************************/
-
 int CESFManager::EventNotify_FileIsRemove(PEVT_PARAM pEvtInfo )
 {
     if(!pEvtInfo) return 0;
@@ -96,7 +93,6 @@ int CESFManager::EventNotify_FileScan(PEVT_PARAM pEvtInfo )
     printf( "[ESF][%s] pid=%d, QtPath=%s \n", __FUNCTION__, pEvtInfo->ProcessId, pEvtInfo->pQtFilePath );
     return 0;
 }
-
 
 int CESFManager::EventNotify_FileDelete(PEVT_PARAM pEvtInfo )
 {
