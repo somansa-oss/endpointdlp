@@ -1252,7 +1252,7 @@ int CKextManager::fnMobileNodeRemoveAll()
 {
     int  nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
    
@@ -1285,7 +1285,7 @@ int CKextManager::fnMobileNodeRemoveAll()
     return nRet;
 }
 
-#ifdef _NOTUSED_
+#ifndef LINUX
 
 int CKextManager::fnSetProcessIdUnprotect(ULONG ProcessId)
 {
@@ -1330,7 +1330,7 @@ int CKextManager::fnSetPermitProcessName(void* pBuf, int nBufSize)
 {
     int  nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE  pCmdNew = NULL;
     PALLOWPROCESSNAME pAllowProcName = NULL;
@@ -1379,7 +1379,7 @@ int CKextManager::fnSetPermitFolderName(void* pBuf, int nBufSize)
 {
     int  nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     PALLOWFOLDERNAME pAllowFolderName = NULL;
