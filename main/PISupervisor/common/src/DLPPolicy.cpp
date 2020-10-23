@@ -4,7 +4,6 @@
 #include <map>
 
 #include "DLPPolicy.h"
-//#include "LogWriter.h"
 
 using namespace nsPISecObject;
 
@@ -329,17 +328,6 @@ bool CDLPPolicy::addDeviceRule(CMarkup& markup)
 		markup.AddAttrib("block_write", "all");
 	}
 	
-	/*
-	   DEBUG_LOG("[xml] (%d/%d/%d) - %s - %s - %s - %s - %s - %d", 
-	   dlpType, dlpSubType, dlpControlMode,
-	   rule.virtualType.c_str(),
-	   util.getValueAsString(rule.disableAll).c_str(),
-	   util.getValueAsString(rule.disableRead).c_str(),
-	   util.getValueAsString(rule.disableWrite).c_str(),
-	   util.getValueAsString(rule.enableLog).c_str(),
-	   rule.reserved1);
-	*/
-	
 	return true;
 }
 
@@ -445,7 +433,6 @@ bool CDLPPolicyPreventPlus::changeControlApprovalToBlock(void) {
 					allowLog.condition &= ~logConditionAll;
 					blockLog.condition |= logConditionAll;
 					allowLog.saveFileCopy.condition &= ~logConditionAll;
-					//blockLog.saveFileCopy.condition |= logConditionAll;
 				}
 			}
 		
@@ -458,7 +445,6 @@ bool CDLPPolicyPreventPlus::changeControlApprovalToBlock(void) {
 					allowLog.condition &= ~logConditionFound;
 					blockLog.condition |= logConditionFound;
 					allowLog.saveFileCopy.condition &= ~logConditionFound;
-					//blockLog.saveFileCopy.condition |= logConditionFound;
 				}
 			}
 			
@@ -468,7 +454,6 @@ bool CDLPPolicyPreventPlus::changeControlApprovalToBlock(void) {
 					allowLog.condition &= ~logConditionNotFound;
 					blockLog.condition |= logConditionNotFound;
 					allowLog.saveFileCopy.condition &= ~logConditionNotFound;
-					//blockLog.saveFileCopy.condition |= logConditionNotFound;
 				}
 			}
 		
@@ -644,8 +629,6 @@ bool CDLPPolicyCopyEx::parsePolicyInfo(CMarkup& markup) {
 }
 
 bool CDLPPolicyCopyEx::addDeviceRule(const bool blockWriteAll) {
-	//DEBUG_LOG1("copy_ex - begin");
-
 	bool blockRead = isBlockReadAll();
 	if (true == blockWriteAll) {
 		bool blockWrite = dlpCopyControls.hasBlockOrApproval();
@@ -653,8 +636,6 @@ bool CDLPPolicyCopyEx::addDeviceRule(const bool blockWriteAll) {
 	} else {
 		CDLPPolicy::addDeviceRule(virtualType, false, blockRead, true, isSaveLogAny());
 	}
-	
-	//DEBUG_LOG1("copy_ex - end");
 
 	return true;
 }
@@ -696,7 +677,6 @@ bool CDLPPolicyUpload::initialize(void) {
 void CDLPPolicyUpload::LoadControlList(std::string & sControlList)
 {
     CMarkup cXml;
-    //MCD_STR sData;
     
     sControlList.clear();
     while(TRUE)
