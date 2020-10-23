@@ -451,7 +451,7 @@ int CKextManager::CommStopControl( boolean_t bPWDisk )
 {
     int nRet = 0;
 
-#ifdef _FIXME_
+#ifndef LINUX
     
     if(true == bPWDisk)
     {
@@ -479,7 +479,7 @@ int CKextManager::CommStopControl( boolean_t bPWDisk )
 // Policy
 /****************************************************************************************/
 
-#ifdef _NOTUSED_
+#ifndef LINUX
 
 int CKextManager::Test_SetExceptUsbPolicy(int nCmd, void* pBuf,  const char* pczVolumePath )
 {
@@ -777,7 +777,8 @@ int CKextManager::fnGetDrivePolicy(void* pBuf, int nLength )
 int CKextManager::fnSetDrivePolicy( void* pBuf, int nLength )
 {
     int  nRet=0;
-#ifdef _FIXME_
+
+#ifndef LINUX
 
     int  nTotalSize =0;
     PCOMMAND_MESSAGE    pCmdNew   = NULL;
@@ -817,7 +818,7 @@ int CKextManager::fnSetExceptDrivePolicy( void* pBuf, int nLength )
 {
     int  nRet=0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     int  nTotalSize =0;
     PCOMMAND_MESSAGE pCmdNew = NULL;
