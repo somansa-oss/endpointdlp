@@ -893,8 +893,6 @@ bool CDLPPolicyApplication::parsePolicyInfo(CMarkup& markup) {
 	
 	markup.OutOfElem();
 
-	//DEBUG_LOG("[test] - controlCount(%u:%u) - preventCount(%u:%u)", controlCount, controlWindowsExecutableCount, preventCount, preventWindowsExecutableCount);
-
 	return true;
 }
 
@@ -1087,12 +1085,8 @@ bool CDLPPolicyMedia::parsePolicyInfo(CMarkup& markup)
             markup.ResetMainPos();
             if(true == markup.FindElem("bluetooth"))
             {
-                //m_bBlockSelectedBluetooth = GetBOOLFromString(markup.GetAttrib("block_selected_bluetooth"));
                 if(0 != (controlCommDevice & commdeviceBlockBluetooth))
                     m_bBlockSelectedBluetooth = ("true" == markup.GetAttrib("block_selected_bluetooth") ? true : false);
-                
-                //if(m_bBlockSelectedBluetooth && 0 == (controlCommDevice & commdeviceBlockBluetooth))
-                //    controlCommDevice |= commdeviceBlockBluetooth;
             }
             markup.OutOfElem();
         }
@@ -1886,27 +1880,6 @@ bool CDLPControl::setXml(CMarkup& markup) {
 	return true;
 }	
 
-//bool CDLPControl::getXml(CMarkup& markup) { 
-//	markup.AddElem("controls");
-//	markup.AddAttrib("type", getInspectOption(inspectOption));
-//	markup.AddAttrib("target_file", targetFile);
-//	markup.AddAttrib("purpose", purpose);
-//
-//	markup.AddElem("control");
-//	markup.AddAttrib("inspect", "none");
-//	markup.AddAttrib("type", getControlType(noInspect));
-//
-//	markup.AddElem("control");
-//	markup.AddAttrib("inspect", "found");
-//	markup.AddAttrib("type", getControlType(found));
-//
-//	markup.AddElem("control");
-//	markup.AddAttrib("inspect", "not_found");
-//	markup.AddAttrib("type", getControlType(notFound));
-//
-//	return true; 
-//}
-
 void CDLPControl::setControlType(const std::string& inspect, const std::string& type) {
 	EM_CONTROL control = controlAllow;
 
@@ -1927,19 +1900,6 @@ void CDLPControl::setControlType(const std::string& inspect, const std::string& 
 	}
 }
 
-//std::string CDLPControl::getControlType(const int value) const {
-//	std::string result = "";
-//	switch(value) {
-//		case controlAllow : result = "allow"; break;
-//		case controlBlock : result = "block"; break;
-//		case controlApproval : result = "approval"; break;
-//		default : break;
-//	}
-//
-//	return result;
-//}
-
-
 int CDLPControl::getTargetFile(const std::string& value) const {
 	int result = targetAll;
 
@@ -1951,17 +1911,6 @@ int CDLPControl::getTargetFile(const std::string& value) const {
 
 	return result;
 }
-
-//std::string CDLPControl::getInspectOption(const int value) const {
-//	std::string result = "";
-//	switch(value) {
-//		case inspectionNoInspect : result = "none"; break;
-//		case inspectionRunInspect : result = "inspect"; break;
-//		default : break;
-//	}
-//
-//	return result;
-//}
 
 int CDLPControl::getInspectOption(const std::string& value) const {
 	int result = inspectionNoInspect;
@@ -2076,13 +2025,6 @@ bool CDLPUSBDriveControl::setXml(CMarkup& markup) {
 	return true;
 }
 
-//bool CDLPUSBDriveControl::getXml(CMarkup& markup) { 
-//	markup.SetAttrib("select_type", selectType);
-//	markup.SetAttrib("read_permit", util.getValueAsBool(readPermit));
-//
-//	return true; 
-//}
-
 ////////////////////////////////////////////////////////////////////////////////
 //class CDLPLobBase
 CDLPLogBase::CDLPLogBase() {
@@ -2105,18 +2047,6 @@ int CDLPLogBase::getType(const std::string& value) {
 	return result;
 }
 
-//std::string CDLPLogBase::getType(const int value) {
-//	std::string result = "";
-//	switch(value) {
-//		case logNone: result = "none"; break;
-//		case logAll : result = "all"; break;
-//		case logConditional : result = "conditional"; break;
-//		default : break;
-//	}
-//
-//	return result;
-//}
-
 int CDLPLogBase::getCondition(const std::string& value) {
 	int result = logConditionNotFound;
 	if ("inspect_notfound" == value) {
@@ -2129,26 +2059,6 @@ int CDLPLogBase::getCondition(const std::string& value) {
 
 	return result;
 }
-
-//std::string CDLPLogBase::getCondition(const int value) {
-//	std::string result = "";
-//	switch(value) {
-//		case logConditionNone : result = "none"; break;
-//		case logConditionNotFound: result = "inspect_notfound"; break;
-//		case logConditionFound: result = "inspect_found"; break;
-//		case logConditionApproval: result = "approval_allow"; break;
-//		default : break;
-//	}
-//
-//	return result;
-//}
-
-//bool CDLPLogBase::getXmlWithCondition(CMarkup& markup, const int condition) {
-//	markup.AddChildElem("condition");
-//	markup.AddChildAttrib("type", getCondition(condition));
-//
-//	return true;
-//}
 
 ////////////////////////////////////////////////////////////////////////////////
 //class CDLPFileCopy
@@ -2180,30 +2090,6 @@ bool CDLPFileCopy::setXml(CMarkup& markup) {
 	return true;
 }
 
-//bool CDLPFileCopy::getXml(CMarkup& markup) { 
-//	markup.AddElem("save_filecopy");
-//	markup.AddAttrib("use", util.getValueAsBool(use));
-//	markup.AddAttrib("type", getType(type));
-//	markup.AddAttrib("max_limit_use", util.getValueAsBool(maxUse));
-//	markup.AddAttrib("max_limit", maxLimit);
-//
-//	if (logConditional == type) {
-//		if (logConditionNotFound & condition) {
-//			getXmlWithCondition(markup, logConditionNotFound);
-//		}
-//
-//		if (logConditionFound & condition) {
-//			getXmlWithCondition(markup, logConditionFound);
-//		}
-//
-//		if (logConditionApproval & condition) {
-//			getXmlWithCondition(markup, logConditionApproval);
-//		}
-//	}
-//
-//	return true; 
-//}
-
 ////////////////////////////////////////////////////////////////////////////////
 //class CDLPLog
 CDLPLog::CDLPLog() {
@@ -2233,34 +2119,6 @@ bool CDLPLog::setXml(CMarkup& markup, const std::string& elem) {
 	return true;
 }
 
-//bool CDLPLog::getXml(CMarkup& markup, const std::string& elem) {
-//	markup.AddElem(elem);
-//	markup.AddAttrib("usb", util.getValueAsBool(use));
-//	markup.AddAttrib("type", getType(type));
-//
-//	if (logConditional == type) {
-//		if (logConditionNotFound & condition) {
-//			getXmlWithCondition(markup, logConditionNotFound);
-//		}
-//
-//		if (logConditionFound & condition) {
-//			getXmlWithCondition(markup, logConditionFound);
-//		}
-//
-//		if (logConditionApproval & condition) {
-//			getXmlWithCondition(markup, logConditionApproval);
-//		}
-//	}
-//
-//	if (true == markup.IntoElem()) {
-//		fileCopy.getXml(markup);
-//		markup.OutOfElem();
-//	}
-//
-//	return true;
-//}
-
-
 ////////////////////////////////////////////////////////////////////////////////
 //class CDLPLogs
 CDLPLogs::CDLPLogs() {
@@ -2283,16 +2141,6 @@ bool CDLPLogs::setXml(CMarkup& markup) {
 	return true;
 }
 
-//bool CDLPLogs::getXml(CMarkup& markup) { 
-//	markup.AddElem("log");
-//	if (true == markup.IntoElem()) {
-//		block.getXml(markup, "block");
-//		allow.getXml(markup, "allow");
-//		markup.OutOfElem();
-//	}
-//
-//	return true; 
-//}
 
 bool CDLPLogs::hasLogEnable(void) const {
 	if (
