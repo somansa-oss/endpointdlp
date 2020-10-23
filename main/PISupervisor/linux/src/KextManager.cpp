@@ -394,7 +394,7 @@ int CKextManager::KextModule_Cleanup( boolean_t bPWDisk )
 {
     int nRet = 0;
 
-#ifdef _FIXME_
+#ifndef LINUX
     DEBUG_LOG("[DLP][%s] CommStopControl( bPWDisk=%d ) \n", __FUNCTION__, bPWDisk );
     nRet = CommStopControl( bPWDisk );
 
@@ -415,10 +415,9 @@ void CKextManager::RegisterCallback( LPCALLBACK pCallback )
     }
     
     g_AppCallback = pCallback;
-#ifdef _FIXME_
 
+#ifndef LINUX
     DEBUG_LOG("[DLP] Callback Function Reset: %p \n", pCallback );
-
 #endif    
 }
 
@@ -426,8 +425,8 @@ void CKextManager::RegisterCallback( LPCALLBACK pCallback )
 int CKextManager::CommStartControl( boolean_t bPWDisk )
 {
     int nRet = 0;
-#ifdef _FIXME_
 
+#ifndef LINUX
     if(true == bPWDisk)
     {
         nRet = g_PWKctl.KernelControl_Init();        
