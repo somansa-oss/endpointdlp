@@ -771,7 +771,6 @@ int CESFManager::fnSetProcessIdUnprotect(ULONG ProcessId)
     if(pCmdNew) free( pCmdNew );
     return nRet;
 }
-#endif
 
 int CESFManager::fnSetPermitProcessName(void* pBuf, int nBufSize)
 {
@@ -811,8 +810,6 @@ int CESFManager::fnSetPermitProcessName(void* pBuf, int nBufSize)
     return nRet;
 }
 
-
-
 int CESFManager::fnSetPermitFolderName(void* pBuf, int nBufSize)
 {
     int  nRet=0, nTotalSize =0;
@@ -851,7 +848,7 @@ int CESFManager::fnSetPermitFolderName(void* pBuf, int nBufSize)
     return nRet;
 
 }
-
+#endif
 
 int CESFManager::fnSetPermitFileExtName(void* pBuf, int nBufSize)
 {
