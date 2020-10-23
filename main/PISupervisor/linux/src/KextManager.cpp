@@ -862,7 +862,7 @@ int CKextManager::fnSetQuarantinePathExt(PQT_CTX pQtCtx)
 {
     int  nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     PCOMM_QT_INFO    pCommQtInfo = NULL;
@@ -911,7 +911,7 @@ int CKextManager::fnSetQuarantineLimit(boolean_t bQtLimit)
 {
     int  nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     PCOMM_QT_INFO    pCommQtInfo = NULL;
@@ -954,7 +954,7 @@ int CKextManager::fnSetUSBMobilePermit( MB_PERMIT& PermitInfo )
 {
     int nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     PCOMM_MB_PERMIT  pCommPermit = NULL;
@@ -998,7 +998,7 @@ int CKextManager::fnSetUSBMobilePermitList(std::vector<MB_PERMIT>* pPermitList)
 {
     int nRet=0, nPos=0, nCount=0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     std::vector<MB_PERMIT>::iterator Iter;
     MB_PERMIT PermitInfo;
