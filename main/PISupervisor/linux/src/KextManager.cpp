@@ -309,7 +309,7 @@ int CKextManager::SelectDisplayMenu_PISecSmartDrv()
 boolean_t
 CKextManager::IsRemovable( char* pczDevice )
 {
-#ifdef _FIXME_
+#ifndef LINUX
 
     kern_return_t nResult = 0;
     io_iterator_t iter;
@@ -376,8 +376,8 @@ CKextManager::IsRemovable( char* pczDevice )
 int CKextManager::KextModule_Startup(LPCALLBACK pCallback, boolean_t bPWDisk )
 {
 	int nRet = 0;
-#ifdef _FIXME_
 
+#ifndef LINUX
 	if( NULL == pCallback )
     {
 		pCallback = reinterpret_cast<LPCALLBACK>(CKextManager::EventNotify_PostProcess);
@@ -393,8 +393,8 @@ int CKextManager::KextModule_Startup(LPCALLBACK pCallback, boolean_t bPWDisk )
 int CKextManager::KextModule_Cleanup( boolean_t bPWDisk )
 {
     int nRet = 0;
-#ifdef _FIXME_
 
+#ifdef _FIXME_
     DEBUG_LOG("[DLP][%s] CommStopControl( bPWDisk=%d ) \n", __FUNCTION__, bPWDisk );
     nRet = CommStopControl( bPWDisk );
 
