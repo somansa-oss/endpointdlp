@@ -78,9 +78,6 @@ int CESFManager::EventNotify_PostProcess( PEVT_PARAM pEvtInfo )
     return nRet;
 }
 
-
-/*****************************************************************************************/
-
 int CESFManager::EventNotify_FileIsRemove(PEVT_PARAM pEvtInfo )
 {
     if(!pEvtInfo) return 0;
@@ -96,7 +93,6 @@ int CESFManager::EventNotify_FileScan(PEVT_PARAM pEvtInfo )
     printf( "[ESF][%s] pid=%d, QtPath=%s \n", __FUNCTION__, pEvtInfo->ProcessId, pEvtInfo->pQtFilePath );
     return 0;
 }
-
 
 int CESFManager::EventNotify_FileDelete(PEVT_PARAM pEvtInfo )
 {
@@ -181,8 +177,8 @@ CESFManager::IsRemovable( char* pczDevice )
 {
 #ifndef LINUX
     kern_return_t nResult = 0;
-    io_iterator_t iter;
-    io_service_t  service;
+    io_iterator_t iter = 0;
+    io_service_t  service = 0;
     boolean_t     bRemovable = false;
 
     CFMutableDictionaryRef matchingDict = IOBSDNameMatching(kIOMasterPortDefault, 0, pczDevice );
@@ -215,7 +211,6 @@ CESFManager::IsRemovable( char* pczDevice )
     }
     
     bRemovable = false;
-    
     do
     {
         if (IOObjectConformsTo(service, kIOMediaClass))
@@ -377,7 +372,6 @@ int CESFManager::fnSetDrivePolicy( void* pBuf, int nLength )
     return nRet;
 }
 
-
 int CESFManager::fnSetExceptDrivePolicy( void* pBuf, int nLength )
 {
     int  nRet=0;
@@ -450,7 +444,7 @@ int CESFManager::fnSetQuarantinePathExt(PQT_CTX pQtCtx)
     return nRet;
 }
 
-
+#ifndef Linux
 int CESFManager::fnSetQuarantineLimit(boolean_t bQtLimit)
 {
     int  nRet=0, nTotalSize =0;
@@ -517,7 +511,6 @@ int CESFManager::fnSetUSBMobilePermit( MB_PERMIT& PermitInfo )
 }
 
 
-
 int CESFManager::fnSetUSBMobilePermitList(std::vector<MB_PERMIT>* pPermitList)
 {
     int nRet=0, nPos=0, nCount=0;
@@ -566,7 +559,6 @@ int CESFManager::fnClrUSBMobilePermitList()
 }
 
 
-
 int CESFManager::fnSetCtrlMobile(PMB_POLICY pPolicy)
 {
     int  nRet=0, nTotalSize =0;
@@ -600,7 +592,6 @@ int CESFManager::fnSetCtrlMobile(PMB_POLICY pPolicy)
     if(pCmdNew) free( pCmdNew );
     return nRet;
 }
-
 
 int CESFManager::fnMobileNodeInsert_SetMtp(const char* pczBasePath, const char* pczKeyword )
 {
@@ -683,7 +674,6 @@ int CESFManager::fnMobileNodeInsert_SetPtp(const char* pczBasePath, const char* 
     return nReturn;
 }
 
-
 int CESFManager::fnMobileNodeInsert(PMB_NODE pNode)
 {
     int  nRet=0, nTotalSize =0;
@@ -721,8 +711,6 @@ int CESFManager::fnMobileNodeInsert(PMB_NODE pNode)
     if(pCmdNew) free( pCmdNew );
     return nRet;
 }
-
-
 
 int CESFManager::fnMobileNodeRemoveAll()
 {
@@ -784,7 +772,6 @@ int CESFManager::fnSetProcessIdUnprotect(ULONG ProcessId)
     return nRet;
 }
 
-
 int CESFManager::fnSetPermitProcessName(void* pBuf, int nBufSize)
 {
     int  nRet=0, nTotalSize =0;
@@ -822,8 +809,6 @@ int CESFManager::fnSetPermitProcessName(void* pBuf, int nBufSize)
     if(pCmdNew) free( pCmdNew );
     return nRet;
 }
-
-
 
 int CESFManager::fnSetPermitFolderName(void* pBuf, int nBufSize)
 {
@@ -864,7 +849,6 @@ int CESFManager::fnSetPermitFolderName(void* pBuf, int nBufSize)
 
 }
 
-
 int CESFManager::fnSetPermitFileExtName(void* pBuf, int nBufSize)
 {
     int   nRet=0, nTotalSize =0;
@@ -903,7 +887,6 @@ int CESFManager::fnSetPermitFileExtName(void* pBuf, int nBufSize)
     return nRet;
 
 }
-
 
 int CESFManager::fnGetSmartLogEx()
 {
@@ -1249,6 +1232,7 @@ int CESFManager::fnSetSelfProtect_CommitComplete( void* pBuf, int nBufSize, ULON
     if(pCmdNew) free( pCmdNew );
     return nRet;
 }
+#endif
 
 
 int CESFManager::fnSetSelfProtect_Commit( boolean_t bProtect, ULONG nCommand )

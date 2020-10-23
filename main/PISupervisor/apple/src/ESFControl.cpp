@@ -56,8 +56,8 @@ CESFControl::~CESFControl()
 int CESFControl::ESFControl_Init()
 {
     int  nRet = 0;
-    pthread_t  PosixTID;
-    pthread_attr_t  Attr;
+    pthread_t  PosixTID = 0;
+    pthread_attr_t  Attr = {0};
     
     m_nESFCtlId = GetESFControlId();
     if(m_nESFCtlId == 0)
@@ -91,8 +91,7 @@ int CESFControl::ESFControl_Init()
     
     pthread_attr_destroy( &Attr );
     DEBUG_LOG1("[ESF] Event Receiver thread Created. \n" );
-    // 이 시점에
-    // 위에서 생성한 이벤트 큐 listener 쓰레드는 kext에 자신을 이벤트 리시버로 등록한 상태에서 kext로부터의 이벤트나 명령 수신을 대기 중임.
+
     return 0;
 }
 
@@ -286,31 +285,6 @@ int CESFControl::SendCommand_ESFCtl( PCOMMAND_MESSAGE pCmdMsg )
         DEBUG_LOG1("SendCommand_ESFCtl InvalidParameter. \n");
         return -1;
     }
-
-//    nSock = ConnectESFControl();
-//    if(nSock < 0)
-//    {
-//        DEBUG_LOG1("ConnectESFControl Error.\n");
-//        return -1;
-//    }
-//
-//    nSend = send( nSock, pCmdMsg, pCmdMsg->Size, 0 );
-//    if(nSend < 0)
-//    {
-//        DEBUG_LOG( "[ESF] SendCommand_ESFCtl send failed(%d) \n", errno);
-//        CloseESFControl( nSock );
-//        return -1;
-//    }
-//    CloseESFControl( nSock );
-//    DEBUG_LOG1("[ESF] SendCommand_ESFCtl Success. \n" );
-    
-//    DEBUG_LOG( "piagent - begin - event:%d - param:%s", eventId, param.c_str());
-//
-//    if( false == isRegistered() ) {
-//        DEBUG_LOG1( "piagent - stop - agent_not_registered");
-//        INFO_LOG1( "notify event to piagent : stop - agent_not_registered");
-//        return false;
-//    }
     
     CPIPacket packet;
     packet.support.bigEndian = ConfigMan.socket.bigEndian;

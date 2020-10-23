@@ -79,21 +79,7 @@ bool CDLPApplication::containBinary(int fd, void(*logCallback)(std::string& log)
 			}
 			
 			readSum += buffer.length;
-/*
-			if (NULL != logCallback) {
-				char szLog[1024] = {0x00,}; sprintf(szLog, "[fd:%d] read:%d - sum:%d - file_len:%lld", fd, (int) buffer.length, readSum, fileLength );
-				std::string log = szLog;
-				logCallback(log);
-			}
-*/
 			result = containBinary(fd, buffer, pattern, logCallback);
-/*			
-			if (NULL != logCallback) {
-				char szLog[1024] = {0x00,}; sprintf(szLog, "[fd:%d] result:%s", fd, (result)?"true":"false");
-				std::string log = szLog;
-				logCallback(log);
-			}
-*/
 		} while ((fileLength > readSum) && (false == result));
 	} while (false);
 
@@ -133,13 +119,6 @@ unsigned char CDLPApplication::x2c(unsigned char c) const { /*0~9, A~F, a~f*/
 bool CDLPApplication::containBinary(int fd, const CBufferType& buffer, const CBufferType& pattern, void(*logCallback)(std::string& log)) const {
 	int curSize = 0;
 	char* source = buffer.data;
-	/*	
-	if (NULL != logCallback) {
-			char szLog[1024] = {0x00,}; sprintf(szLog, "[fd:%d] before - curSize:%d - buf_len:%d - pattern_len:%d", fd, curSize, (int) buffer.length, (int) pattern.length);
-			std::string log = szLog;
-			logCallback(log);
-		}
-*/
 	while (curSize < buffer.length) {
 		char* dest = pattern.data;	
 
@@ -147,13 +126,6 @@ bool CDLPApplication::containBinary(int fd, const CBufferType& buffer, const CBu
 
 
 		while (true) {
-		/*	
-			if (NULL != logCallback) {
-				char szLog[1024] = {0x00,}; sprintf(szLog, "%s(%d) [fd:%d] curSize:%d - buf_len:%d - tempPos:%d - pattern_len:%d", __FUNCTION__, __LINE__, fd, curSize, (int) buffer.length, tempPos, (int) pattern.length);
-				std::string log = szLog;
-				logCallback(log);
-			}
-	*/	
 			if (curSize >= buffer.length) {
 				break;
 			}
@@ -182,14 +154,7 @@ bool CDLPApplication::containBinary(int fd, const CBufferType& buffer, const CBu
 		source = source - tempPos + 1;
 		curSize = curSize - tempPos + 1;
 	}
-/*	
-	if (NULL != logCallback) {
-			char szLog[1024] = {0x00,}; sprintf(szLog, "[fd:%d] after - curSize:%d - buf_len:%d - pattern_len:%d", fd, curSize, (int) buffer.length, (int) pattern.length);
-			std::string log = szLog;
-			logCallback(log);
-		}
-*/		
-
+	
 	return false;
 }
 
