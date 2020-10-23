@@ -1159,7 +1159,7 @@ int CKextManager::fnMobileNodeInsert_SetPtp(const char* pczBasePath, const char*
 {
     int      nReturn = 0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     size_t   nLength = 0;
     MB_NODE  Node;
@@ -1201,8 +1201,7 @@ int CKextManager::fnMobileNodeInsert_SetPtp(const char* pczBasePath, const char*
     return nReturn;
 }
 
-#ifdef _NOTUSED_
-
+#ifndef LINUX
 
 int CKextManager::fnMobileNodeInsert(PMB_NODE pNode)
 {
