@@ -3519,7 +3519,7 @@ int CKextManager::fnSetSelfProtect_Commit( boolean_t bProtect, ULONG nCommand )
     return nRet;
 }
 
-#ifdef _NOTUSED_
+#ifndef LINUX
 
 boolean_t
 CKextManager::ShellCommand_Execute( std::string strCommand, std::string& strResult )
@@ -3580,29 +3580,6 @@ CKextManager::PWDisk_GetFreeDiskPath( PWDISK_SIZE* pDiskSize )
     
     return false;
 }
-
-
-
-/*
- if [ -d $VolumePath ]; then
- echo "detach $VolumePath"
- sudo hdiutil detach $VolumePath
- fi
- 
- 
- if [ -e $ImagePath ]; then
- echo "attach $ImagePath"
- sudo hdiutil attach $ImagePath
- else
- echo "mkdir -p $DirPath"
- sudo mkdir -p $DirPath
- echo "create $ImagePath"
- sudo hdiutil create $ImagePath -size 1g -fs HFS+ -volname $VolumeName -format UDRW -srcfolder $DirPath
- echo "attach $ImagePath"
- sudo hdiutil attach $ImagePath
- fi
- 
- */
 
 
 boolean_t
@@ -3673,16 +3650,6 @@ CKextManager::PWDisk_QuarantineDisk_mount( PWDISK_SIZE* pDiskSize )
 }
 
 
-
-
-/*
-if [ "$1" == "unload" ]; then
-echo "unload $VolumePath"
-sudo hdiutil detach $VolumePath
-exit 0
-fi
-*/
-
 boolean_t
 CKextManager::PWDisk_QuarantineDisk_unmount( PWDISK_SIZE* pDiskSize )
 {
@@ -3707,22 +3674,6 @@ CKextManager::PWDisk_QuarantineDisk_unmount( PWDISK_SIZE* pDiskSize )
 
     return true;
 }
-
-
-/*
- if [ "$1" == "size" -a "$2" ]; then
- if [ -d $VolumePath ]; then
- echo "detach $VolumePath"
- sudo hdiutil detach $VolumePath
- fi
- 
- echo "resize $2GB"
- sudo hdiutil resize -size "$2g" $ImagePath
- exit 0
- fi
- 
- */
-
 
 boolean_t
 CKextManager::PWDisk_QuarantineDisk_resize( PWDISK_SIZE* pDiskSize, int nNewSize )
