@@ -738,7 +738,7 @@ int CESFManager::fnMobileNodeRemoveAll()
     if(pCmdNew) free( pCmdNew );
     return nRet;
 }
-#endif
+
 
 int CESFManager::fnSetProcessIdUnprotect(ULONG ProcessId)
 {
@@ -771,7 +771,7 @@ int CESFManager::fnSetProcessIdUnprotect(ULONG ProcessId)
     if(pCmdNew) free( pCmdNew );
     return nRet;
 }
-
+#endif
 
 int CESFManager::fnSetPermitProcessName(void* pBuf, int nBufSize)
 {
