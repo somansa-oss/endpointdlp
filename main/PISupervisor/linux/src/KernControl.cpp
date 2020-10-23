@@ -37,49 +37,6 @@ CKernControl::~CKernControl()
 
 int CKernControl::KernelControl_Init()
 {
-    int  nRet = 0;
-    pthread_t  PosixTID;
-    pthread_attr_t  Attr;
-    
-#ifdef _FIXME_    
-
-    m_nKernCtlId = GetKernelControlId();
-    if(m_nKernCtlId == 0)
-    {
-        DEBUG_LOG("[DLP] GetKernelControlId() failed err=%d, err-msg=%s \n", errno, strerror(errno) );
-        return -1;
-    }
-    
-    // Event Queue Listener Thread Create.
-    nRet = pthread_attr_init( &Attr );
-    if(nRet != 0)
-    {
-        DEBUG_LOG("[DLP] pthread_atrr_init() failed (%d) \n", nRet );
-    }
-    
-    nRet = pthread_attr_setdetachstate( &Attr, PTHREAD_CREATE_DETACHED );
-    if(nRet != 0)
-    {
-        DEBUG_LOG( "[DLP] pthread_attr_setdetachstate() failed(%d) \n", nRet );
-        pthread_attr_destroy( &Attr );
-        return -1;
-    }
-    
-    nRet = pthread_create( &PosixTID, &Attr, CKernControl::ListenEventQueueThread, NULL );
-    if(nRet != 0)
-    {
-        DEBUG_LOG("[DLP] pthread_create() failed(%d) \n", nRet );
-        pthread_attr_destroy( &Attr );
-        return -1;
-    }
-    
-    pthread_attr_destroy( &Attr );
-
-#endif
-
-    DEBUG_LOG1("[DLP] Event Receiver thread Created. \n" );
-    // 이 시점에
-    // 위에서 생성한 이벤트 큐 listener 쓰레드는 kext에 자신을 이벤트 리시버로 등록한 상태에서 kext로부터의 이벤트나 명령 수신을 대기 중임.
     return 0;
 }
 
