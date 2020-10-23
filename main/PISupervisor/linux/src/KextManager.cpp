@@ -309,7 +309,7 @@ int CKextManager::SelectDisplayMenu_PISecSmartDrv()
 boolean_t
 CKextManager::IsRemovable( char* pczDevice )
 {
-#ifdef _FIXME_
+#ifndef LINUX
 
     kern_return_t nResult = 0;
     io_iterator_t iter;
@@ -376,8 +376,8 @@ CKextManager::IsRemovable( char* pczDevice )
 int CKextManager::KextModule_Startup(LPCALLBACK pCallback, boolean_t bPWDisk )
 {
 	int nRet = 0;
-#ifdef _FIXME_
 
+#ifndef LINUX
 	if( NULL == pCallback )
     {
 		pCallback = reinterpret_cast<LPCALLBACK>(CKextManager::EventNotify_PostProcess);
@@ -393,8 +393,8 @@ int CKextManager::KextModule_Startup(LPCALLBACK pCallback, boolean_t bPWDisk )
 int CKextManager::KextModule_Cleanup( boolean_t bPWDisk )
 {
     int nRet = 0;
-#ifdef _FIXME_
 
+#ifndef LINUX
     DEBUG_LOG("[DLP][%s] CommStopControl( bPWDisk=%d ) \n", __FUNCTION__, bPWDisk );
     nRet = CommStopControl( bPWDisk );
 
@@ -415,10 +415,9 @@ void CKextManager::RegisterCallback( LPCALLBACK pCallback )
     }
     
     g_AppCallback = pCallback;
-#ifdef _FIXME_
 
+#ifndef LINUX
     DEBUG_LOG("[DLP] Callback Function Reset: %p \n", pCallback );
-
 #endif    
 }
 
@@ -426,8 +425,8 @@ void CKextManager::RegisterCallback( LPCALLBACK pCallback )
 int CKextManager::CommStartControl( boolean_t bPWDisk )
 {
     int nRet = 0;
-#ifdef _FIXME_
 
+#ifndef LINUX
     if(true == bPWDisk)
     {
         nRet = g_PWKctl.KernelControl_Init();        
@@ -452,7 +451,7 @@ int CKextManager::CommStopControl( boolean_t bPWDisk )
 {
     int nRet = 0;
 
-#ifdef _FIXME_
+#ifndef LINUX
     
     if(true == bPWDisk)
     {
@@ -480,7 +479,7 @@ int CKextManager::CommStopControl( boolean_t bPWDisk )
 // Policy
 /****************************************************************************************/
 
-#ifdef _NOTUSED_
+#ifndef LINUX
 
 int CKextManager::Test_SetExceptUsbPolicy(int nCmd, void* pBuf,  const char* pczVolumePath )
 {
@@ -778,7 +777,8 @@ int CKextManager::fnGetDrivePolicy(void* pBuf, int nLength )
 int CKextManager::fnSetDrivePolicy( void* pBuf, int nLength )
 {
     int  nRet=0;
-#ifdef _FIXME_
+
+#ifndef LINUX
 
     int  nTotalSize =0;
     PCOMMAND_MESSAGE    pCmdNew   = NULL;
@@ -818,7 +818,7 @@ int CKextManager::fnSetExceptDrivePolicy( void* pBuf, int nLength )
 {
     int  nRet=0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     int  nTotalSize =0;
     PCOMMAND_MESSAGE pCmdNew = NULL;
@@ -862,7 +862,7 @@ int CKextManager::fnSetQuarantinePathExt(PQT_CTX pQtCtx)
 {
     int  nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     PCOMM_QT_INFO    pCommQtInfo = NULL;
@@ -911,7 +911,7 @@ int CKextManager::fnSetQuarantineLimit(boolean_t bQtLimit)
 {
     int  nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     PCOMM_QT_INFO    pCommQtInfo = NULL;
@@ -954,7 +954,7 @@ int CKextManager::fnSetUSBMobilePermit( MB_PERMIT& PermitInfo )
 {
     int nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     PCOMM_MB_PERMIT  pCommPermit = NULL;
@@ -998,7 +998,7 @@ int CKextManager::fnSetUSBMobilePermitList(std::vector<MB_PERMIT>* pPermitList)
 {
     int nRet=0, nPos=0, nCount=0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     std::vector<MB_PERMIT>::iterator Iter;
     MB_PERMIT PermitInfo;
@@ -1023,7 +1023,7 @@ int CKextManager::fnClrUSBMobilePermitList()
 {
     int  nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     PCOMM_MB_PERMIT pCommPermit = NULL;
@@ -1066,7 +1066,7 @@ int CKextManager::fnSetCtrlMobile(PMB_POLICY pPolicy)
 {
     int  nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     PCOMM_MB_POLICY  pMbPolicy = NULL;
@@ -1111,7 +1111,7 @@ int CKextManager::fnMobileNodeInsert_SetMtp(const char* pczBasePath, const char*
 {
     int      nReturn = 0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     size_t   nLength = 0;
     MB_NODE  Node;
@@ -1159,7 +1159,7 @@ int CKextManager::fnMobileNodeInsert_SetPtp(const char* pczBasePath, const char*
 {
     int      nReturn = 0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     size_t   nLength = 0;
     MB_NODE  Node;
@@ -1201,8 +1201,7 @@ int CKextManager::fnMobileNodeInsert_SetPtp(const char* pczBasePath, const char*
     return nReturn;
 }
 
-#ifdef _NOTUSED_
-
+#ifndef LINUX
 
 int CKextManager::fnMobileNodeInsert(PMB_NODE pNode)
 {
@@ -1253,7 +1252,7 @@ int CKextManager::fnMobileNodeRemoveAll()
 {
     int  nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
    
@@ -1286,7 +1285,7 @@ int CKextManager::fnMobileNodeRemoveAll()
     return nRet;
 }
 
-#ifdef _NOTUSED_
+#ifndef LINUX
 
 int CKextManager::fnSetProcessIdUnprotect(ULONG ProcessId)
 {
@@ -1331,7 +1330,7 @@ int CKextManager::fnSetPermitProcessName(void* pBuf, int nBufSize)
 {
     int  nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE  pCmdNew = NULL;
     PALLOWPROCESSNAME pAllowProcName = NULL;
@@ -1380,7 +1379,7 @@ int CKextManager::fnSetPermitFolderName(void* pBuf, int nBufSize)
 {
     int  nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     PALLOWFOLDERNAME pAllowFolderName = NULL;
@@ -1430,7 +1429,7 @@ int CKextManager::fnSetPermitFileExtName(void* pBuf, int nBufSize)
 {
     int   nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE  pCmdNew = NULL;
     PALLOWFILEEXTNAME pAllowFileExt = NULL;
@@ -1487,7 +1486,7 @@ int CKextManager::fnSetPrintPrevent_Off()
 {
     int nRet = 0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PRINT_POLICY policy;
     memset( &policy, 0, sizeof(policy) );
@@ -1502,7 +1501,7 @@ int CKextManager::fnSetPrintPrevent_Off()
     return nRet;
 }
 
-#ifdef _NOTUSED_
+#ifndef LINUX
 
 int CKextManager::fnSetPrintPrevent_Allow()
 {
@@ -1574,7 +1573,7 @@ int CKextManager::fnSetPrintPrevent(void* pBuf, int nBufSize )
 {
     int nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     PPRINT_POLICY    pPolicy = NULL;
@@ -1623,7 +1622,7 @@ int CKextManager::fnSetUploadPrevent(void* pBuf, int nBufSize )
 {
     int nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     PUPLOAD_POLICY    pPolicy = NULL;
@@ -1649,9 +1648,6 @@ int CKextManager::fnSetUploadPrevent(void* pBuf, int nBufSize )
     if(pPolicy)
     {
         memcpy( pPolicy, pBuf, nBufSize );
-        
-        //printf("applyPolicyUploadPrevent pDLPPolicyUpload->m_sControlList.size == %lu, [%s]",
-        //          pPolicy->lControlListSize, &(pPolicy->szControlList));
     }
     
     if(m_bKctl == true || g_AppKctl.m_nKernCtlId > 0)
@@ -1674,7 +1670,7 @@ int CKextManager::fnSetProcessAccessCheck( BOOLEAN bProcAC, BOOLEAN bLog )
 {
     int nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     PROC_AC_POLICY*  pPolicy = NULL;
@@ -1719,7 +1715,7 @@ int CKextManager::fnSetControlCamera( bool bControl, bool bLog  )
 {
     int nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     CAMERA_POLICY*  pPolicy = NULL;
@@ -1764,7 +1760,7 @@ int CKextManager::fnSetControlRndis( bool bRNdisCtrl, bool bRNdisLog )
 {
     int nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     RNDIS_POLICY* pPolicy = NULL;
@@ -1809,7 +1805,7 @@ int CKextManager::fnSetControlAirDrop( bool bAirDropBlock, bool bAirDropLog )
 {
     int nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     AIRDROP_POLICY* pPolicy = NULL;
@@ -1852,7 +1848,7 @@ int CKextManager::fnSetControlAirDrop( bool bAirDropBlock, bool bAirDropLog )
     return nRet;
 }
 
-#ifdef _NOTUSED_
+#ifndef LINUX
 
 //
 // PWDisk.kext
@@ -3418,7 +3414,7 @@ int CKextManager::fnSetSelfProtect_Commit( boolean_t bProtect, ULONG nCommand )
 {
     int  nRet=0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     ULONG nPID=0;
     ProtectCheck ProcCheck;
@@ -3523,7 +3519,7 @@ int CKextManager::fnSetSelfProtect_Commit( boolean_t bProtect, ULONG nCommand )
     return nRet;
 }
 
-#ifdef _NOTUSED_
+#ifndef LINUX
 
 boolean_t
 CKextManager::ShellCommand_Execute( std::string strCommand, std::string& strResult )
@@ -3584,29 +3580,6 @@ CKextManager::PWDisk_GetFreeDiskPath( PWDISK_SIZE* pDiskSize )
     
     return false;
 }
-
-
-
-/*
- if [ -d $VolumePath ]; then
- echo "detach $VolumePath"
- sudo hdiutil detach $VolumePath
- fi
- 
- 
- if [ -e $ImagePath ]; then
- echo "attach $ImagePath"
- sudo hdiutil attach $ImagePath
- else
- echo "mkdir -p $DirPath"
- sudo mkdir -p $DirPath
- echo "create $ImagePath"
- sudo hdiutil create $ImagePath -size 1g -fs HFS+ -volname $VolumeName -format UDRW -srcfolder $DirPath
- echo "attach $ImagePath"
- sudo hdiutil attach $ImagePath
- fi
- 
- */
 
 
 boolean_t
@@ -3677,16 +3650,6 @@ CKextManager::PWDisk_QuarantineDisk_mount( PWDISK_SIZE* pDiskSize )
 }
 
 
-
-
-/*
-if [ "$1" == "unload" ]; then
-echo "unload $VolumePath"
-sudo hdiutil detach $VolumePath
-exit 0
-fi
-*/
-
 boolean_t
 CKextManager::PWDisk_QuarantineDisk_unmount( PWDISK_SIZE* pDiskSize )
 {
@@ -3711,22 +3674,6 @@ CKextManager::PWDisk_QuarantineDisk_unmount( PWDISK_SIZE* pDiskSize )
 
     return true;
 }
-
-
-/*
- if [ "$1" == "size" -a "$2" ]; then
- if [ -d $VolumePath ]; then
- echo "detach $VolumePath"
- sudo hdiutil detach $VolumePath
- fi
- 
- echo "resize $2GB"
- sudo hdiutil resize -size "$2g" $ImagePath
- exit 0
- fi
- 
- */
-
 
 boolean_t
 CKextManager::PWDisk_QuarantineDisk_resize( PWDISK_SIZE* pDiskSize, int nNewSize )

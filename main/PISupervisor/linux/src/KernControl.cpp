@@ -37,49 +37,6 @@ CKernControl::~CKernControl()
 
 int CKernControl::KernelControl_Init()
 {
-    int  nRet = 0;
-    pthread_t  PosixTID;
-    pthread_attr_t  Attr;
-    
-#ifdef _FIXME_    
-
-    m_nKernCtlId = GetKernelControlId();
-    if(m_nKernCtlId == 0)
-    {
-        DEBUG_LOG("[DLP] GetKernelControlId() failed err=%d, err-msg=%s \n", errno, strerror(errno) );
-        return -1;
-    }
-    
-    // Event Queue Listener Thread Create.
-    nRet = pthread_attr_init( &Attr );
-    if(nRet != 0)
-    {
-        DEBUG_LOG("[DLP] pthread_atrr_init() failed (%d) \n", nRet );
-    }
-    
-    nRet = pthread_attr_setdetachstate( &Attr, PTHREAD_CREATE_DETACHED );
-    if(nRet != 0)
-    {
-        DEBUG_LOG( "[DLP] pthread_attr_setdetachstate() failed(%d) \n", nRet );
-        pthread_attr_destroy( &Attr );
-        return -1;
-    }
-    
-    nRet = pthread_create( &PosixTID, &Attr, CKernControl::ListenEventQueueThread, NULL );
-    if(nRet != 0)
-    {
-        DEBUG_LOG("[DLP] pthread_create() failed(%d) \n", nRet );
-        pthread_attr_destroy( &Attr );
-        return -1;
-    }
-    
-    pthread_attr_destroy( &Attr );
-
-#endif
-
-    DEBUG_LOG1("[DLP] Event Receiver thread Created. \n" );
-    // 이 시점에
-    // 위에서 생성한 이벤트 큐 listener 쓰레드는 kext에 자신을 이벤트 리시버로 등록한 상태에서 kext로부터의 이벤트나 명령 수신을 대기 중임.
     return 0;
 }
 
@@ -88,7 +45,7 @@ int CKernControl::KernelControl_Uninit()
 {
     int nRet = 0;
 
-#ifdef _FIXME_        
+#ifndef LINUX
     nRet = QuitKernelControl();
 #endif
 
@@ -100,7 +57,7 @@ int CKernControl::ConnectKernelControl()
 {
     int nSock = 0;
 
-#ifdef _FIXME_        
+#ifndef LINUX
     
     nSock = socket(PF_SYSTEM, SOCK_STREAM, SYSPROTO_CONTROL);
     if(nSock < 0)
@@ -140,7 +97,7 @@ int CKernControl::ConnectKernelControl()
 //
 int CKernControl::CloseKernelControl(int nSock)
 {
-#ifdef _FIXME_    
+#ifndef LINUX
 
     if(close(nSock) < 0)
     {
@@ -167,7 +124,7 @@ u_int32_t CKernControl::GetKernelControlId()
 {
     int nSock = 0;
 
-#ifdef _FIXME_    
+#ifndef LINUX
     
     nSock = socket( PF_SYSTEM, SOCK_DGRAM, SYSPROTO_CONTROL);
     if(nSock < 0)
@@ -210,7 +167,7 @@ int CKernControl::QuitKernelControl()
     int   nSock = 0;
     COMMAND_MESSAGE CmdMsg;
     
-#ifdef _FIXME_    
+#ifndef LINUX 
 
     nSock = ConnectKernelControl();
     if(nSock < 0)
@@ -246,7 +203,7 @@ int CKernControl::SendCommand_KernCtl( PCOMMAND_MESSAGE pCmdMsg )
     int nSock=0;
     ssize_t nSend = 0;
     
-#ifdef _FIXME_        
+#ifndef LINUX 
     if(!pCmdMsg)
     {
         DEBUG_LOG1("SendCommand_KernCtl InvalidParameter. \n");
@@ -281,7 +238,7 @@ int CKernControl::SendRecvCommand_KernCtl( PCOMMAND_MESSAGE pCmdMsg )
     int nSock=0;
     ssize_t nSend = 0, nRecv=0;
     
-#ifdef _FIXME_        
+#ifndef LINUX
     if(!pCmdMsg)
     {
         DEBUG_LOG1("[DLP] SendRecvCommand_KernCtl InvalidParameter. \n");
@@ -349,7 +306,7 @@ void* CKernControl::ListenEventQueueThread(void* pParam)
     
     DEBUG_LOG1("begin.");
 
-#ifdef _FIXME_    
+#ifndef LINUX
 
     nListenSock = g_AppKctl.ConnectKernelControl();
     if(nListenSock < 0)
@@ -487,7 +444,7 @@ CKernControl::JobEventThread_KernCtl(void* pPacket)
     boolean_t  bSuc  = FALSE;
     PCOMMAND_MESSAGE pCmdMsg = NULL;
     
-#ifdef _FIXME_    
+#ifndef LINUX
 
     pCmdMsg = (PCOMMAND_MESSAGE)pPacket;
     if(pCmdMsg == NULL)
@@ -576,7 +533,7 @@ CKernControl::JobEvent_IsRemoable(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     size_t     nDataSize=0, nTotalSize=0;
     PSCANNER_NOTIFICATION pNotify = NULL;
     
-#ifdef _FIXME_    
+#ifndef LINUX
 
     if(nSock < 0 || !pCmdMsg)
     {
@@ -618,7 +575,7 @@ CKernControl::JobEvent_FileEventNotify(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     int    nEventPID = 0, nAction=0;
     PSCANNER_NOTIFICATION pNotify = NULL;
     
-#ifdef _FIXME_    
+#ifndef LINUX
 
     if(nSock < 0 || !pCmdMsg) return FALSE;
     
@@ -658,7 +615,7 @@ void CKernControl::GetLogTime(char* pczCurTime, int nTimeBufSize)
     time_t     CurTime;
     struct tm* pTimeData = NULL;
     
-#ifdef _FIXME_    
+#ifndef LINUX
 
     if(!pczCurTime) return;
     
@@ -678,7 +635,7 @@ CKernControl::JobEvent_SmartLogNotify(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     ULONG  Command = 0;
     PSMART_LOG_RECORD_EX pLogEx = NULL;
     
-#ifdef _FIXME_    
+#ifndef LINUX
 
     if(nSock < 0 || !pCmdMsg) return FALSE;
     
@@ -712,7 +669,7 @@ CKernControl::IsProcessAccessCheckExample( int nPID, char* pczFilePath )
     char czProcName[260];
     char* pczToken = NULL;
     
-#ifdef _FIXME_    
+#ifndef LINUX
 
     if(!pczFilePath)
     {
@@ -758,7 +715,7 @@ CKernControl::IsProcessAccessCheck( const int nCommand, const int nPID, char* pc
 	EVT_PARAM  EvtInfo;
 	char       czProcName[260];
     
-#ifdef _FIXME_    
+#ifndef LINUX
 
 	if(!pczFilePath)
     {
@@ -797,7 +754,7 @@ CKernControl::JobEvent_ProcessAccessCheck(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     char  czProcName[MAX_PROC];
     char  czParentName[MAX_PROC];
     
-#ifdef _FIXME_        
+#ifndef LINUX
     if(nSock < 0 || !pCmdMsg)
     {
         return FALSE;
@@ -836,7 +793,7 @@ CKernControl::JobEvent_ProcessAccessCheck(int nSock, PCOMMAND_MESSAGE pCmdMsg)
 boolean_t
 CKernControl::CheckDiskAccessPermission( char* czPath )
 {
-#ifdef _FIXME_        
+#ifndef LINUX
     struct statfs fileStat = { 0, };
     char czRand[8] = { '.', 0, };
 
@@ -960,7 +917,7 @@ IsNewerOSVersionThenCatalina()
     char czTemp[8] = { 0, };
     int nCount = 0;
     
-#ifdef _FIXME_        
+#ifndef LINUX
     fp = popen("sw_vers -productVersion | grep 10.", "r");
     while (fgets(czResult, sizeof(czResult), fp) != NULL);
     pclose(fp);
@@ -988,7 +945,7 @@ IsNewerOSVersionThenCatalina()
 boolean_t
 CKernControl::JobEvent_FullDiskAccessCheck( int nSock, PCOMMAND_MESSAGE pCmdMsg )
 {
-#ifdef _FIXME_        
+#ifndef LINUX
     if (!IsNewerOSVersionThenCatalina())
         return FALSE;
     
@@ -1077,104 +1034,6 @@ CKernControl::JobEvent_FullDiskAccessCheck( int nSock, PCOMMAND_MESSAGE pCmdMsg 
     return TRUE;
 }
 
-
-
-/*
-
-boolean_t
-CKernControl::FileScan_Process(int nSock, PCOMMAND_MESSAGE pCmdMsg, char* pczQtFilePath )
-{
-    boolean_t  bAccess   = FALSE;
-    size_t     nFileSize = 0, nDataSize=0, nTotalSize=0;
-    int        nCommand=0, nEventPID = 0;
-    int        nTempFile=0;
-    char       czPath[ MAXPATHLEN ];
-    char*      pczPos = NULL;
-    char*      pczBuf = NULL;
-    PSCANNER_NOTIFICATION pNotify = NULL;
-    
-    if(nSock < 0 || !pCmdMsg || !pczTempFilePath) return FALSE;
-    
-    pNotify = (PSCANNER_NOTIFICATION)pCmdMsg->Data;
-    if(!pNotify) return FALSE;
-    
-    nCommand  = pCmdMsg->Command;
-    nEventPID = pNotify->nPID;
-    nFileSize = (size_t)pNotify->pParam;
-    
-    if(nFileSize <= 0) return FALSE;
-    
-    memset( czPath, 0, sizeof(czPath) );
-    memset( pczTempFilePath, 0, MAXPATHLEN );
-    strcpy( czPath, pNotify->czFilePath );
-    strcpy( pczTempFilePath, czPath );
-    
-    pczPos = pczTempFilePath + strlen(pczTempFilePath);
-    *pczPos++ = '.';
-    *pczPos++ = '_';
-    *pczPos++ = '@';
-    *pczPos++ = '_';
-    *pczPos++ = 0;
-    
-    printf("[DLP][%s] FilePath=%s \n",     __FUNCTION__, czPath );
-    printf("[DLP][%s] TempFilePath=%s \n", __FUNCTION__, pczTempFilePath );
-    
-    nTempFile = open( pczTempFilePath, O_RDWR | O_TRUNC | O_CREAT, S_IRWXU );
-    if(nTempFile < 0)
-    {   // 임시 파일 만들기 실패. '권한 없음'을 리턴함.
-        printf("[DLP] open() failed(%d)\n", errno);
-        return FALSE;
-    }
-    
-    // 3. 파일 읽기/쓰기에 사용할 버퍼 할당하기
-    pczBuf = (char*)malloc( nFileSize );
-    if(pczBuf == NULL)
-    {   // 버퍼를 할당하는데 실패함. '권한 없음'을 리턴함.
-        close( nTempFile );
-        unlink( pczTempFilePath ); // 임시 파일 지움.
-        return FALSE;
-    }
-    
-    nDataSize = sizeof(SCANNER_NOTIFICATION);
-    nTotalSize = sizeof(COMMAND_MESSAGE) + sizeof(SCANNER_NOTIFICATION);
-    // 4. 원본 파일 내용 읽어오기
-    pCmdMsg->Size = (ULONG)nTotalSize;
-    pCmdMsg->Command  = (ULONG)GetFileData;
-    pNotify = (PSCANNER_NOTIFICATION)pCmdMsg->Data;
-    if(pNotify)
-    {
-        memset( pNotify, 0, nDataSize );
-        pNotify->pParam   = (void*)pczBuf;
-        pNotify->pParam02 = (void*)0;
-        pNotify->pParam03 = (void*)nFileSize;
-    }
-    
-    if(send( nSock, pCmdMsg, nTotalSize, 0) < 0)
-    {   // 원본 파일 내용 읽기 실패. '권한 없음'을 리턴함.
-        printf("[DLP] send(GET_FILEDATA) failed(%d) \n", errno );
-        free( pczBuf );
-        close( nTempFile );
-        unlink( pczTempFilePath );
-        return FALSE;
-    }
-    
-    // 5. 원본 파일 내용을 임시 파일에 쓰기
-    if(write( nTempFile, pczBuf, nFileSize) < 0)
-    {   // 임시 파일에 쓰기 실패. '권한 없음'을 리턴함.
-        printf("[DLP] write() failed(%d)\n", errno);
-        free( pczBuf );
-        close( nTempFile );
-        unlink( pczTempFilePath );
-        return FALSE;
-    }
-    
-    
-    free( pczBuf );
-    close( nTempFile );
-    return bAccess;
-}
-*/
-
 #define PRT_FILE "/Users/somansa/test/prt.pdf"
 
 boolean_t
@@ -1182,7 +1041,7 @@ CKernControl::QtCopyFileUser(PCOMMAND_MESSAGE pCmdMsg)
 {
     boolean_t  bAccess   = FALSE;
 
-#ifdef _FIXME_        
+#ifndef LINUX
     size_t     nFileSize = 0;
     int        nCommand=0, nEventPID = 0;
     int        nFile=0, nQtFile=0;
@@ -1270,21 +1129,6 @@ CKernControl::QtCopyFileUser(PCOMMAND_MESSAGE pCmdMsg)
     
     free( pczBuf );
     close( nQtFile );
-
-//    {
-//        size_t nLength=0, nCupsTmp=0;
-//        nCupsTmp = strlen( DIR_CUPS_TMP );
-//        nLength  = strlen( pNotify->czFilePath );
-//        if(nLength >= nCupsTmp && 0 == strncasecmp( pNotify->czFilePath, DIR_CUPS_TMP, nCupsTmp ))
-//        {
-//            printf("[DLP][%s] Except Path=%s \n", __FUNCTION__, pNotify->czFilePath );
-//        }
-//        else
-//        {
-//            // Watermark Test
-//            nLength = JobCopyFile( PRT_FILE, pNotify->czFilePath );
-//        }
-//    }
 #endif
     return bAccess;
 }
@@ -1295,7 +1139,7 @@ int CKernControl::JobCopyFile( const char* pczSrc, const char* pczDst )
     size_t nRead=0, nWrite=0;
     char czBuf[1024];
     
-#ifdef _FIXME_        
+#ifndef LINUX
     if(!pczSrc || !pczDst) return 0;
     
     printf("[DLP][%s] src=%s \n", __FUNCTION__, pczSrc );
@@ -1351,8 +1195,7 @@ CKernControl::JobEvent_FileScan(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     EVT_PARAM    EvtInfo;
     PSCANNER_NOTIFICATION pNotify = NULL;
 
-#ifdef _FIXME_    
-
+#ifndef LINUX
     if(nSock < 0 || !pCmdMsg)
     {
         return FALSE;
@@ -1465,8 +1308,7 @@ CKernControl::JobEvent_FileExchangeData(int nSock, PCOMMAND_MESSAGE pCmdMsg)
 {
     int     nEventPID = 0;
 
-#ifdef _FIXME_        
-
+#ifndef LINUX
     size_t  nDataSize=0, nTotalSize=0;
     char*   pczPath  = NULL;
     char*   pczPath2 = NULL;
@@ -1516,8 +1358,7 @@ CKernControl::JobEvent_FileEventDiskFull(int nSock, PCOMMAND_MESSAGE pCmdMsg)
 {
     int     nCommand=0, nEventPID = 0;
 
-#ifdef _FIXME_        
-
+#ifndef LINUX
     char    czFilePath[ MAXPATHLEN ];
     PSCANNER_NOTIFICATION pNotify = NULL;
     
@@ -1557,8 +1398,7 @@ CKernControl::JobEvent_FileRename(int nSock, PCOMMAND_MESSAGE pCmdMsg)
 {
     int     nEventPID = 0;
 
-#ifdef _FIXME_        
-
+#ifndef LINUX
     size_t  nDataSize=0, nTotalSize=0;
     PSCANNER_NOTIFICATION pNotify = NULL;
     
@@ -1585,8 +1425,7 @@ CKernControl::JobEvent_FileRename(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     return TRUE;
 }
 
-#ifdef _FIXME_
-
+#ifndef LINUX
 
 #  define HTTP_MAX_BUFFER	2048	/* Max length of data buffer */
 typedef long ssize_t;			/* @private@ */
@@ -2037,7 +1876,7 @@ CKernControl::JobEvent_GetPrintSpoolPath(int nSock, PCOMMAND_MESSAGE pCmdMsg)
 {
     size_t  nDataSize=0, nTotalSize=0;
 
-#ifdef _FIXME_        
+#ifndef LINUX
 
     PSCANNER_NOTIFICATION pNotify = NULL;
     
@@ -2073,7 +1912,7 @@ boolean_t CKernControl::JobEvent_ProcessCallback(int nSock, PCOMMAND_MESSAGE pCm
 {
     ULONG  nCommand  = 0;
 
-#ifdef _FIXME_        
+#ifndef LINUX    
 
     PSCANNER_NOTIFICATION pNotify = NULL;
     
