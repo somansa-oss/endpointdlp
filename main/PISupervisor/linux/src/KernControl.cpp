@@ -533,7 +533,7 @@ CKernControl::JobEvent_IsRemoable(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     size_t     nDataSize=0, nTotalSize=0;
     PSCANNER_NOTIFICATION pNotify = NULL;
     
-#ifdef _FIXME_    
+#ifndef LINUX
 
     if(nSock < 0 || !pCmdMsg)
     {
@@ -575,7 +575,7 @@ CKernControl::JobEvent_FileEventNotify(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     int    nEventPID = 0, nAction=0;
     PSCANNER_NOTIFICATION pNotify = NULL;
     
-#ifdef _FIXME_    
+#ifndef LINUX
 
     if(nSock < 0 || !pCmdMsg) return FALSE;
     
@@ -615,7 +615,7 @@ void CKernControl::GetLogTime(char* pczCurTime, int nTimeBufSize)
     time_t     CurTime;
     struct tm* pTimeData = NULL;
     
-#ifdef _FIXME_    
+#ifndef LINUX
 
     if(!pczCurTime) return;
     
