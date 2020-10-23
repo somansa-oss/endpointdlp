@@ -180,7 +180,7 @@ bool CPIESFStub::applyPolicy(unsigned long command, void* in, unsigned long size
         case SetSelfProtect:
             result = g_AppESF.fnSetSelfProtect_Commit( *((boolean_t*)in), SetSelfProtect );
             break;
-            
+
         case SetSelfProtectOnlyPermit:
             result = g_AppESF.fnSetSelfProtect_Commit( *((boolean_t*)in), SetSelfProtectOnlyPermit );
             break;
@@ -204,8 +204,6 @@ bool CPIESFStub::applyPolicy(unsigned long command, void* in, unsigned long size
     return (0 == result) ? true : false;
 }
 
-
-//
 bool CPIESFStub::applyPolicyAirDrop( const bool bAirDropBlock, const bool bAirDropLog )
 {
     bool bResult = false;
@@ -217,7 +215,6 @@ bool CPIESFStub::applyPolicyAirDrop( const bool bAirDropBlock, const bool bAirDr
     bResult = g_AppESF.fnSetControlAirDrop( bAirDropBlock, bAirDropLog );
     return bResult;
 }
-
 
 // WLan Tethering
 bool CPIESFStub::applyPolicyRndis( const bool bRNdisCtrl, const bool bRNdisLog )
@@ -339,7 +336,10 @@ bool CPIESFStub::applyPolicySelectedBluetooth(const bool control, const bool log
 
 void CPIESFStub::load(void)
 {
-    system("kextload -v 6 /Library/Extensions/PISecSmartDrv.kext");}
+#ifndef LINUX    
+    system("kextload -v 6 /Library/Extensions/PISecSmartDrv.kext");
+#endif    
+}
 
 void CPIESFStub::unload(void)
 {
