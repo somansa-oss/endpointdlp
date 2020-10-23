@@ -45,7 +45,7 @@ int CKernControl::KernelControl_Uninit()
 {
     int nRet = 0;
 
-#ifdef _FIXME_        
+#ifndef LINUX
     nRet = QuitKernelControl();
 #endif
 
@@ -57,7 +57,7 @@ int CKernControl::ConnectKernelControl()
 {
     int nSock = 0;
 
-#ifdef _FIXME_        
+#ifndef LINUX
     
     nSock = socket(PF_SYSTEM, SOCK_STREAM, SYSPROTO_CONTROL);
     if(nSock < 0)
