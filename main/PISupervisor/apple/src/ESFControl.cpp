@@ -285,31 +285,6 @@ int CESFControl::SendCommand_ESFCtl( PCOMMAND_MESSAGE pCmdMsg )
         DEBUG_LOG1("SendCommand_ESFCtl InvalidParameter. \n");
         return -1;
     }
-
-//    nSock = ConnectESFControl();
-//    if(nSock < 0)
-//    {
-//        DEBUG_LOG1("ConnectESFControl Error.\n");
-//        return -1;
-//    }
-//
-//    nSend = send( nSock, pCmdMsg, pCmdMsg->Size, 0 );
-//    if(nSend < 0)
-//    {
-//        DEBUG_LOG( "[ESF] SendCommand_ESFCtl send failed(%d) \n", errno);
-//        CloseESFControl( nSock );
-//        return -1;
-//    }
-//    CloseESFControl( nSock );
-//    DEBUG_LOG1("[ESF] SendCommand_ESFCtl Success. \n" );
-    
-//    DEBUG_LOG( "piagent - begin - event:%d - param:%s", eventId, param.c_str());
-//
-//    if( false == isRegistered() ) {
-//        DEBUG_LOG1( "piagent - stop - agent_not_registered");
-//        INFO_LOG1( "notify event to piagent : stop - agent_not_registered");
-//        return false;
-//    }
     
     CPIPacket packet;
     packet.support.bigEndian = ConfigMan.socket.bigEndian;
