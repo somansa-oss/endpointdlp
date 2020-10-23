@@ -211,7 +211,6 @@ CESFManager::IsRemovable( char* pczDevice )
     }
     
     bRemovable = false;
-    
     do
     {
         if (IOObjectConformsTo(service, kIOMediaClass))
@@ -372,7 +371,6 @@ int CESFManager::fnSetDrivePolicy( void* pBuf, int nLength )
     free( pCmdNew );
     return nRet;
 }
-
 
 int CESFManager::fnSetExceptDrivePolicy( void* pBuf, int nLength )
 {
@@ -561,8 +559,7 @@ int CESFManager::fnClrUSBMobilePermitList()
     return nRet;
 }
 
-
-
+#ifndef Linux
 int CESFManager::fnSetCtrlMobile(PMB_POLICY pPolicy)
 {
     int  nRet=0, nTotalSize =0;
@@ -596,7 +593,7 @@ int CESFManager::fnSetCtrlMobile(PMB_POLICY pPolicy)
     if(pCmdNew) free( pCmdNew );
     return nRet;
 }
-
+#endif
 
 int CESFManager::fnMobileNodeInsert_SetMtp(const char* pczBasePath, const char* pczKeyword )
 {
