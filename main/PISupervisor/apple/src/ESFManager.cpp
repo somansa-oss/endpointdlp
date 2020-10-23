@@ -444,7 +444,7 @@ int CESFManager::fnSetQuarantinePathExt(PQT_CTX pQtCtx)
     return nRet;
 }
 
-
+#ifndef Linux
 int CESFManager::fnSetQuarantineLimit(boolean_t bQtLimit)
 {
     int  nRet=0, nTotalSize =0;
@@ -476,7 +476,7 @@ int CESFManager::fnSetQuarantineLimit(boolean_t bQtLimit)
     if(pCmdNew) free( pCmdNew );
     return nRet;
 }
-
+#endif
 
 int CESFManager::fnSetUSBMobilePermit( MB_PERMIT& PermitInfo )
 {
