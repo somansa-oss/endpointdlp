@@ -90,8 +90,6 @@ void CPCSecurity::ApplyShareFolder()
     }
     
     pthread_mutex_unlock( &m_SFMutex );
-    // unlock();
-    
 }
 
 
@@ -155,11 +153,9 @@ void* CPCSecurity::PCSecuritySFolderThreadProc(void* pParam)
         sleep(5);
     } while(false == pPCSecurity->m_bThreadExit);
     
-    // sleep( nIntervalTime );
     pthread_exit( (void*)1);
     INFO_LOG1("PCSecuritySFolderThreadProc Stopped.");
     return ((void*)1);
-    
 }
 
 
