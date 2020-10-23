@@ -177,8 +177,8 @@ CESFManager::IsRemovable( char* pczDevice )
 {
 #ifndef LINUX
     kern_return_t nResult = 0;
-    io_iterator_t iter;
-    io_service_t  service;
+    io_iterator_t iter = 0;
+    io_service_t  service = 0;
     boolean_t     bRemovable = false;
 
     CFMutableDictionaryRef matchingDict = IOBSDNameMatching(kIOMasterPortDefault, 0, pczDevice );
