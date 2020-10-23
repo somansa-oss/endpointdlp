@@ -509,7 +509,6 @@ int CESFManager::fnSetUSBMobilePermit( MB_PERMIT& PermitInfo )
     if(pCmdNew) free( pCmdNew );
     return nRet;
 }
-#endif
 
 
 int CESFManager::fnSetUSBMobilePermitList(std::vector<MB_PERMIT>* pPermitList)
@@ -559,7 +558,7 @@ int CESFManager::fnClrUSBMobilePermitList()
     return nRet;
 }
 
-#ifndef Linux
+
 int CESFManager::fnSetCtrlMobile(PMB_POLICY pPolicy)
 {
     int  nRet=0, nTotalSize =0;
