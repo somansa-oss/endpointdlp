@@ -203,7 +203,7 @@ int CKernControl::SendCommand_KernCtl( PCOMMAND_MESSAGE pCmdMsg )
     int nSock=0;
     ssize_t nSend = 0;
     
-#ifdef _FIXME_        
+#ifndef LINUX 
     if(!pCmdMsg)
     {
         DEBUG_LOG1("SendCommand_KernCtl InvalidParameter. \n");
@@ -238,7 +238,7 @@ int CKernControl::SendRecvCommand_KernCtl( PCOMMAND_MESSAGE pCmdMsg )
     int nSock=0;
     ssize_t nSend = 0, nRecv=0;
     
-#ifdef _FIXME_        
+#ifndef LINUX
     if(!pCmdMsg)
     {
         DEBUG_LOG1("[DLP] SendRecvCommand_KernCtl InvalidParameter. \n");
@@ -306,7 +306,7 @@ void* CKernControl::ListenEventQueueThread(void* pParam)
     
     DEBUG_LOG1("begin.");
 
-#ifdef _FIXME_    
+#ifndef LINUX
 
     nListenSock = g_AppKctl.ConnectKernelControl();
     if(nListenSock < 0)
@@ -444,7 +444,7 @@ CKernControl::JobEventThread_KernCtl(void* pPacket)
     boolean_t  bSuc  = FALSE;
     PCOMMAND_MESSAGE pCmdMsg = NULL;
     
-#ifdef _FIXME_    
+#ifndef LINUX
 
     pCmdMsg = (PCOMMAND_MESSAGE)pPacket;
     if(pCmdMsg == NULL)
