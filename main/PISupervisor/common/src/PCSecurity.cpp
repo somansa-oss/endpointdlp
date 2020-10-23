@@ -28,7 +28,7 @@ bool CPCSecurity::Load(CShareFolder& cSFolder)
 
 long CPCSecurity::LoadPCSecurityInfo(CShareFolder& cSFolder)
 {
-    char czModulePath[MAX_PATH];
+    char czModulePath[MAX_PATH] = {0};
     memset( czModulePath, 0, sizeof(czModulePath) );
     
     if(true == cSFolder.getBlockAll())
