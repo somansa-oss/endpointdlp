@@ -1876,7 +1876,7 @@ CKernControl::JobEvent_GetPrintSpoolPath(int nSock, PCOMMAND_MESSAGE pCmdMsg)
 {
     size_t  nDataSize=0, nTotalSize=0;
 
-#ifdef _FIXME_        
+#ifndef LINUX
 
     PSCANNER_NOTIFICATION pNotify = NULL;
     
@@ -1912,7 +1912,7 @@ boolean_t CKernControl::JobEvent_ProcessCallback(int nSock, PCOMMAND_MESSAGE pCm
 {
     ULONG  nCommand  = 0;
 
-#ifdef _FIXME_        
+#ifndef LINUX    
 
     PSCANNER_NOTIFICATION pNotify = NULL;
     
