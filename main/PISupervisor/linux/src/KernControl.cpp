@@ -1195,8 +1195,7 @@ CKernControl::JobEvent_FileScan(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     EVT_PARAM    EvtInfo;
     PSCANNER_NOTIFICATION pNotify = NULL;
 
-#ifdef _FIXME_    
-
+#ifndef LINUX
     if(nSock < 0 || !pCmdMsg)
     {
         return FALSE;
@@ -1309,8 +1308,7 @@ CKernControl::JobEvent_FileExchangeData(int nSock, PCOMMAND_MESSAGE pCmdMsg)
 {
     int     nEventPID = 0;
 
-#ifdef _FIXME_        
-
+#ifndef LINUX
     size_t  nDataSize=0, nTotalSize=0;
     char*   pczPath  = NULL;
     char*   pczPath2 = NULL;
