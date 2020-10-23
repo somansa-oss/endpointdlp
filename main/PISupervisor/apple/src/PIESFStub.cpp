@@ -110,8 +110,6 @@ bool CPIESFStub::applyPolicy(unsigned long command, void* in, unsigned long size
     switch(command)
     {
         case SetDrivePolicy :
-            //printf("pisecsmartdrv - set_drive_policy - size:%ld\n", size);
-
             if( (NULL == in) && (0 == size) )
             {
                 in = malloc(sizeof(ATTACHED_DEVICE_EX));
@@ -123,8 +121,6 @@ bool CPIESFStub::applyPolicy(unsigned long command, void* in, unsigned long size
             
             break;
         case SetPermitProcessName :
-            //printf("pisecsmartdrv - set_permit_process_name - size:%ld\n", size);
-
             if( (NULL == in) && (0 == size) ) {
                 in = malloc(sizeof(ALLOWPROCESSNAME));
                 size = sizeof(ATTACHED_DEVICE);
@@ -135,8 +131,6 @@ bool CPIESFStub::applyPolicy(unsigned long command, void* in, unsigned long size
 
             break;
         case SetPermitFolderName :
-            //printf("pisecsmartdrv - set_permit_folder_name - size:%ld\n", size);
-
             if( (NULL == in) && (0 == size) ) {
                 in = malloc(sizeof(ALLOWFOLDERNAME));
                 size = sizeof(ATTACHED_DEVICE);
@@ -147,8 +141,6 @@ bool CPIESFStub::applyPolicy(unsigned long command, void* in, unsigned long size
             
             break;
         case SetPermitFileExtName :
-            //printf("pisecsmartdrv - set_permit_file_ext_name - size:%ld\n", size);
-
             if( (NULL == in) && (0 == size) ) {
                 in = malloc(sizeof(ALLOWFILEEXTNAME));
                 size = sizeof(ATTACHED_DEVICE);
@@ -158,8 +150,6 @@ bool CPIESFStub::applyPolicy(unsigned long command, void* in, unsigned long size
             result = g_AppESF.fnSetPermitFileExtName( in, (int)size);
             break;
         case SetExceptDrivePolicy :
-            //printf("pisecsmartdrv - set_except_drive_policy - size:%ld\n", size);
-
             if( (NULL == in) && (0 == size) ) {
                 in = malloc(sizeof(ATTACHED_DEVICE));
                 size = sizeof(ATTACHED_DEVICE);
@@ -168,17 +158,16 @@ bool CPIESFStub::applyPolicy(unsigned long command, void* in, unsigned long size
             
             result = g_AppESF.fnSetExceptDrivePolicy( in, (int)size);
             break;
+
         case SetQuarantinePathExt :
-            //printf("pisecsmartdrv - set_quarantine_path_ext - size:%ld\n", size);
             result = g_AppESF.fnSetQuarantinePathExt( (PQT_CTX)in);
             break;
+
         case SetQuarantineLimit :
-            //printf("pisecsmartdrv - set_quarantine_limit- size:%ld\n", size);
             result = g_AppESF.fnSetQuarantineLimit( *((boolean_t*)in));
             break;
-        case SetPrintPrevent :
-            //printf("pisecsmartdrv - set_print policy- size:%ld\n", size);
 
+        case SetPrintPrevent :
             if( (NULL == in) && (0 == size) ) {
                 in = malloc(sizeof(PRINT_POLICY));
                 size = sizeof(ATTACHED_DEVICE);
@@ -191,6 +180,7 @@ bool CPIESFStub::applyPolicy(unsigned long command, void* in, unsigned long size
         case SetSelfProtect:
             result = g_AppESF.fnSetSelfProtect_Commit( *((boolean_t*)in), SetSelfProtect );
             break;
+            
         case SetSelfProtectOnlyPermit:
             result = g_AppESF.fnSetSelfProtect_Commit( *((boolean_t*)in), SetSelfProtectOnlyPermit );
             break;
