@@ -635,7 +635,7 @@ CKernControl::JobEvent_SmartLogNotify(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     ULONG  Command = 0;
     PSMART_LOG_RECORD_EX pLogEx = NULL;
     
-#ifdef _FIXME_    
+#ifndef LINUX
 
     if(nSock < 0 || !pCmdMsg) return FALSE;
     
@@ -669,7 +669,7 @@ CKernControl::IsProcessAccessCheckExample( int nPID, char* pczFilePath )
     char czProcName[260];
     char* pczToken = NULL;
     
-#ifdef _FIXME_    
+#ifndef LINUX
 
     if(!pczFilePath)
     {
@@ -715,7 +715,7 @@ CKernControl::IsProcessAccessCheck( const int nCommand, const int nPID, char* pc
 	EVT_PARAM  EvtInfo;
 	char       czProcName[260];
     
-#ifdef _FIXME_    
+#ifndef LINUX
 
 	if(!pczFilePath)
     {
@@ -754,7 +754,7 @@ CKernControl::JobEvent_ProcessAccessCheck(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     char  czProcName[MAX_PROC];
     char  czParentName[MAX_PROC];
     
-#ifdef _FIXME_        
+#ifndef LINUX
     if(nSock < 0 || !pCmdMsg)
     {
         return FALSE;
@@ -793,7 +793,7 @@ CKernControl::JobEvent_ProcessAccessCheck(int nSock, PCOMMAND_MESSAGE pCmdMsg)
 boolean_t
 CKernControl::CheckDiskAccessPermission( char* czPath )
 {
-#ifdef _FIXME_        
+#ifndef LINUX
     struct statfs fileStat = { 0, };
     char czRand[8] = { '.', 0, };
 
