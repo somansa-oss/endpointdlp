@@ -592,7 +592,6 @@ int CESFManager::fnSetCtrlMobile(PMB_POLICY pPolicy)
     if(pCmdNew) free( pCmdNew );
     return nRet;
 }
-#endif
 
 int CESFManager::fnMobileNodeInsert_SetMtp(const char* pczBasePath, const char* pczKeyword )
 {
@@ -674,7 +673,7 @@ int CESFManager::fnMobileNodeInsert_SetPtp(const char* pczBasePath, const char* 
     nReturn = fnMobileNodeInsert( &Node );
     return nReturn;
 }
-
+#endif
 
 int CESFManager::fnMobileNodeInsert(PMB_NODE pNode)
 {
