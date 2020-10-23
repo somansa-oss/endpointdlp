@@ -673,7 +673,6 @@ int CESFManager::fnMobileNodeInsert_SetPtp(const char* pczBasePath, const char* 
     nReturn = fnMobileNodeInsert( &Node );
     return nReturn;
 }
-#endif
 
 int CESFManager::fnMobileNodeInsert(PMB_NODE pNode)
 {
@@ -713,8 +712,6 @@ int CESFManager::fnMobileNodeInsert(PMB_NODE pNode)
     return nRet;
 }
 
-
-
 int CESFManager::fnMobileNodeRemoveAll()
 {
     int  nRet=0, nTotalSize =0;
@@ -741,7 +738,7 @@ int CESFManager::fnMobileNodeRemoveAll()
     if(pCmdNew) free( pCmdNew );
     return nRet;
 }
-
+#endif
 
 int CESFManager::fnSetProcessIdUnprotect(ULONG ProcessId)
 {
