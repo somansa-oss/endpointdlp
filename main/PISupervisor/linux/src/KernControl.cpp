@@ -1358,8 +1358,7 @@ CKernControl::JobEvent_FileEventDiskFull(int nSock, PCOMMAND_MESSAGE pCmdMsg)
 {
     int     nCommand=0, nEventPID = 0;
 
-#ifdef _FIXME_        
-
+#ifndef LINUX
     char    czFilePath[ MAXPATHLEN ];
     PSCANNER_NOTIFICATION pNotify = NULL;
     
@@ -1399,8 +1398,7 @@ CKernControl::JobEvent_FileRename(int nSock, PCOMMAND_MESSAGE pCmdMsg)
 {
     int     nEventPID = 0;
 
-#ifdef _FIXME_        
-
+#ifndef LINUX
     size_t  nDataSize=0, nTotalSize=0;
     PSCANNER_NOTIFICATION pNotify = NULL;
     
@@ -1427,8 +1425,7 @@ CKernControl::JobEvent_FileRename(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     return TRUE;
 }
 
-#ifdef _FIXME_
-
+#ifndef LINUX
 
 #  define HTTP_MAX_BUFFER	2048	/* Max length of data buffer */
 typedef long ssize_t;			/* @private@ */
