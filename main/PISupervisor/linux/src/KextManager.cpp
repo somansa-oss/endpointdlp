@@ -1023,7 +1023,7 @@ int CKextManager::fnClrUSBMobilePermitList()
 {
     int  nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     PCOMM_MB_PERMIT pCommPermit = NULL;
@@ -1066,7 +1066,7 @@ int CKextManager::fnSetCtrlMobile(PMB_POLICY pPolicy)
 {
     int  nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     PCOMM_MB_POLICY  pMbPolicy = NULL;
@@ -1111,7 +1111,7 @@ int CKextManager::fnMobileNodeInsert_SetMtp(const char* pczBasePath, const char*
 {
     int      nReturn = 0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     size_t   nLength = 0;
     MB_NODE  Node;
