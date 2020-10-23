@@ -56,8 +56,8 @@ CESFControl::~CESFControl()
 int CESFControl::ESFControl_Init()
 {
     int  nRet = 0;
-    pthread_t  PosixTID;
-    pthread_attr_t  Attr;
+    pthread_t  PosixTID = 0;
+    pthread_attr_t  Attr = {0};
     
     m_nESFCtlId = GetESFControlId();
     if(m_nESFCtlId == 0)
