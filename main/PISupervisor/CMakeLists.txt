@@ -5,24 +5,11 @@ project(PISupervisor)
 
 set(CMAKE_VERBOSE_MAKEFILE "YES")
 
-#target_include_directories(Tutorial PUBLIC
-#                           "${PROJECT_BINARY_DIR}"
-#                           )
-
 ADD_DEFINITIONS ( -DLINUX )
 
 LINK_LIBRARIES ( -pthread -ldl -llsf-media -ludev  )
 
 # add the executable
-# not supported for Linux:
-#   src/PIFullDiskAccess.cpp
-#   src/PIDRDevice.cpp
-#   src/PIWallMan.cpp
-#   src/PIWallController.cpp
-#   linux/src/PWDiskStub.cpp
-#   linux/src/ProtectCheck.cpp          
-#   linux/src/PISecFilterDeviceStub.cpp     
-#   linux/src/PIWLanCheck.cpp               linux/src/PWKctl.cpp
 add_executable(PISupervisor src/PISuperivorMain.cpp  
         src/PIAction.cpp                    src/PIActionInitializeData.cpp          src/PIActionRegister.cpp      
         src/PIClientStub.cpp                src/PIDeviceMan.cpp                     src/PIEventHandler.cpp
