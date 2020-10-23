@@ -91,8 +91,7 @@ int CESFControl::ESFControl_Init()
     
     pthread_attr_destroy( &Attr );
     DEBUG_LOG1("[ESF] Event Receiver thread Created. \n" );
-    // 이 시점에
-    // 위에서 생성한 이벤트 큐 listener 쓰레드는 kext에 자신을 이벤트 리시버로 등록한 상태에서 kext로부터의 이벤트나 명령 수신을 대기 중임.
+
     return 0;
 }
 
