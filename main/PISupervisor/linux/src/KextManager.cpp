@@ -1429,7 +1429,7 @@ int CKextManager::fnSetPermitFileExtName(void* pBuf, int nBufSize)
 {
     int   nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE  pCmdNew = NULL;
     PALLOWFILEEXTNAME pAllowFileExt = NULL;
@@ -1486,7 +1486,7 @@ int CKextManager::fnSetPrintPrevent_Off()
 {
     int nRet = 0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PRINT_POLICY policy;
     memset( &policy, 0, sizeof(policy) );
@@ -1501,7 +1501,7 @@ int CKextManager::fnSetPrintPrevent_Off()
     return nRet;
 }
 
-#ifdef _NOTUSED_
+#ifndef LINUX
 
 int CKextManager::fnSetPrintPrevent_Allow()
 {
@@ -1573,7 +1573,7 @@ int CKextManager::fnSetPrintPrevent(void* pBuf, int nBufSize )
 {
     int nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     PPRINT_POLICY    pPolicy = NULL;
@@ -1622,7 +1622,7 @@ int CKextManager::fnSetUploadPrevent(void* pBuf, int nBufSize )
 {
     int nRet=0, nTotalSize =0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     PCOMMAND_MESSAGE pCmdNew = NULL;
     PUPLOAD_POLICY    pPolicy = NULL;
