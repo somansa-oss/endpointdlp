@@ -20,7 +20,7 @@ int CSysControl::SystemControl_Init()
 {
     int    nRet = 0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     int    nCpu = 0;
     int    nMib[2];
@@ -94,7 +94,7 @@ int CSysControl::SystemControl_Uninit()
 {
     int nRet = 0;
 
-#ifdef _FIXME_
+#ifndef LINUX
     nRet = QuitSystemControl();
 #endif
 
@@ -112,8 +112,7 @@ int CSysControl::QuitSystemControl()
 {
     printf("waiting for threads exit\n");
 
-#ifdef _FIXME_    
-
+#ifndef LINUX
     struct event_proto proto;
     proto.size = sizeof(struct event_proto);
     proto.command = DESTROY_THREAD_POOL;
@@ -145,8 +144,7 @@ int CSysControl::QuitSystemControl()
 //
 void* CSysControl::HandlerEventThread_SysCtl(void* pParam)
 {
-#ifdef _FIXME_
-
+#ifndef LINUX
     int     nMib[2];
     size_t  nLength = 0;
     
@@ -405,8 +403,7 @@ int CSysControl::SendCommand_SysCtl( PCOMMAND_MESSAGE pCmdMsg )
 {
     int64_t  ullCommand = 0;
 
-#ifdef _FIXME_    
-    
+#ifndef LINUX
     if(!pCmdMsg)
     {
         printf( "SetSendCommand_SysCtl() Invalid Parameter \n" );
