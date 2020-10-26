@@ -112,8 +112,7 @@ int CSysControl::QuitSystemControl()
 {
     printf("waiting for threads exit\n");
 
-#ifdef _FIXME_    
-
+#ifndef LINUX
     struct event_proto proto;
     proto.size = sizeof(struct event_proto);
     proto.command = DESTROY_THREAD_POOL;
