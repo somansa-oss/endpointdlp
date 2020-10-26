@@ -44,10 +44,11 @@ int CKextManager::EventNotify_PostProcess( PEVT_PARAM pEvtInfo )
         case FileRename:
             nRet = g_AppKext.EventNotify_FileRename( pEvtInfo );
             break;
+#ifndef LINUX            
         case FileEventDiskFull:
             nRet = g_AppKext.EventNotify_FileEventDiskFull( pEvtInfo );
             break;
-       
+#endif       
         case SmartLogNotify:
             nRet = g_AppKext.EventNotify_SmartLogNotify( pEvtInfo );
             break;
@@ -55,7 +56,8 @@ int CKextManager::EventNotify_PostProcess( PEVT_PARAM pEvtInfo )
 		case ProcessAccessCheck:
             nRet = g_AppKext.EventNotify_ProcessAccessCheck( pEvtInfo );
             break;
-            
+
+#ifndef LINUX
         // PWDisk.kext
         case PWNotify_ProcessNotify:
             nRet = g_AppKext.PWDisk_EN_Process( pEvtInfo );
@@ -64,7 +66,7 @@ int CKextManager::EventNotify_PostProcess( PEVT_PARAM pEvtInfo )
         case PWNotify_PWDiskLogNotify:
             nRet = g_AppKext.PWDisk_EN_Log( pEvtInfo );
             break;
-            
+#endif            
             
         default: break;
     }
