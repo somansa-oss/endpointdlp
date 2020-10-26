@@ -152,7 +152,7 @@ typedef void            kmod_info_t;
 #define FILE_DEVICE_VIRTUAL_DISK        0x00000024
 #define FILE_DEVICE_WAVE_IN             0x00000025
 #define FILE_DEVICE_WAVE_OUT            0x00000026
-#endif
+
 
 
 #define FSD_GLOBAL_DOS  "\\??\\"
@@ -176,6 +176,8 @@ typedef void            kmod_info_t;
 
 // 0x%08x%08x
 #define P64(X)   (unsigned int)(X>>32)&0xFFFFFFFF,(unsigned int)X&0xFFFFFFFF
+
+#endif
 
 /* ********************************************************************************************************** */
     
