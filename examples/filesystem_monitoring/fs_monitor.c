@@ -244,9 +244,9 @@ int
 main (int          argc,
       const char **argv)
 {
-    int signal_fd;
-    int fanotify_fd;
-    struct pollfd fds[FD_POLL_MAX];
+    int signal_fd = 0;
+    int fanotify_fd = 0;
+    struct pollfd fds[FD_POLL_MAX] = {0};
     
     /* Input arguments... */
     //   if (argc < 2)
