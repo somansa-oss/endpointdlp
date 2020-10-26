@@ -927,14 +927,6 @@ void CPIESF::fnRemoveNotify(void* pzArg)
                            event_mask,
                            AT_FDCWD,
                            monitors[i].path);
-
-        // //fanotify_open_perm_fd, event_mask_open_perm
-        // fanotify_mark (fanotify_open_perm_fd,
-        //                    FAN_MARK_REMOVE,
-        //                    event_mask_open_perm,
-        //                    AT_FDCWD,
-        //                    monitors[i].path);
-
         fprintf (stdout,
                     "fanotify_mark()-REMOVE-'%s':'%d'\n",
                     monitors[i].path,
