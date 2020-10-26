@@ -70,7 +70,7 @@ Kauth_Vnode_IsProtectWrite( int nPID, char* pczProcName, int nAction, int nVType
         return FALSE;
     }
     
-#ifdef FIXME    
+#ifndef LINUX
     if(TRUE == IsProtect_FilePath( pczVnodePath ))
     {
         return TRUE;
