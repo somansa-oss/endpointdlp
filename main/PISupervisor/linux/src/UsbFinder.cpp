@@ -106,7 +106,7 @@ UsbFinder::EnumerateUsbDevice()
     return true;
 }
 
-#ifdef _FIXME_
+#ifndef LINUX
 char*
 UsbFinder::CFURLRefToCString(CFURLRef pCFUrl)
 {
