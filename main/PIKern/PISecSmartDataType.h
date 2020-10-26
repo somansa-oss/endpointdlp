@@ -250,7 +250,7 @@ typedef struct _DRV_CTX
 } DRV_CTX, *PDRV_CTX;
 
 
-#if 0
+#ifndef LINUX
 typedef struct _ALLOWPROCESSNAME
 {
     char  czAllowedProcessName[NT_PROCNAMELEN + 1];	 // ?�문자�? ( ?? EXECEL.EXE )
