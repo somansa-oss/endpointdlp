@@ -51,4 +51,17 @@ extern "C"
 };
 #endif
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+void CPIESF_fnAddNotify(void* pzArg);
+
+void CPIESF_fnRemoveNotify(void* pzArg);
+
+#ifdef __cplusplus
+};
+#endif
+
 #endif 

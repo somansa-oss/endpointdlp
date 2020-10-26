@@ -33,7 +33,7 @@ Kauth_Vnode_IsProtectRead(int nPID, char* pczProcName, int nAction, int nVType, 
         return FALSE;
     }
     
-#ifdef FIXME
+#ifndef LINUX
     bProtect = IsProtect_KextUnload( nPID, pczProcName, pczVnodePath );
     if(TRUE == bProtect)
     {
@@ -70,7 +70,7 @@ Kauth_Vnode_IsProtectWrite( int nPID, char* pczProcName, int nAction, int nVType
         return FALSE;
     }
     
-#ifdef FIXME    
+#ifndef LINUX
     if(TRUE == IsProtect_FilePath( pczVnodePath ))
     {
         return TRUE;

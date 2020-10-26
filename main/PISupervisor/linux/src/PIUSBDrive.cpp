@@ -8,10 +8,8 @@
 #include "PIUSBDrive.h"
 #include "UsbFinder.h"
 
-#ifdef _FIXME
-
+#ifndef LINUX
 #include "nsMICrypto.h"
-
 #endif
 
 #include "Markup.h"
@@ -60,8 +58,7 @@ std::string CPIUSBDrive::getEncryptedSerial(void) {
 std::string CPIUSBDrive::encrypt(const std::string& plainText) {
 	std::string result = "";
 
-#ifdef _FIXME_    
-
+#ifndef LINUX
 	nsMICrypto::CRC4 rc4;
 	rc4.Init();
 

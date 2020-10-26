@@ -149,7 +149,7 @@ int CESFControl::CloseESFControl(int nSock)
 
 u_int32_t CESFControl::GetESFControlId()
 {
-#ifdef FIXME
+#ifndef LINUX
     int nSock = 0;
     
     nSock = socket( AF_INET, SOCK_DGRAM, SYSPROTO_CONTROL);
@@ -2209,10 +2209,6 @@ CESFControl::JobEvent_GetPrintSpoolPath(int nSock, PCOMMAND_MESSAGE pCmdMsg, int
 //    {
 //        printf("[ESF] send(FileDeleteResult) failed(%d)\n", errno);
 //    }
-    
-#ifdef FIXME_PRINT
-    // NOT IMPL.
-#endif
     
     return TRUE;
 }

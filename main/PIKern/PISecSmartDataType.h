@@ -93,49 +93,7 @@ typedef void            kmod_info_t;
 #include "command.h"
 #include "KernelCommand.h"
 
-//////////////////////////////////////////////////////////////////////////////////
-//            Need to convert
-//////////////////////////////////////////////////////////////////////////////////
-//#ifndef _STORAGE_BUS_TYPE
-//
-//typedef enum _STORAGE_BUS_TYPE
-//{
-//    BusTypeUnknown            = 0x00,
-//    BusTypeScsi               = 0x1,
-//    BusTypeAtapi              = 0x2,
-//    BusTypeAta                = 0x3,
-//    BusType1394               = 0x4,
-//    BusTypeSsa                = 0x5,
-//    BusTypeFibre              = 0x6,
-//    BusTypeUsb                = 0x7,
-//    BusTypeRAID               = 0x8,
-//    BusTypeiScsi              = 0x9,
-//    BusTypeSas                = 0xA,
-//    BusTypeSata               = 0xB,
-//    BusTypeSd                 = 0xC,
-//    BusTypeMmc                = 0xD,
-//    BusTypeVirtual            = 0xE,
-//    BusTypeFileBackedVirtual  = 0xF,
-//    BusTypeMax                = 0x10,
-//
-//    BusTypeSFolder            = 0x21,
-//    BusTypeThunderBolt        = 0x31,
-//
-//    BusTypeMaxReserved        = 0x7F
-//} STORAGE_BUS_TYPE, *PSTORAGE_BUS_TYPE;
-//
-//#endif
-//
-//#ifndef _ACTION_TYPE
-//
-//typedef enum _ACTION_TYPE
-//{
-//    ActionTypePrint           = 0x80,
-//    ActionTypeUpload,
-//} ACTION_TYPE, *PACTION_TYPE;
-//
-//#endif
-
+#ifndef LINUX
 #define FILE_DEVICE_8042_PORT           0x00000027
 #define FILE_DEVICE_ACPI                0x00000032
 #define FILE_DEVICE_BATTERY             0x00000029
@@ -195,6 +153,8 @@ typedef void            kmod_info_t;
 #define FILE_DEVICE_WAVE_IN             0x00000025
 #define FILE_DEVICE_WAVE_OUT            0x00000026
 
+
+
 #define FSD_GLOBAL_DOS  "\\??\\"
 #define FSD_GLOBAL      "\\GLOBAL??\\"
 #define FSD_DOSDEVICES  "\\DosDevices\\"
@@ -216,6 +176,8 @@ typedef void            kmod_info_t;
 
 // 0x%08x%08x
 #define P64(X)   (unsigned int)(X>>32)&0xFFFFFFFF,(unsigned int)X&0xFFFFFFFF
+
+#endif
 
 /* ********************************************************************************************************** */
     
@@ -288,7 +250,7 @@ typedef struct _DRV_CTX
 } DRV_CTX, *PDRV_CTX;
 
 
-#if 0
+#ifndef LINUX
 typedef struct _ALLOWPROCESSNAME
 {
     char  czAllowedProcessName[NT_PROCNAMELEN + 1];	 // ?�문자�? ( ?? EXECEL.EXE )
@@ -356,7 +318,7 @@ typedef struct _VOLUME_CTX
 } VOLUME_CTX, *PVOLUME_CTX;
 
 /* ********************************************************************************************************** */
-    
+
 typedef struct _MOBILE_CTX
 {
     // Android, Syscallhook
@@ -370,14 +332,16 @@ typedef struct _MOBILE_CTX
     MB_NODE*   pNewMBNodes[MB_NODE_COUNT];
     MB_PERMIT* pNewPermitList[USBMOBILE_PERMIT_COUNT];
 } MOBILE_CTX;
-    
+
+
 typedef struct _PROC_AC_CTX
 {
     PROC_AC_POLICY Policy;
 } PROC_AC_CTX, *PPROC_AC_CTX;
     
 /* ********************************************************************************************************** */
-    
+
+
 // Commiunication KernelControl
 typedef struct _COMM_CTX_KCTL
 {
@@ -387,7 +351,6 @@ typedef struct _COMM_CTX_KCTL
     uint32_t       nEvtUnit;
     int64_t        nllKctlThread;
 } COMM_CTX_KCTL;
-    
     
     
 // Commiunication KernelControl
@@ -445,7 +408,7 @@ typedef struct _AGENT_CTX
     vnode_t  pAgentVnode; // ?�이?�트 ?�행 ?�일??vnode
     
 } AGENT_CTX;
-    
+
     
 typedef struct _LOG_PARAM
 {

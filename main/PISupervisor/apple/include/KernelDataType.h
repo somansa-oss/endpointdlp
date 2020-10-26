@@ -23,8 +23,10 @@ typedef __uint64_t      uint64_t;
 
 typedef int             kern_return_t;
 
+#ifndef FALSE
 #define FALSE           0
 #define TRUE            1
+#endif
 
 #define false           0
 #define true            1

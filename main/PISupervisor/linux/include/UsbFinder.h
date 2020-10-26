@@ -64,7 +64,7 @@ public:
 	bool Reload(std::vector<USBInfo>& list);
     
 public:
-#ifdef _FIXME_
+#ifndef LINUX
 
     static char* CFURLRefToCString(CFURLRef pCFUrl);
     static char* CFTypeRefToCString(CFTypeRef pCFType);
@@ -101,7 +101,7 @@ protected:
 public:
     void UsbDeviceInit();
 
-#ifdef _FIXME_    
+#ifndef LINUX
     static void UsbDeviceEnumerate(void* pRefCon, io_iterator_t Iter);
     
     static bool FetchUsbDevice( io_service_t UsbDevice, UsbFinder* pUsbFinder, USBInfo& UsbTemp );

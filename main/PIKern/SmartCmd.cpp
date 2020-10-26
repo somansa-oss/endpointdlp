@@ -1424,12 +1424,14 @@ GetBusTypeFromVolume( CHAR* pczVolume )
 
     if(!pczVolume) return 0;
 
-printf("FIXME!!!!!!!!!!!!!!!!!-%s\n", __FUNCTION__);
+#ifndef LINUX
 
     if( sms_strnstr(pczVolume, VOLUME_VIPUSB, strlen(VOLUME_VIPUSB)) || sms_strnstr(pczVolume, VOLUME_NICSUSB, strlen(VOLUME_NICSUSB)) )
     {
         ulBusType = BusTypeUsb;
     }
+#endif
+    
     return ulBusType;
 }
 

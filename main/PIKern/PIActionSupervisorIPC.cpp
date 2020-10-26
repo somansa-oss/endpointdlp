@@ -383,7 +383,7 @@ bool CPIActionSupervisorIPC::sendResponse(CPIClientStub* pClient, const int comm
 
 	CPIPacket packet;
     
-#ifdef FIXME
+#ifndef LINUX
 	packet.support.bigEndian = ConfigMan.socket.bigEndian;
 	packet.support.unsignedType = ConfigMan.socket.unsignedType;
 #endif
