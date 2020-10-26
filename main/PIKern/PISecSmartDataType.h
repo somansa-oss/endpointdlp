@@ -93,49 +93,7 @@ typedef void            kmod_info_t;
 #include "command.h"
 #include "KernelCommand.h"
 
-//////////////////////////////////////////////////////////////////////////////////
-//            Need to convert
-//////////////////////////////////////////////////////////////////////////////////
-//#ifndef _STORAGE_BUS_TYPE
-//
-//typedef enum _STORAGE_BUS_TYPE
-//{
-//    BusTypeUnknown            = 0x00,
-//    BusTypeScsi               = 0x1,
-//    BusTypeAtapi              = 0x2,
-//    BusTypeAta                = 0x3,
-//    BusType1394               = 0x4,
-//    BusTypeSsa                = 0x5,
-//    BusTypeFibre              = 0x6,
-//    BusTypeUsb                = 0x7,
-//    BusTypeRAID               = 0x8,
-//    BusTypeiScsi              = 0x9,
-//    BusTypeSas                = 0xA,
-//    BusTypeSata               = 0xB,
-//    BusTypeSd                 = 0xC,
-//    BusTypeMmc                = 0xD,
-//    BusTypeVirtual            = 0xE,
-//    BusTypeFileBackedVirtual  = 0xF,
-//    BusTypeMax                = 0x10,
-//
-//    BusTypeSFolder            = 0x21,
-//    BusTypeThunderBolt        = 0x31,
-//
-//    BusTypeMaxReserved        = 0x7F
-//} STORAGE_BUS_TYPE, *PSTORAGE_BUS_TYPE;
-//
-//#endif
-//
-//#ifndef _ACTION_TYPE
-//
-//typedef enum _ACTION_TYPE
-//{
-//    ActionTypePrint           = 0x80,
-//    ActionTypeUpload,
-//} ACTION_TYPE, *PACTION_TYPE;
-//
-//#endif
-
+#ifndef LINUX
 #define FILE_DEVICE_8042_PORT           0x00000027
 #define FILE_DEVICE_ACPI                0x00000032
 #define FILE_DEVICE_BATTERY             0x00000029
@@ -194,6 +152,8 @@ typedef void            kmod_info_t;
 #define FILE_DEVICE_VIRTUAL_DISK        0x00000024
 #define FILE_DEVICE_WAVE_IN             0x00000025
 #define FILE_DEVICE_WAVE_OUT            0x00000026
+#endif
+
 
 #define FSD_GLOBAL_DOS  "\\??\\"
 #define FSD_GLOBAL      "\\GLOBAL??\\"
