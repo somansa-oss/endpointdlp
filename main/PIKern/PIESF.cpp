@@ -875,7 +875,6 @@ void CPIESF::fnAddNotify(void* pzArg)
 
     // e.g.
     // [VolCtx_Update] NewAdd BusType=7, Device=/dev/disk2s2, BasePath=/Volumes/새 볼륨. Count=2
-
     monitors[ n_monitors ].path = strdup ( pDevice->czBasePath );
     if (monitors[ n_monitors ].path != NULL)
     {
@@ -902,30 +901,6 @@ void CPIESF::fnAddNotify(void* pzArg)
                         n_monitors);        
             n_monitors++;
         }
-
-        // //fanotify_open_perm_fd, event_mask_open_perm
-        // if (fanotify_mark (fanotify_open_perm_fd,
-        //                     FAN_MARK_ADD | FAN_MARK_MOUNT,
-        //                     event_mask_open_perm,
-        //                     AT_FDCWD,
-        //                     monitors[ n_monitors ].path) < 0)
-        // {
-        //     fprintf (stderr,
-        //                 "Add monitor in mount '%s' 2nd [%d] FAIL: '%s'\n",
-        //                 monitors[ n_monitors ].path,
-        //                 n_monitors,
-        //                 strerror (errno));
-        //
-        //     free( monitors[ n_monitors ].path );
-        // }
-        // else
-        // {
-        //     fprintf (stdout,
-        //                 "Add monitor in mount '%s' 2nd [%d] SUCCESS\n",
-        //                 monitors[ n_monitors ].path,
-        //                 n_monitors);        
-        //     n_monitors++;
-        // }
     }
     else
     {
