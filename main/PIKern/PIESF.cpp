@@ -472,11 +472,6 @@ void* CPIESF::fnCommunicateClient(void* pzArg) {
                         close (metadata->fd);
                     }
 
-                    //if (change_mod_value > 0 && file_path[0] != 0)
-                    //{
-                    //    int ret = chmod((char*)file_path, change_mod_value);
-                    //}
-
                     metadata = FAN_EVENT_NEXT (metadata, length);
                 }
             }
