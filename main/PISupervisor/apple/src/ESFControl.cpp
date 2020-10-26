@@ -1480,6 +1480,7 @@ CESFControl::JobEvent_FileRename(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     return TRUE;
 }
 
+#ifndef LINUX
 
 #  define HTTP_MAX_BUFFER    2048    /* Max length of data buffer */
 typedef long ssize_t;            /* @private@ */
@@ -1923,6 +1924,7 @@ read_cups_spool_path_ESF(char * szSpoolPath, size_t SpoolPathlen, char * szTempP
     }
 }
 
+
 boolean_t
 CESFControl::JobEvent_GetPrintSpoolPath(int nSock, PCOMMAND_MESSAGE pCmdMsg, int& resultCode, std::string& resultValue)
 {
@@ -1950,11 +1952,10 @@ CESFControl::JobEvent_GetPrintSpoolPath(int nSock, PCOMMAND_MESSAGE pCmdMsg, int
 //    {
 //        printf("[ESF] send(FileDeleteResult) failed(%d)\n", errno);
 //    }
-    
+
     return TRUE;
 }
 
-#ifndef LINUX
 boolean_t CESFControl::JobEvent_ProcessCallback(int nSock, PCOMMAND_MESSAGE pCmdMsg)
 {
     ULONG  nCommand  = 0;
