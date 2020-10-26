@@ -483,99 +483,9 @@ void* CESFControl::ListenEventQueueThread(void* pParam)
     return NULL;
 }
 
-
-
-
-
-
-//
-// ESF control API를 kext와의 통신 수단으로 사용하는 경우에,
-// 단위 이벤트 처리를 담당하는 쓰레드의 실행 함수.
-// 파라미터로 전달받은 이벤트 패킷에 대한 처리를 마치면 쓰레드는 종료함.
-// Kext가 100개의 이벤트를 전송하면 100개의 쓰레드를 생성하여 각각의 이벤트를 처리하는 개념.
-// CPU 개수 두 배 만큼의 쓰레드들이 번갈아가며 이벤트를 처리하는 system control 모델과의 차이점임.
-//
-// Parameter
-//        param : 이벤트 패킷 포인터. 즉, struct event_proto 구조체의 포인터.
-//
-
-
 void*
 CESFControl::JobEventThread_ESFCtl(void* pPacket)
 {
-    int        nSock = 0;
-//    ULONG      nCmd  = 0;
-//    boolean_t  bSuc  = FALSE;
-//    PCOMMAND_MESSAGE pCmdMsg = NULL;
-//
-//    pCmdMsg = (PCOMMAND_MESSAGE)pPacket;
-//    if(pCmdMsg == NULL)
-//    {
-//        assert( pCmdMsg );
-//        return NULL;
-//    }
-//
-//    nSock = g_AppESFctl.ConnectESFControl();
-//    if(nSock < 0)
-//    {
-//        printf("[ESF] socket() failed(%d)\n", errno );
-//        free( pPacket );
-//        pPacket = NULL;
-//        return NULL;
-//    }
-//
-//    nCmd = (ULONG)pCmdMsg->Command;
-//    switch(nCmd)
-//    {
-//    case FileIsRemove:
-//        bSuc = CESFControl::JobEvent_IsRemoable(nSock, pCmdMsg);
-//        break;
-//
-//    case FileScan:
-//        bSuc = CESFControl::JobEvent_FileScan(nSock, pCmdMsg);
-//        break;
-//
-//    case FileDelete:
-//        bSuc = CESFControl::JobEvent_FileDelete(nSock, pCmdMsg);
-//        break;
-//    case FileRename:
-//        bSuc = CESFControl::JobEvent_FileRename(nSock, pCmdMsg);
-//        break;
-//    case FileExchangeData:
-//        bSuc = CESFControl::JobEvent_FileExchangeData(nSock, pCmdMsg);
-//        break;
-//    case FileEventDiskFull:
-//        bSuc = CESFControl::JobEvent_FileEventDiskFull(nSock, pCmdMsg);
-//        break;
-//
-//    case FileEventNotify:
-//        bSuc = CESFControl::JobEvent_FileEventNotify(nSock, pCmdMsg);
-//        break;
-//
-//    case SmartLogNotify:
-//        bSuc = CESFControl::JobEvent_SmartLogNotify(nSock, pCmdMsg );
-//        break;
-//    case GetPrintSpoolPath:
-//        bSuc = CESFControl::JobEvent_GetPrintSpoolPath(nSock, pCmdMsg);
-//        break;
-//
-//    case ProcessCallback:
-//        bSuc = CESFControl::JobEvent_ProcessCallback(nSock, pCmdMsg);
-//        break;
-//
-//    case ProcessAccessCheck:
-//        bSuc = CESFControl::JobEvent_ProcessAccessCheck( nSock, pCmdMsg );
-//        break;
-//
-//    case FullDiskAccessCheck:
-//        bSuc = CESFControl::JobEvent_FullDiskAccessCheck( nSock, pCmdMsg );
-//        break;
-//
-//     default: break;
-//    }
-//
-//    g_AppESFctl.CloseESFControl( nSock );
-//    if(pPacket) free( pPacket );
     return NULL;
 }
 
