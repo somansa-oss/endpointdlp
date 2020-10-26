@@ -410,43 +410,9 @@ event_process (struct fanotify_event_metadata *event,
     access.fd = event->fd;
     access.response = FAN_ALLOW;
 
-    // if (event->mask & FAN_OPEN_PERM)
-    // {
-    //     bBlock = Kauth_Vnode_IsProtectRead( LogParam.nProcessId, LogParam.pczProcName, 0, 0, NULL, (char*)target_file_path.c_str(), &LogParam );
-    //     printf( "[DLP][%s] Kauth_Vnode_IsProtectRead(), bBlock=%d \n", __FUNCTION__, bBlock );
-    
-    //     if (bBlock)
-    //     {
-    //         access.response     = FAN_DENY;
-    //     }
-    //     else
-    //     {
-    //         if (IsControlDeviceType( NULL, (char*)target_file_path.c_str() ))
-    //         {
-    //             bBlock = Kauth_Vnode_IsProtectWrite( LogParam.nProcessId, LogParam.pczProcName, 0, 0, NULL, (char*)target_file_path.c_str(), &LogParam );
-    //             printf( "[DLP][%s] Kauth_Vnode_IsProtectWrite(), bBlock=%d \n", __FUNCTION__, bBlock );
-                
-    //             if (bBlock)
-    //             {
-    //                 if (controlDevice(LSF_MEDIA_USB_MEMORY, "RemovableDrive", LSF_MEDIA_READONLY))
-    //                 {
-    //                     LogParam.nLogType   = LOG_VNODE;
-    //                     SmartDrv_LogAppend( &LogParam, 0 );
-    //                 }
-    //             }
-    //             else
-    //             {
-    //                 enableDevice(LSF_MEDIA_USB_MEMORY);
-    //             }
-    //         }            
-    //     }
-    // }
-    // else
     if (event->mask & FAN_CLOSE_WRITE)
     {
         LogParam.nLogType    = LOG_FILEOP;
-
-        //QtCopyFileUser((char*)target_file_path.c_str(), "/tmp/1");
 
         bAllow = Kauth_FileOp_FileClose(nProcessId,
                                 (char*)process_name.c_str(),
