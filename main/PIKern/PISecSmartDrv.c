@@ -334,7 +334,11 @@ VolCtx_Search_BusType(const char* pczBasePath)
         {
             memset( czCmpBuf, 0, sizeof(czCmpBuf) );
             strncpy( czCmpBuf, g_DrvKext.VolCtx.VolumeDevice[nPos].czBasePath, nCtxLength );
-            strncat( czCmpBuf, "/", strlen("/") );
+#ifdef LINUX
+            strcat( czCmpBuf, "/");
+#else            
+            strncat( czCmpBuf, "/", (size_t) strlen("/") );
+#endif            
             nCmpLength = (ULONG)strlen(czCmpBuf);
             if(0 == strncasecmp( pczBasePath, czCmpBuf, nCmpLength ))
             {
