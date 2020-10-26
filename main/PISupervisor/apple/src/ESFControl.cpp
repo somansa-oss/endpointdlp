@@ -1946,13 +1946,6 @@ CESFControl::JobEvent_GetPrintSpoolPath(int nSock, PCOMMAND_MESSAGE pCmdMsg, int
     nDataSize  = sizeof(SCANNER_NOTIFICATION);
     nTotalSize = sizeof(COMMAND_MESSAGE) + nDataSize;
     
-//    pCmdMsg->Size = (ULONG)nTotalSize;
-//    pCmdMsg->Command  = (ULONG)GetPrintSpoolPathResult;
-//    if(send( nSock, pCmdMsg, nTotalSize, 0) < 0)
-//    {
-//        printf("[ESF] send(FileDeleteResult) failed(%d)\n", errno);
-//    }
-
     return TRUE;
 }
 
@@ -1973,10 +1966,6 @@ boolean_t CESFControl::JobEvent_ProcessCallback(int nSock, PCOMMAND_MESSAGE pCmd
         return FALSE;
     }
     
-    //
-    // DeviceMan.setSelfProtect();
-    //
-
     nCommand  = (ULONG)pCmdMsg->Command;
     if(g_AppCallback != NULL)
     {
