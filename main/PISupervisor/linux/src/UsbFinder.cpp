@@ -63,8 +63,7 @@ void UsbFinder::UsbDeviceInit()
 bool
 UsbFinder::EnumerateUsbDevice()
 {
-#ifdef _FIXME_
-
+#ifndef LINUX
     kern_return_t nRet = 0;
     io_iterator_t IterAttach = 0;
     mach_port_t   MasterPort = 0;
