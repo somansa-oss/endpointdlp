@@ -443,11 +443,11 @@ bool CPIActionOpenClientIPC::processPacket(CPIPacket& packet, int& resultCode, s
         case FileDelete:
             CESFControl::JobEvent_FileDelete(1, (PCOMMAND_MESSAGE)packet.getBinary(0), resultCode, resultValue);
             break;
-            
+#ifndef LINUX            
         case GetPrintSpoolPath:
             CESFControl::JobEvent_GetPrintSpoolPath(1, (PCOMMAND_MESSAGE)packet.getBinary(0), resultCode, resultValue);
             break;
-
+#endif
 		//end: Redmine #148385 ----------
 		default : break;
 	}

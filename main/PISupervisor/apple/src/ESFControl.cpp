@@ -2,9 +2,6 @@
 //  ESFControl.cpp
 //  PISupervisor
 //
-//  Created by Juno on 2020/07/07.
-//  Copyright © 2020 somansa. All rights reserved.
-//
 #define ACCESS_CHECK_NONE     0
 #define ACCESS_CHECK_COPY     1
 #define ACCESS_CHECK_PRINT    2
@@ -344,19 +341,6 @@ int CESFControl::SendRecvCommand_ESFCtl( PCOMMAND_MESSAGE pCmdMsg )
     return 0;
 }
 
-
-
-
-//
-// 이 에이전트를 이벤트 리시버로 kext에 등록하고 아래 1,2번 과정을 무한 반복함.
-// 1. recv() 함수를 호출하여 kext로부터의 이벤트 수신을 대기함.
-// 2. 이벤트 수신하면 쓰레드를 생성하여 이벤트 넘기며 쓰레드에 이벤트 처리를 맡김.
-// 이상의 1,2번 과정을 무한 반복하다가 DESTROY_EVENT_QUEUE 명령을 수신하면 종료함.
-//
-// Parameter
-//        param : 사용하지 않음.
-//
-
 void* CESFControl::ListenEventQueueThread(void* pParam)
 {
 #ifndef LINUX
@@ -549,11 +533,6 @@ CESFControl::JobEvent_FileEventNotify(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     
     if(nAction == NOTIFY_BLOCK_READ || nAction == NOTIFY_BLOCK_WRITE)
     {
-        // 1,2번 정책 적용 중일 때, kauth listener로부터 받는 명령임.
-        // 응용프로그램에서 removable 디바이스의 파일을 읽거나 쓰려고 할 때
-        // kauth listener가 접근을 차단한 후 결과를 에이전트에 통지하는 중.
-        // Kext에 처리 결과를 리턴하지 않는 단방향 이벤트임.
-        
         if(g_AppCallback != NULL)
         {
             EVT_PARAM  EvtInfo;
@@ -613,9 +592,6 @@ CESFControl::JobEvent_SmartLogNotify(int nSock, PCOMMAND_MESSAGE pCmdMsg)
 }
 
 #ifndef LINUX
-//
-// ProcessAccessCheck 체크하는 로직추가 예시
-//
 boolean_t
 CESFControl::IsProcessAccessCheckExample( int nPID, char* pczFilePath )
 {
@@ -718,7 +694,6 @@ CESFControl::JobEvent_ProcessAccessCheck(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     proc_name( AppInfo.nPID, czProcName, sizeof(czProcName) );
     DEBUG_LOG( "ProcessCreate, UID=%d, Parent=%s, Proc=%s, PID=%d, FilePath=%s", AppInfo.nUID, czParentName, czProcName, pNotify->nPID, pNotify->czFilePath );
     
-    // ProcessAccessCheck 체크하는 로직추가 예시
     bAccess = IsProcessAccessCheck( pCmdMsg->Command, pNotify->nPID, pNotify->czFilePath );
     if(bAccess)
     {
@@ -901,11 +876,6 @@ CESFControl::JobEvent_FullDiskAccessCheck( int nSock, PCOMMAND_MESSAGE pCmdMsg )
             DeviceMan.m_cFDA.MountCtx_Update( czPath, czPath, BusTypeUsb );
             if(CPIFullDiskAccess::IsDiskAccessPermission( czPath ) == FALSE)
             {
-                // os_log(OS_LOG_DEFAULT, "[ESF] CheckDiskAccessPermission == FALSE");
-                // sprintf(czCmd, "diskutil unmount \"%s\"", czPath);
-                // os_log(OS_LOG_DEFAULT, "[ESF] JobEvent_FullDiskAccessCheck / pzCmd: %s", czCmd);
-                // int nResult = system(czCmd);
-                //
                 nResult = unmount( czPath, MNT_CMDFLAGS );
                 os_log(OS_LOG_DEFAULT, "[ESF][%s] nResult=%d, Error=%d", __FUNCTION__, nResult, errno );
                 if(nResult == 0)
@@ -1510,6 +1480,7 @@ CESFControl::JobEvent_FileRename(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     return TRUE;
 }
 
+#ifndef LINUX
 
 #  define HTTP_MAX_BUFFER    2048    /* Max length of data buffer */
 typedef long ssize_t;            /* @private@ */
@@ -1953,6 +1924,7 @@ read_cups_spool_path_ESF(char * szSpoolPath, size_t SpoolPathlen, char * szTempP
     }
 }
 
+
 boolean_t
 CESFControl::JobEvent_GetPrintSpoolPath(int nSock, PCOMMAND_MESSAGE pCmdMsg, int& resultCode, std::string& resultValue)
 {
@@ -1974,17 +1946,9 @@ CESFControl::JobEvent_GetPrintSpoolPath(int nSock, PCOMMAND_MESSAGE pCmdMsg, int
     nDataSize  = sizeof(SCANNER_NOTIFICATION);
     nTotalSize = sizeof(COMMAND_MESSAGE) + nDataSize;
     
-//    pCmdMsg->Size = (ULONG)nTotalSize;
-//    pCmdMsg->Command  = (ULONG)GetPrintSpoolPathResult;
-//    if(send( nSock, pCmdMsg, nTotalSize, 0) < 0)
-//    {
-//        printf("[ESF] send(FileDeleteResult) failed(%d)\n", errno);
-//    }
-    
     return TRUE;
 }
 
-#ifndef LINUX
 boolean_t CESFControl::JobEvent_ProcessCallback(int nSock, PCOMMAND_MESSAGE pCmdMsg)
 {
     ULONG  nCommand  = 0;
@@ -2002,10 +1966,6 @@ boolean_t CESFControl::JobEvent_ProcessCallback(int nSock, PCOMMAND_MESSAGE pCmd
         return FALSE;
     }
     
-    //
-    // DeviceMan.setSelfProtect();
-    //
-
     nCommand  = (ULONG)pCmdMsg->Command;
     if(g_AppCallback != NULL)
     {
