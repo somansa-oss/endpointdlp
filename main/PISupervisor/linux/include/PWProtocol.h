@@ -69,29 +69,6 @@ extern "C"
 #define LOG_PROC_LEN     260
 #define LOG_FILE_LEN     260
 
-
-	//#define LOG_VNODE       0x0000
-	//#define LOG_FILEOP      0x0001
-	//#define LOG_MTP         0x0002
-	//#define LOG_PTP         0x0004
-	//#define LOG_ANDROID     0x0008
-	//#define LOG_APPLE       0x0010
-	//#define LOG_PWDISK      0x0020
-	//    
-	//    
-	//#define ACTION_NONE     0x0000
-	//#define ACTION_OPEN     0x0001
-	//#define ACTION_CONNECT  0x0002
-	//#define ACTION_UNLINK   0x0004
-	//#define ACTION_KILL     0x0008
-	//#define ACTION_READ     0x0010
-	//#define ACTION_WRITE    0x0020
-	//#define ACTION_APPEND   0x0040
-	//#define ACTION_EXCHANGE 0x0080
-	//#define ACTION_CLOSE    0x0100
-	//#define ACTION_RENAME   0x0200
-
-
 #define RECORD_TYPE_NORMAL                       0x00000000
 #define RECORD_TYPE_FILETAG                      0x00000004
 #define RECORD_TYPE_FLAG_STATIC                  0x80000000

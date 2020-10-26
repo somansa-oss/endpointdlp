@@ -1034,9 +1034,6 @@ int CESFManager::fnSetUploadPrevent(void* pBuf, int nBufSize )
     if(pPolicy)
     {
         memcpy( pPolicy, pBuf, nBufSize );
-        
-        //printf("applyPolicyUploadPrevent pDLPPolicyUpload->m_sControlList.size == %lu, [%s]",
-        //          pPolicy->lControlListSize, &(pPolicy->szControlList));
     }
     
     if(g_AppESFctl.m_nESFCtlId > 0)

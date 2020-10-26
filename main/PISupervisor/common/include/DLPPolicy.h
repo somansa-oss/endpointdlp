@@ -640,8 +640,6 @@ class CDLPPolicyUpload: public CDLPPolicyPreventPlus {
 		virtual bool initialize(void);
     
         void LoadControlList(std::string & sControlList);
-//        virtual void clear(void);
-//        virtual bool parsePolicyInfo(CMarkup& markup);
 };
 
 ////////////////////////////////////////////////////////////////////////////////

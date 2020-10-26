@@ -44,10 +44,11 @@ int CKextManager::EventNotify_PostProcess( PEVT_PARAM pEvtInfo )
         case FileRename:
             nRet = g_AppKext.EventNotify_FileRename( pEvtInfo );
             break;
+#ifndef LINUX            
         case FileEventDiskFull:
             nRet = g_AppKext.EventNotify_FileEventDiskFull( pEvtInfo );
             break;
-       
+#endif       
         case SmartLogNotify:
             nRet = g_AppKext.EventNotify_SmartLogNotify( pEvtInfo );
             break;
@@ -55,7 +56,8 @@ int CKextManager::EventNotify_PostProcess( PEVT_PARAM pEvtInfo )
 		case ProcessAccessCheck:
             nRet = g_AppKext.EventNotify_ProcessAccessCheck( pEvtInfo );
             break;
-            
+
+#ifndef LINUX
         // PWDisk.kext
         case PWNotify_ProcessNotify:
             nRet = g_AppKext.PWDisk_EN_Process( pEvtInfo );
@@ -64,7 +66,7 @@ int CKextManager::EventNotify_PostProcess( PEVT_PARAM pEvtInfo )
         case PWNotify_PWDiskLogNotify:
             nRet = g_AppKext.PWDisk_EN_Log( pEvtInfo );
             break;
-            
+#endif            
             
         default: break;
     }
@@ -116,6 +118,7 @@ int CKextManager::EventNotify_FileExchangeData(PEVT_PARAM pEvtInfo )
     return 0;
 }
 
+#ifndef LINUX
 int CKextManager::EventNotify_FileEventDiskFull(PEVT_PARAM pEvtInfo )
 {
     
@@ -124,7 +127,7 @@ int CKextManager::EventNotify_FileEventDiskFull(PEVT_PARAM pEvtInfo )
     printf( "[DLP][%s] pid=%d, path=%s \n", __FUNCTION__, pEvtInfo->ProcessId, pEvtInfo->pFilePath );
     return 0;
 }
-
+#endif
 
 int CKextManager::EventNotify_SmartLogNotify(PEVT_PARAM pEvtInfo )
 {
@@ -164,7 +167,7 @@ int CKextManager::EventNotify_ProcessAccessCheck( PEVT_PARAM pEvtInfo )
 // PWDisk.kext
 //
 
-
+#ifndef LINUX
 int CKextManager::PWDisk_EN_Process(PEVT_PARAM pEvtInfo)
 {
     if(!pEvtInfo) return 0;
@@ -198,7 +201,7 @@ int CKextManager::PWDisk_EN_Log(PEVT_PARAM pEvtInfo)
     
     return 0;
 }
-
+#endif
 
 CKextManager::CKextManager() : m_bKctl(true)
 {
