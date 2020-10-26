@@ -144,8 +144,7 @@ int CSysControl::QuitSystemControl()
 //
 void* CSysControl::HandlerEventThread_SysCtl(void* pParam)
 {
-#ifdef _FIXME_
-
+#ifndef LINUX
     int     nMib[2];
     size_t  nLength = 0;
     
