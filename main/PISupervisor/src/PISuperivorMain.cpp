@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
 	get_option(argc, argv);
 
 #ifndef __APPLE__
-#ifdef _NOT_USED_
+#ifndef LINUX
 	// ----------
 	// run daemon
 	// ----------
