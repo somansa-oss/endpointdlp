@@ -34,6 +34,5 @@ add_executable(PISupervisor src/PISuperivorMain.cpp
         apple/src/ESFControl.cpp            apple/src/ESFManager.cpp                apple/src/PIESFStub.cpp
         )
 
-        #INCLUDE_DIRECTORIES ( include common/include sqlite/include linux/include )
 target_include_directories(PISupervisor PUBLIC
     . include common/include sqlite/include linux/include apple/include )
