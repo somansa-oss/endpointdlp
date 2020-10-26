@@ -9,16 +9,6 @@
 extern "C"
 {
 #endif
-
-//#include "event_proto.h"
-//    
-//typedef struct _PARAM_SCTL
-//{
-//    struct sysctl_oid* pOid;
-//    struct sysctl_req* pReq;
-//    void*    pArg1;
-//    int      nArg2;
-//} PARAM_SCTL;
     
 kern_return_t
 StartSystemControl(void);

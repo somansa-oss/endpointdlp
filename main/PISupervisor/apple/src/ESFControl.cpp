@@ -483,99 +483,9 @@ void* CESFControl::ListenEventQueueThread(void* pParam)
     return NULL;
 }
 
-
-
-
-
-
-//
-// ESF control API를 kext와의 통신 수단으로 사용하는 경우에,
-// 단위 이벤트 처리를 담당하는 쓰레드의 실행 함수.
-// 파라미터로 전달받은 이벤트 패킷에 대한 처리를 마치면 쓰레드는 종료함.
-// Kext가 100개의 이벤트를 전송하면 100개의 쓰레드를 생성하여 각각의 이벤트를 처리하는 개념.
-// CPU 개수 두 배 만큼의 쓰레드들이 번갈아가며 이벤트를 처리하는 system control 모델과의 차이점임.
-//
-// Parameter
-//        param : 이벤트 패킷 포인터. 즉, struct event_proto 구조체의 포인터.
-//
-
-
 void*
 CESFControl::JobEventThread_ESFCtl(void* pPacket)
 {
-    int        nSock = 0;
-//    ULONG      nCmd  = 0;
-//    boolean_t  bSuc  = FALSE;
-//    PCOMMAND_MESSAGE pCmdMsg = NULL;
-//
-//    pCmdMsg = (PCOMMAND_MESSAGE)pPacket;
-//    if(pCmdMsg == NULL)
-//    {
-//        assert( pCmdMsg );
-//        return NULL;
-//    }
-//
-//    nSock = g_AppESFctl.ConnectESFControl();
-//    if(nSock < 0)
-//    {
-//        printf("[ESF] socket() failed(%d)\n", errno );
-//        free( pPacket );
-//        pPacket = NULL;
-//        return NULL;
-//    }
-//
-//    nCmd = (ULONG)pCmdMsg->Command;
-//    switch(nCmd)
-//    {
-//    case FileIsRemove:
-//        bSuc = CESFControl::JobEvent_IsRemoable(nSock, pCmdMsg);
-//        break;
-//
-//    case FileScan:
-//        bSuc = CESFControl::JobEvent_FileScan(nSock, pCmdMsg);
-//        break;
-//
-//    case FileDelete:
-//        bSuc = CESFControl::JobEvent_FileDelete(nSock, pCmdMsg);
-//        break;
-//    case FileRename:
-//        bSuc = CESFControl::JobEvent_FileRename(nSock, pCmdMsg);
-//        break;
-//    case FileExchangeData:
-//        bSuc = CESFControl::JobEvent_FileExchangeData(nSock, pCmdMsg);
-//        break;
-//    case FileEventDiskFull:
-//        bSuc = CESFControl::JobEvent_FileEventDiskFull(nSock, pCmdMsg);
-//        break;
-//
-//    case FileEventNotify:
-//        bSuc = CESFControl::JobEvent_FileEventNotify(nSock, pCmdMsg);
-//        break;
-//
-//    case SmartLogNotify:
-//        bSuc = CESFControl::JobEvent_SmartLogNotify(nSock, pCmdMsg );
-//        break;
-//    case GetPrintSpoolPath:
-//        bSuc = CESFControl::JobEvent_GetPrintSpoolPath(nSock, pCmdMsg);
-//        break;
-//
-//    case ProcessCallback:
-//        bSuc = CESFControl::JobEvent_ProcessCallback(nSock, pCmdMsg);
-//        break;
-//
-//    case ProcessAccessCheck:
-//        bSuc = CESFControl::JobEvent_ProcessAccessCheck( nSock, pCmdMsg );
-//        break;
-//
-//    case FullDiskAccessCheck:
-//        bSuc = CESFControl::JobEvent_FullDiskAccessCheck( nSock, pCmdMsg );
-//        break;
-//
-//     default: break;
-//    }
-//
-//    g_AppESFctl.CloseESFControl( nSock );
-//    if(pPacket) free( pPacket );
     return NULL;
 }
 
@@ -584,7 +494,7 @@ CESFControl::JobEventThread_ESFCtl(void* pPacket)
 // EventCallback Function
 /*******************************************************************************************************************/
 
-
+#ifndef LINUX
 boolean_t
 CESFControl::JobEvent_IsRemoable(int nSock, PCOMMAND_MESSAGE pCmdMsg)
 {
@@ -620,7 +530,6 @@ CESFControl::JobEvent_IsRemoable(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     }
     return TRUE;
 }
-
 
 boolean_t
 CESFControl::JobEvent_FileEventNotify(int nSock, PCOMMAND_MESSAGE pCmdMsg)
@@ -658,7 +567,7 @@ CESFControl::JobEvent_FileEventNotify(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     
     return TRUE;
 }
-
+#endif
 
 void CESFControl::GetLogTime(char* pczCurTime, int nTimeBufSize)
 {
@@ -703,14 +612,13 @@ CESFControl::JobEvent_SmartLogNotify(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     return TRUE;
 }
 
+#ifndef LINUX
 //
 // ProcessAccessCheck 체크하는 로직추가 예시
 //
 boolean_t
 CESFControl::IsProcessAccessCheckExample( int nPID, char* pczFilePath )
 {
-#ifndef LINUX
-
     char czProcName[260];
     char* pczToken = NULL;
     
@@ -745,16 +653,12 @@ CESFControl::IsProcessAccessCheckExample( int nPID, char* pczFilePath )
         printf("%s, pid=%d, proc=%s, FilePath=%s Deny. \n\n", __FUNCTION__, nPID, czProcName, pczFilePath  );
         return FALSE;
     }
-#endif    
     return TRUE;
 }
-
 
 boolean_t
 CESFControl::IsProcessAccessCheck( const int nCommand, const int nPID, char* pczFilePath )
 {
-#ifndef LINUX
-
     boolean_t  bAccess = TRUE;
     EVT_PARAM  EvtInfo;
     char       czProcName[260];
@@ -781,10 +685,8 @@ CESFControl::IsProcessAccessCheck( const int nCommand, const int nPID, char* pcz
         }
     }
     return bAccess;
-#else
-    return TRUE;
-#endif    
 }
+#endif    
 
 
 boolean_t
@@ -1038,104 +940,6 @@ CESFControl::JobEvent_FullDiskAccessCheck( int nSock, PCOMMAND_MESSAGE pCmdMsg )
 #endif    
     return TRUE;
 }
-
-
-
-/*
-
-boolean_t
-CESFControl::FileScan_Process(int nSock, PCOMMAND_MESSAGE pCmdMsg, char* pczQtFilePath )
-{
-    boolean_t  bAccess   = FALSE;
-    size_t     nFileSize = 0, nDataSize=0, nTotalSize=0;
-    int        nCommand=0, nEventPID = 0;
-    int        nTempFile=0;
-    char       czPath[ MAXPATHLEN ];
-    char*      pczPos = NULL;
-    char*      pczBuf = NULL;
-    PSCANNER_NOTIFICATION pNotify = NULL;
-    
-    if(nSock < 0 || !pCmdMsg || !pczTempFilePath) return FALSE;
-    
-    pNotify = (PSCANNER_NOTIFICATION)pCmdMsg->Data;
-    if(!pNotify) return FALSE;
-    
-    nCommand  = pCmdMsg->Command;
-    nEventPID = pNotify->nPID;
-    nFileSize = (size_t)pNotify->pParam;
-    
-    if(nFileSize <= 0) return FALSE;
-    
-    memset( czPath, 0, sizeof(czPath) );
-    memset( pczTempFilePath, 0, MAXPATHLEN );
-    strcpy( czPath, pNotify->czFilePath );
-    strcpy( pczTempFilePath, czPath );
-    
-    pczPos = pczTempFilePath + strlen(pczTempFilePath);
-    *pczPos++ = '.';
-    *pczPos++ = '_';
-    *pczPos++ = '@';
-    *pczPos++ = '_';
-    *pczPos++ = 0;
-    
-    printf("[ESF][%s] FilePath=%s \n",     __FUNCTION__, czPath );
-    printf("[ESF][%s] TempFilePath=%s \n", __FUNCTION__, pczTempFilePath );
-    
-    nTempFile = open( pczTempFilePath, O_RDWR | O_TRUNC | O_CREAT, S_IRWXU );
-    if(nTempFile < 0)
-    {   // 임시 파일 만들기 실패. '권한 없음'을 리턴함.
-        printf("[ESF] open() failed(%d)\n", errno);
-        return FALSE;
-    }
-    
-    // 3. 파일 읽기/쓰기에 사용할 버퍼 할당하기
-    pczBuf = (char*)malloc( nFileSize );
-    if(pczBuf == NULL)
-    {   // 버퍼를 할당하는데 실패함. '권한 없음'을 리턴함.
-        close( nTempFile );
-        unlink( pczTempFilePath ); // 임시 파일 지움.
-        return FALSE;
-    }
-    
-    nDataSize = sizeof(SCANNER_NOTIFICATION);
-    nTotalSize = sizeof(COMMAND_MESSAGE) + sizeof(SCANNER_NOTIFICATION);
-    // 4. 원본 파일 내용 읽어오기
-    pCmdMsg->Size = (ULONG)nTotalSize;
-    pCmdMsg->Command  = (ULONG)GetFileData;
-    pNotify = (PSCANNER_NOTIFICATION)pCmdMsg->Data;
-    if(pNotify)
-    {
-        memset( pNotify, 0, nDataSize );
-        pNotify->pParam   = (void*)pczBuf;
-        pNotify->pParam02 = (void*)0;
-        pNotify->pParam03 = (void*)nFileSize;
-    }
-    
-    if(send( nSock, pCmdMsg, nTotalSize, 0) < 0)
-    {   // 원본 파일 내용 읽기 실패. '권한 없음'을 리턴함.
-        printf("[ESF] send(GET_FILEDATA) failed(%d) \n", errno );
-        free( pczBuf );
-        close( nTempFile );
-        unlink( pczTempFilePath );
-        return FALSE;
-    }
-    
-    // 5. 원본 파일 내용을 임시 파일에 쓰기
-    if(write( nTempFile, pczBuf, nFileSize) < 0)
-    {   // 임시 파일에 쓰기 실패. '권한 없음'을 리턴함.
-        printf("[ESF] write() failed(%d)\n", errno);
-        free( pczBuf );
-        close( nTempFile );
-        unlink( pczTempFilePath );
-        return FALSE;
-    }
-    
-    
-    free( pczBuf );
-    close( nTempFile );
-    return bAccess;
-}
-*/
 
 #define PRT_FILE "/Users/somansa/test/prt.pdf"
 
@@ -1408,21 +1212,6 @@ CESFControl::QtCopyFileUser(PCOMMAND_MESSAGE pCmdMsg)
     free( pczBuf );
     close( nQtFile );
 
-//    {
-//        size_t nLength=0, nCupsTmp=0;
-//        nCupsTmp = strlen( DIR_CUPS_TMP );
-//        nLength  = strlen( pNotify->czFilePath );
-//        if(nLength >= nCupsTmp && 0 == strncasecmp( pNotify->czFilePath, DIR_CUPS_TMP, nCupsTmp ))
-//        {
-//            printf("[ESF][%s] Except Path=%s \n", __FUNCTION__, pNotify->czFilePath );
-//        }
-//        else
-//        {
-//            // Watermark Test
-//            nLength = JobCopyFile( PRT_FILE, pNotify->czFilePath );
-//        }
-//    }
-
     return bAccess;
 }
 
@@ -1548,14 +1337,6 @@ CESFControl::JobEvent_FileScan(int nSock, PCOMMAND_MESSAGE pCmdMsg, int& resultC
     
     resultCode = pNotify->nResult;
     
-//    nTotalSize = sizeof(COMMAND_MESSAGE) + sizeof(SCANNER_NOTIFICATION);
-//    pCmdMsg->Size = (ULONG)nTotalSize;
-//    pCmdMsg->Command = FileScanResult;
-//    if(send( nSock, pCmdMsg, nTotalSize, 0) < 0)
-//    {
-//        printf("[ESF][%s]  FileScanResult failed(%d)\n", __FUNCTION__, errno );
-//    }
-    
     printf("[ESF][%s]  FileScanResult Success. bAccess=%d \n", __FUNCTION__, bAccess  );
   
     return TRUE;
@@ -1594,16 +1375,6 @@ CESFControl::JobEvent_FileDelete(int nSock, PCOMMAND_MESSAGE pCmdMsg, int& resul
     }
     
     resultCode = pNotify->nResult;
-    
-//    nDataSize  = sizeof(SCANNER_NOTIFICATION);
-//    nTotalSize = sizeof(COMMAND_MESSAGE) + nDataSize;
-//
-//    pCmdMsg->Size = (ULONG)nTotalSize;
-//    pCmdMsg->Command  = (ULONG)FileDeleteResult;
-//    if(send( nSock, pCmdMsg, nTotalSize, 0) < 0)
-//    {
-//        printf("[ESF] send(FileDeleteResult) failed(%d)\n", errno);
-//    }
 
     return TRUE;
 }
