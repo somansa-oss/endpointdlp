@@ -28,7 +28,6 @@ enum {
 };
 
 static uint64_t event_mask =
-//(FAN_OPEN_PERM);      // Open permission control
 (
  FAN_MARK_MOUNT |
  FAN_OPEN_PERM|
@@ -105,15 +104,6 @@ event_process (struct fanotify_event_metadata *event,
         write (fanotify_fd, &access, sizeof (access));
         return;
     }
-    
-    // if (strncmp(file_path, "/media/", sizeof("/media/")) != 0)
-    // {
-    //   struct fanotify_response access = {0};
-    //   access.fd = event->fd;
-    //   access.response = FAN_ALLOW;
-    //   write (fanotify_fd, &access, sizeof (access));
-    //   return;
-    // }
     
     printf ("Received event in path '%s'=>[%d]", file_path, event->mask);
     printf (" pid=%d (%s): \n",
@@ -254,9 +244,9 @@ int
 main (int          argc,
       const char **argv)
 {
-    int signal_fd;
-    int fanotify_fd;
-    struct pollfd fds[FD_POLL_MAX];
+    int signal_fd = 0;
+    int fanotify_fd = 0;
+    struct pollfd fds[FD_POLL_MAX] = {0};
     
     /* Input arguments... */
     //   if (argc < 2)
