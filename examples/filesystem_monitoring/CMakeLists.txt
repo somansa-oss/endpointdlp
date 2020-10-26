@@ -11,7 +11,11 @@ LINK_LIBRARIES ( -pthread -ldl )
 add_executable(get_mount_info         get_mount_info.cpp
 )
 
+add_executable(fs_monitor            fs_monitor.c
+)
+
+add_executable(mount_monitor         mount_monitor.c
+)
+
 target_include_directories(get_mount_info PUBLIC
     .  )
-
-#target_link_libraries(PIKern pisupervisor_common_lib pisupervisor_src_lib )
