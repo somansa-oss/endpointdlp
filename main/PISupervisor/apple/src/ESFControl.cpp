@@ -530,7 +530,6 @@ CESFControl::JobEvent_IsRemoable(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     }
     return TRUE;
 }
-#endif
 
 boolean_t
 CESFControl::JobEvent_FileEventNotify(int nSock, PCOMMAND_MESSAGE pCmdMsg)
@@ -568,7 +567,7 @@ CESFControl::JobEvent_FileEventNotify(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     
     return TRUE;
 }
-
+#endif
 
 void CESFControl::GetLogTime(char* pczCurTime, int nTimeBufSize)
 {
