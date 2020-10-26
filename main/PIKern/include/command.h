@@ -1,7 +1,6 @@
 #ifndef __COMMAND_H__
 #define __COMMAND_H__
 
-
 #define SET_POLICY              6       // 정책(1,2,3)을 설정하라는 명령 (agent -> kext)
 #define SET_DEBUG               7       // 디버그 메시지를 출력할지 말지를 설정하는 명령 (agent -> kext)
 #define GET_FILEDATA            8       // Vnode를 키로 사용하여 파일 내용을 읽을 때 사용 (agent -> kext)
@@ -19,102 +18,6 @@
 #define REMOVE_ANDROID_NODE     20      // 안드로이드 디바이스 노드 경로를 제거하는 명령 (agent -> kext)
 
 #define BEGIN_TEST              30      // 스트레스 테스트 등 용도
-
-//typedef enum _SMARTDRV_COMMAND
-//{
-///**************************************************************************************************/
-//    NO_COMMAND            = 1000, // Kernel control 채널 사용 시, 이벤트 큐 시작 명령 (agent -> kext)
-//    BEGIN_EVENT_QUEUE     = 1001, // Kernel control 채널 사용 시, 이벤트 큐 닫기 명령 (agent <-> kext), 응답 값 사용
-//    DESTROY_EVENT_QUEUE   = 1002, // System control 채널 사용 시, 쓰레드 풀에 참여한다는 명령 (agent -> kext)
-//    BEGIN_WAIT_THREAD     = 1003, // System control 채널 사용 시, 쓰레드 풀에 참여한다는 명령 (agent -> kext)
-//    ACTIVATE_THREAD_POOL  = 1004, // System control 채널 사용 시, 쓰레드 풀 시작 명령 (agent -> kext)
-//    DESTROY_THREAD_POOL   = 1005, // System control 채널 사용 시, 쓰레드 풀 닫기 명령 (agent -> kext)
-///**************************************************************************************************/
-//    GetFileData           = 1009,
-///**************************************************************************************************/
-//    GetDrivePolicy        = 1011,
-//    SetDrivePolicy        = 1012,
-//    SetExceptDrivePolicy  = 1013,
-//    SetQuarantinePathExt  = 1014,
-//    SetQuarantineLimit    = 1015,
-///**************************************************************************************************/
-//    
-//    SetMobilePermitList   = 1021,
-//    ClrMobilePermitList   = 1022,
-//    
-//    SetCtrlMobile         = 1026,
-//    MobileNodeInsert      = 1027,
-//    MobileNodeRemoveAll   = 1028,
-///**************************************************************************************************/
-//    SetPermitProcessName  = 1031,
-//    SetPermitFolderName   = 1032,
-//    SetPermitFileExtName  = 1033,
-//    SetProcessIdUnprotect = 1034,
-///**************************************************************************************************/
-//    GetSmartDrvLogEx      = 1041,
-//    GetSmartDrvLog        = 1042,
-//    GetSmartDrvVersion    = 1043,
-///**************************************************************************************************/
-//    SetStopSmartDrv       = 1044, //  [3/27/2015 sally]
-//    SetStartSmartDrv	  = 1045, //  [3/27/2015 sally]
-//    IsUseSmartDrv	      = 1046, //
-//    GetEnumDriveList      = 1047,
-//    GetSmartBusType       = 1048,
-//    GetSmartVolumeSize    = 1049,
-///**************************************************************************************************/
-//    SetPrintPrevent       = 1071,
-///**************************************************************************************************/
-//    SetSelfProtect           = 1081,
-//    SetSelfProtectOnlyPermit = 1082,
-///**************************************************************************************************/
-//    SetUploadPrevent      = 1091,
-//    SetProcessAccessCheck = 1101,
-///**************************************************************************************************/
-//    SetControlCamera      = 1201,
-//    SetControlRNDIS       = 1301,
-///**************************************************************************************************/
-//    SetControlAirDrop     = 1305
-//    
-//} SMARTDRV_COMMAND;
-
-//typedef enum _SCANNER_COMMAND
-//{
-///**************************************************************************************************/
-//    FileScan               = 1101,
-//    FileScanResult         = 1102,
-//    FileDelete             = 1103,
-//    FileDeleteResult       = 1104,
-//    FileRename             = 1105,
-//    FileRenameResult       = 1106,
-//    FileExchangeData       = 1107,
-//    FileExchangeDataResult = 1108,
-//    
-///**************************************************************************************************/
-//    
-//    FileEventDiskFull      = 1201,
-//    FileEventNotify        = 1203,
-//    FileIsRemove           = 1205,
-//    FileIsRemoveResult     = 1206,
-//    
-///**************************************************************************************************/
-//    SmartLogNotify          = 1301,
-//    GetPrintSpoolPath       = 1302,
-//    GetPrintSpoolPathResult = 1303,
-///**************************************************************************************************/
-//    
-//    ProcessCallback          = 1401,
-//    ProcessAccessCheck       = 1403,
-//    ProcessAccessCheckResult = 1404,
-//    
-///**************************************************************************************************/
-//
-//    FullDiskAccessCheck      = 1501,
-//    // Volume Notify
-//    EnumMountVolumeNotify    = 1505
-//    
-///**************************************************************************************************/
-//} SCANNER_COMMAND;
-
 
 // Policy StorDeviceType
 #define MEDIA_COPYPREVENT   0x0001
@@ -163,19 +66,13 @@
 #define ACTION_CLOSE       0x0100
 #define ACTION_EXECUTE     0x0200
 
-
 #define NOTIFY_BLOCK_READ   0x00
 #define NOTIFY_BLOCK_WRITE  0x01
 #define NOTIFY_LOG_RECORD   0x02
-
 
 #define ACCESS_CHECK_NONE     0
 #define ACCESS_CHECK_COPY     1
 #define ACCESS_CHECK_PRINT    2
 #define ACCESS_CHECK_UPLOAD   3
-
-
-
-
 
 #endif // __COMMAND_H__
