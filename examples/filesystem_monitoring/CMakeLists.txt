@@ -17,6 +17,8 @@ add_executable(fs_monitor            fs_monitor.c
 add_executable(mount_monitor         mount_monitor.c
 )
 
+add_executable(get_device_info	get_device_info.cpp )
+
 target_include_directories(mount_monitor PUBLIC
 	.  
 	/usr/include/libmount
