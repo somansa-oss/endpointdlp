@@ -107,7 +107,7 @@ bool CShareFolderCtrl::ShellExecuteFetchSFFilePath( std::string strCommand, std:
     char  czBuffer[1024];
     int  nLength=0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     pPipe = popen( strCommand.c_str(), "r" );
     if(!pPipe) return false;
