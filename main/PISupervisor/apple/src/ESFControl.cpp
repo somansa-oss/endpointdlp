@@ -2,9 +2,6 @@
 //  ESFControl.cpp
 //  PISupervisor
 //
-//  Created by Juno on 2020/07/07.
-//  Copyright © 2020 somansa. All rights reserved.
-//
 #define ACCESS_CHECK_NONE     0
 #define ACCESS_CHECK_COPY     1
 #define ACCESS_CHECK_PRINT    2
@@ -343,19 +340,6 @@ int CESFControl::SendRecvCommand_ESFCtl( PCOMMAND_MESSAGE pCmdMsg )
     DEBUG_LOG1("[ESF] SendRecvCommand_ESFCtl Success. \n" );
     return 0;
 }
-
-
-
-
-//
-// 이 에이전트를 이벤트 리시버로 kext에 등록하고 아래 1,2번 과정을 무한 반복함.
-// 1. recv() 함수를 호출하여 kext로부터의 이벤트 수신을 대기함.
-// 2. 이벤트 수신하면 쓰레드를 생성하여 이벤트 넘기며 쓰레드에 이벤트 처리를 맡김.
-// 이상의 1,2번 과정을 무한 반복하다가 DESTROY_EVENT_QUEUE 명령을 수신하면 종료함.
-//
-// Parameter
-//        param : 사용하지 않음.
-//
 
 void* CESFControl::ListenEventQueueThread(void* pParam)
 {
