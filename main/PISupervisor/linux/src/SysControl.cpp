@@ -20,7 +20,7 @@ int CSysControl::SystemControl_Init()
 {
     int    nRet = 0;
 
-#ifdef _FIXME_
+#ifndef LINUX
 
     int    nCpu = 0;
     int    nMib[2];
