@@ -853,16 +853,9 @@ errno_t SmartCmd_SetDrivePolicy( PCOMMAND_MESSAGE pCmdMsg );
 
 static uint64_t event_mask =
 (
- //FAN_MARK_MOUNT |
- //FAN_ACCESS_PERM |
-// FAN_OPEN_PERM|
- // FAN_ACCESS |         /* File accessed */
- //FAN_MODIFY |         /* File modified */
- FAN_CLOSE_WRITE |    /* Writtable file closed */
- //FAN_CLOSE_NOWRITE |  /* Unwrittable file closed */
- //FAN_OPEN |           /* File was opened */
- FAN_ONDIR |           /* We want to be reported of events in the directory */
- FAN_EVENT_ON_CHILD); /* We want to be reported of events in files of the directory */
+    FAN_CLOSE_WRITE |    /* Writtable file closed */
+    FAN_ONDIR |           /* We want to be reported of events in the directory */
+    FAN_EVENT_ON_CHILD); /* We want to be reported of events in files of the directory */
 
 void CPIESF::fnAddNotify(void* pzArg)
 {
