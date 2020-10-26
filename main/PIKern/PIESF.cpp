@@ -410,43 +410,9 @@ event_process (struct fanotify_event_metadata *event,
     access.fd = event->fd;
     access.response = FAN_ALLOW;
 
-    // if (event->mask & FAN_OPEN_PERM)
-    // {
-    //     bBlock = Kauth_Vnode_IsProtectRead( LogParam.nProcessId, LogParam.pczProcName, 0, 0, NULL, (char*)target_file_path.c_str(), &LogParam );
-    //     printf( "[DLP][%s] Kauth_Vnode_IsProtectRead(), bBlock=%d \n", __FUNCTION__, bBlock );
-    
-    //     if (bBlock)
-    //     {
-    //         access.response     = FAN_DENY;
-    //     }
-    //     else
-    //     {
-    //         if (IsControlDeviceType( NULL, (char*)target_file_path.c_str() ))
-    //         {
-    //             bBlock = Kauth_Vnode_IsProtectWrite( LogParam.nProcessId, LogParam.pczProcName, 0, 0, NULL, (char*)target_file_path.c_str(), &LogParam );
-    //             printf( "[DLP][%s] Kauth_Vnode_IsProtectWrite(), bBlock=%d \n", __FUNCTION__, bBlock );
-                
-    //             if (bBlock)
-    //             {
-    //                 if (controlDevice(LSF_MEDIA_USB_MEMORY, "RemovableDrive", LSF_MEDIA_READONLY))
-    //                 {
-    //                     LogParam.nLogType   = LOG_VNODE;
-    //                     SmartDrv_LogAppend( &LogParam, 0 );
-    //                 }
-    //             }
-    //             else
-    //             {
-    //                 enableDevice(LSF_MEDIA_USB_MEMORY);
-    //             }
-    //         }            
-    //     }
-    // }
-    // else
     if (event->mask & FAN_CLOSE_WRITE)
     {
         LogParam.nLogType    = LOG_FILEOP;
-
-        //QtCopyFileUser((char*)target_file_path.c_str(), "/tmp/1");
 
         bAllow = Kauth_FileOp_FileClose(nProcessId,
                                 (char*)process_name.c_str(),
@@ -505,11 +471,6 @@ void* CPIESF::fnCommunicateClient(void* pzArg) {
                     {
                         close (metadata->fd);
                     }
-
-                    //if (change_mod_value > 0 && file_path[0] != 0)
-                    //{
-                    //    int ret = chmod((char*)file_path, change_mod_value);
-                    //}
 
                     metadata = FAN_EVENT_NEXT (metadata, length);
                 }
@@ -892,16 +853,9 @@ errno_t SmartCmd_SetDrivePolicy( PCOMMAND_MESSAGE pCmdMsg );
 
 static uint64_t event_mask =
 (
- //FAN_MARK_MOUNT |
- //FAN_ACCESS_PERM |
-// FAN_OPEN_PERM|
- // FAN_ACCESS |         /* File accessed */
- //FAN_MODIFY |         /* File modified */
- FAN_CLOSE_WRITE |    /* Writtable file closed */
- //FAN_CLOSE_NOWRITE |  /* Unwrittable file closed */
- //FAN_OPEN |           /* File was opened */
- FAN_ONDIR |           /* We want to be reported of events in the directory */
- FAN_EVENT_ON_CHILD); /* We want to be reported of events in files of the directory */
+    FAN_CLOSE_WRITE |    /* Writtable file closed */
+    FAN_ONDIR |           /* We want to be reported of events in the directory */
+    FAN_EVENT_ON_CHILD); /* We want to be reported of events in files of the directory */
 
 void CPIESF::fnAddNotify(void* pzArg)
 {
@@ -914,7 +868,6 @@ void CPIESF::fnAddNotify(void* pzArg)
 
     // e.g.
     // [VolCtx_Update] NewAdd BusType=7, Device=/dev/disk2s2, BasePath=/Volumes/새 볼륨. Count=2
-
     monitors[ n_monitors ].path = strdup ( pDevice->czBasePath );
     if (monitors[ n_monitors ].path != NULL)
     {
@@ -941,30 +894,6 @@ void CPIESF::fnAddNotify(void* pzArg)
                         n_monitors);        
             n_monitors++;
         }
-
-        // //fanotify_open_perm_fd, event_mask_open_perm
-        // if (fanotify_mark (fanotify_open_perm_fd,
-        //                     FAN_MARK_ADD | FAN_MARK_MOUNT,
-        //                     event_mask_open_perm,
-        //                     AT_FDCWD,
-        //                     monitors[ n_monitors ].path) < 0)
-        // {
-        //     fprintf (stderr,
-        //                 "Add monitor in mount '%s' 2nd [%d] FAIL: '%s'\n",
-        //                 monitors[ n_monitors ].path,
-        //                 n_monitors,
-        //                 strerror (errno));
-        //
-        //     free( monitors[ n_monitors ].path );
-        // }
-        // else
-        // {
-        //     fprintf (stdout,
-        //                 "Add monitor in mount '%s' 2nd [%d] SUCCESS\n",
-        //                 monitors[ n_monitors ].path,
-        //                 n_monitors);        
-        //     n_monitors++;
-        // }
     }
     else
     {
@@ -998,14 +927,6 @@ void CPIESF::fnRemoveNotify(void* pzArg)
                            event_mask,
                            AT_FDCWD,
                            monitors[i].path);
-
-        // //fanotify_open_perm_fd, event_mask_open_perm
-        // fanotify_mark (fanotify_open_perm_fd,
-        //                    FAN_MARK_REMOVE,
-        //                    event_mask_open_perm,
-        //                    AT_FDCWD,
-        //                    monitors[i].path);
-
         fprintf (stdout,
                     "fanotify_mark()-REMOVE-'%s':'%d'\n",
                     monitors[i].path,
