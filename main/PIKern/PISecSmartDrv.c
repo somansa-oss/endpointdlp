@@ -117,7 +117,7 @@ PISecSmartDrv_start(kmod_info_t* pKmodInfo, void* pData)
         return KERN_FAILURE;
     }
     
-#ifdef FIXME_UPLOAD
+#ifndef LINUX
     if(KERN_SUCCESS != InstallNetworkFilter() )
     {
         PISecSmartDrv_stop(pKmodInfo, pData);
@@ -451,9 +451,7 @@ IsMediaPath_SFolder(const char* pczDevice, const char* pczBasePath, const char* 
     if (pczBasePath == NULL)
         return bSFolder;
     
-#ifdef LINUX
-//FIXME_MUST
-#else    
+#ifndef LINUX
     NSString *volume = @(pczBasePath);
     DASessionRef dasess = DASessionCreate(nil);
     CFURLRef cfurl = CFURLCreateFromFileSystemRepresentation(nil, (const uint8*)[volume UTF8String], strlen([volume UTF8String]), TRUE);
@@ -488,9 +486,7 @@ IsMediaPath_UsbStor( const char* pczPath )
     if (pczPath == NULL)
         return bUsbStor;
     
-#ifdef LINUX
-//FIXME_MUST
-#else    
+#ifndef LINUX
     NSString *volume = @(pczPath);
     DASessionRef dasess = DASessionCreate(nil);
     CFURLRef cfurl = CFURLCreateFromFileSystemRepresentation(nil, (const uint8*)[volume UTF8String], strlen([volume UTF8String]), TRUE);
@@ -530,9 +526,7 @@ IsMediaPath_CDStor(const char* pczPath)
     if (pczPath == NULL)
         return bCDStor;
     
-#ifdef LINUX
-//FIXME_MUST
-#else    
+#ifndef LINUX
     NSString *volume = @(pczPath);
     DASessionRef dasess = DASessionCreate(nil);
     CFURLRef cfurl = CFURLCreateFromFileSystemRepresentation(nil, (const uint8*)[volume UTF8String], strlen([volume UTF8String]), TRUE);
