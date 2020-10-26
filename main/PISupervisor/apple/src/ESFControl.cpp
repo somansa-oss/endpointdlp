@@ -533,11 +533,6 @@ CESFControl::JobEvent_FileEventNotify(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     
     if(nAction == NOTIFY_BLOCK_READ || nAction == NOTIFY_BLOCK_WRITE)
     {
-        // 1,2번 정책 적용 중일 때, kauth listener로부터 받는 명령임.
-        // 응용프로그램에서 removable 디바이스의 파일을 읽거나 쓰려고 할 때
-        // kauth listener가 접근을 차단한 후 결과를 에이전트에 통지하는 중.
-        // Kext에 처리 결과를 리턴하지 않는 단방향 이벤트임.
-        
         if(g_AppCallback != NULL)
         {
             EVT_PARAM  EvtInfo;
@@ -597,9 +592,6 @@ CESFControl::JobEvent_SmartLogNotify(int nSock, PCOMMAND_MESSAGE pCmdMsg)
 }
 
 #ifndef LINUX
-//
-// ProcessAccessCheck 체크하는 로직추가 예시
-//
 boolean_t
 CESFControl::IsProcessAccessCheckExample( int nPID, char* pczFilePath )
 {
@@ -702,7 +694,6 @@ CESFControl::JobEvent_ProcessAccessCheck(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     proc_name( AppInfo.nPID, czProcName, sizeof(czProcName) );
     DEBUG_LOG( "ProcessCreate, UID=%d, Parent=%s, Proc=%s, PID=%d, FilePath=%s", AppInfo.nUID, czParentName, czProcName, pNotify->nPID, pNotify->czFilePath );
     
-    // ProcessAccessCheck 체크하는 로직추가 예시
     bAccess = IsProcessAccessCheck( pCmdMsg->Command, pNotify->nPID, pNotify->czFilePath );
     if(bAccess)
     {
@@ -885,11 +876,6 @@ CESFControl::JobEvent_FullDiskAccessCheck( int nSock, PCOMMAND_MESSAGE pCmdMsg )
             DeviceMan.m_cFDA.MountCtx_Update( czPath, czPath, BusTypeUsb );
             if(CPIFullDiskAccess::IsDiskAccessPermission( czPath ) == FALSE)
             {
-                // os_log(OS_LOG_DEFAULT, "[ESF] CheckDiskAccessPermission == FALSE");
-                // sprintf(czCmd, "diskutil unmount \"%s\"", czPath);
-                // os_log(OS_LOG_DEFAULT, "[ESF] JobEvent_FullDiskAccessCheck / pzCmd: %s", czCmd);
-                // int nResult = system(czCmd);
-                //
                 nResult = unmount( czPath, MNT_CMDFLAGS );
                 os_log(OS_LOG_DEFAULT, "[ESF][%s] nResult=%d, Error=%d", __FUNCTION__, nResult, errno );
                 if(nResult == 0)
