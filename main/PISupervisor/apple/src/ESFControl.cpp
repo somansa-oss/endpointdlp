@@ -1984,7 +1984,7 @@ CESFControl::JobEvent_GetPrintSpoolPath(int nSock, PCOMMAND_MESSAGE pCmdMsg, int
     return TRUE;
 }
 
-
+#ifndef LINUX
 boolean_t CESFControl::JobEvent_ProcessCallback(int nSock, PCOMMAND_MESSAGE pCmdMsg)
 {
     ULONG  nCommand  = 0;
@@ -2016,3 +2016,4 @@ boolean_t CESFControl::JobEvent_ProcessCallback(int nSock, PCOMMAND_MESSAGE pCmd
     }
     return TRUE;
 }
+#endif
