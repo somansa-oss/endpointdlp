@@ -612,14 +612,13 @@ CESFControl::JobEvent_SmartLogNotify(int nSock, PCOMMAND_MESSAGE pCmdMsg)
     return TRUE;
 }
 
+#ifndef LINUX
 //
 // ProcessAccessCheck 체크하는 로직추가 예시
 //
 boolean_t
 CESFControl::IsProcessAccessCheckExample( int nPID, char* pczFilePath )
 {
-#ifndef LINUX
-
     char czProcName[260];
     char* pczToken = NULL;
     
@@ -654,16 +653,12 @@ CESFControl::IsProcessAccessCheckExample( int nPID, char* pczFilePath )
         printf("%s, pid=%d, proc=%s, FilePath=%s Deny. \n\n", __FUNCTION__, nPID, czProcName, pczFilePath  );
         return FALSE;
     }
-#endif    
     return TRUE;
 }
-
 
 boolean_t
 CESFControl::IsProcessAccessCheck( const int nCommand, const int nPID, char* pczFilePath )
 {
-#ifndef LINUX
-
     boolean_t  bAccess = TRUE;
     EVT_PARAM  EvtInfo;
     char       czProcName[260];
@@ -690,10 +685,8 @@ CESFControl::IsProcessAccessCheck( const int nCommand, const int nPID, char* pcz
         }
     }
     return bAccess;
-#else
-    return TRUE;
-#endif    
 }
+#endif    
 
 
 boolean_t
