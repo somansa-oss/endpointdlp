@@ -94,7 +94,7 @@ int CSysControl::SystemControl_Uninit()
 {
     int nRet = 0;
 
-#ifdef _FIXME_
+#ifndef LINUX
     nRet = QuitSystemControl();
 #endif
 
