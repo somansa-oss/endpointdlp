@@ -31,20 +31,6 @@ int EnumMountCallback(void* pMount, void* pParam);
 int EnumMountCallback(mount_t pMount, void* pParam);
 #endif
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-void CPIESF_fnAddNotify(void* pzArg);
-
-void CPIESF_fnRemoteNotify(void* pzArg);
-
-#ifdef __cplusplus
-};
-#endif
-
-
 void FetchVolumes()
 {
     VolCtx_Clear();

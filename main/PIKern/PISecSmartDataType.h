@@ -318,7 +318,7 @@ typedef struct _VOLUME_CTX
 } VOLUME_CTX, *PVOLUME_CTX;
 
 /* ********************************************************************************************************** */
-    
+
 typedef struct _MOBILE_CTX
 {
     // Android, Syscallhook
@@ -332,14 +332,16 @@ typedef struct _MOBILE_CTX
     MB_NODE*   pNewMBNodes[MB_NODE_COUNT];
     MB_PERMIT* pNewPermitList[USBMOBILE_PERMIT_COUNT];
 } MOBILE_CTX;
-    
+
+
 typedef struct _PROC_AC_CTX
 {
     PROC_AC_POLICY Policy;
 } PROC_AC_CTX, *PPROC_AC_CTX;
     
 /* ********************************************************************************************************** */
-    
+
+
 // Commiunication KernelControl
 typedef struct _COMM_CTX_KCTL
 {
@@ -349,7 +351,6 @@ typedef struct _COMM_CTX_KCTL
     uint32_t       nEvtUnit;
     int64_t        nllKctlThread;
 } COMM_CTX_KCTL;
-    
     
     
 // Commiunication KernelControl
@@ -407,7 +408,7 @@ typedef struct _AGENT_CTX
     vnode_t  pAgentVnode; // ?�이?�트 ?�행 ?�일??vnode
     
 } AGENT_CTX;
-    
+
     
 typedef struct _LOG_PARAM
 {
