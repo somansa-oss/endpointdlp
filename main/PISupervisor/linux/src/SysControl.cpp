@@ -403,8 +403,7 @@ int CSysControl::SendCommand_SysCtl( PCOMMAND_MESSAGE pCmdMsg )
 {
     int64_t  ullCommand = 0;
 
-#ifdef _FIXME_    
-    
+#ifndef LINUX
     if(!pCmdMsg)
     {
         printf( "SetSendCommand_SysCtl() Invalid Parameter \n" );
