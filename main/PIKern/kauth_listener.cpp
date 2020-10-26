@@ -783,41 +783,43 @@ RemoveKauthListener(void)
 
 void UserModeTo_GetPrintSpoolPath()
 {
-//    PCOMMAND_MESSAGE      pCmdNew = NULL;
-//    PSCANNER_NOTIFICATION pNotify = NULL;
-//    boolean_t             bReturn = FALSE;
-//    size_t                nTotalSize = 0, nDataSize=0;
-//
-//    nDataSize  = sizeof(SCANNER_NOTIFICATION);
-//    nTotalSize = sizeof(COMMAND_MESSAGE) + nDataSize;
-//
-//    //LOG_MSG("[DLP][%s] FilePath=%s \n", __FUNCTION__, pczFilePath );
-//    // pCmdNew = (PCOMMAND_MESSAGE)_MALLOC( nTotalSize, 1, M_ZERO );
-//    pCmdNew = (PCOMMAND_MESSAGE)MyMAlloc( nTotalSize );
-//    if(!pCmdNew)
-//    {
-//        LOG_MSG("[DLP]-[%s] Memory Allocate Failed.\n", __FUNCTION__);
-//        return;
-//    }
-//
-//    pCmdNew->Size = (ULONG)nTotalSize;
-//    pCmdNew->Command  = (ULONG)GetPrintSpoolPath;
-//    pNotify = (PSCANNER_NOTIFICATION)pCmdNew->Data;
-//    if(pNotify)
-//    {
-//        pNotify->nSize    = (ULONG)nDataSize;
-//        pNotify->pWakeup  = (void*)&bReturn;
-//    }
-//
-//    if(UserModeTo_SendCommand( pCmdNew, nTotalSize) != KERN_SUCCESS)
-//    {
-//        LOG_MSG("[DLP][%s] UserModeTo_SendCommand() Failed.\n", __FUNCTION__ );
-//        _FREE( pCmdNew, 1 );
-//        return;
-//    }
-//    
-//    _FREE( pCmdNew, 1 );
+#ifndef LINUX    
+   PCOMMAND_MESSAGE      pCmdNew = NULL;
+   PSCANNER_NOTIFICATION pNotify = NULL;
+   boolean_t             bReturn = FALSE;
+   size_t                nTotalSize = 0, nDataSize=0;
+
+   nDataSize  = sizeof(SCANNER_NOTIFICATION);
+   nTotalSize = sizeof(COMMAND_MESSAGE) + nDataSize;
+
+   //LOG_MSG("[DLP][%s] FilePath=%s \n", __FUNCTION__, pczFilePath );
+   // pCmdNew = (PCOMMAND_MESSAGE)_MALLOC( nTotalSize, 1, M_ZERO );
+   pCmdNew = (PCOMMAND_MESSAGE)MyMAlloc( nTotalSize );
+   if(!pCmdNew)
+   {
+       LOG_MSG("[DLP]-[%s] Memory Allocate Failed.\n", __FUNCTION__);
+       return;
+   }
+
+   pCmdNew->Size = (ULONG)nTotalSize;
+   pCmdNew->Command  = (ULONG)GetPrintSpoolPath;
+   pNotify = (PSCANNER_NOTIFICATION)pCmdNew->Data;
+   if(pNotify)
+   {
+       pNotify->nSize    = (ULONG)nDataSize;
+       pNotify->pWakeup  = (void*)&bReturn;
+   }
+
+   if(UserModeTo_SendCommand( pCmdNew, nTotalSize) != KERN_SUCCESS)
+   {
+       LOG_MSG("[DLP][%s] UserModeTo_SendCommand() Failed.\n", __FUNCTION__ );
+       _FREE( pCmdNew, 1 );
+       return;
+   }
+   
+   _FREE( pCmdNew, 1 );
     return;
+#endif    
 }
 
 #ifndef MAX_ALLOC_SIZE
