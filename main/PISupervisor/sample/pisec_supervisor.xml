@@ -4,36 +4,10 @@
 <client ttlcycle="10"/>
 <agent_auto_restart use="false"/>
 <filemonitor_auto_restart use="false"/>
-<copy_prevent save_path="/Users/Shared/Privacy-i/Quarantine" block_write_all="false"/>
 <block_hid use="false" cc_spec="false"/>
-<allow_program_list>
-	<program name="test_program1"/>
-	<program name="test_program2"/>
-	<program name="test_program3"/>
-</allow_program_list>
-<allow_paths_for_ext>
-	<path name="test_path1"/>
-	<path name="test_path2"/>
-	<path name="test_path3"/>
-</allow_paths_for_ext>
-<allow_file_ext>
-	<ext name="test_ext1"/>
-	<ext name="test_ext2"/>
-	<ext name="test_ext3"/>
-</allow_file_ext>
 <cdsu_auto_restart use="false"/>
 <drive_managemen use="false"/>
 <drive_policy_default_block use="false"/>
 <nonregister_usbdisk_read_block use="false"/>
-<block_device_list>
-	<device InstanceID="test_device1"/>
-	<device InstanceID="test_device2"/>
-	<device InstanceID="test_device3"/>
-</block_device_list>
-<access_block_registry_list>
-	<registry name="test_registry1"/>
-	<registry name="test_registry2"/>
-	<registry name="test_registry3"/>
-</access_block_registry_list>
 <QuarantineLimit use="false"/>
 </pisecurity>
