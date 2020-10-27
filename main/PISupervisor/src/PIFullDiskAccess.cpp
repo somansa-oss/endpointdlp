@@ -24,83 +24,16 @@ CPIFullDiskAccess::~CPIFullDiskAccess()
 
 void CPIFullDiskAccess::FDAJobRequest(void)
 {
-    if(true == IsPolicyExistShareFolderPrevent() || true == IsPolicyExistCopyPrevent())
-    {
-        if(GetFDAThread())
-        {
-            ThreadStop();
-        }
-        ThreadStart();
-    }
-    else
-    {
-        if(GetFDAThread())
-        {
-            ThreadStop();
-            sleep(1);
-        }
-    }
 }
 
 
 void CPIFullDiskAccess::MountCtx_Clear(void)
 {
-    m_nMountPos = 0;
-    memset( &m_Mount, 0, sizeof(m_Mount) );
-    os_log( OS_LOG_DEFAULT, "[DLP][%s]", __FUNCTION__ );
 }
 
 boolean_t
 CPIFullDiskAccess::MountCtx_Update(char* pczDeviceName, char* pczBasePath, ULONG nBusType)
 {
-    ULONG nPos=0, nMaxPos=0, nLength=0;
-    
-    if(!pczDeviceName || !pczBasePath)
-    {
-        return false;
-    }
-    
-    nMaxPos = m_nMountPos;
-    for(nPos=0; nPos<nMaxPos; nPos++)
-    {
-        if(nPos >= MAX_MOUNT)
-        {
-            return false;
-        }
-        
-        if(0 == strncmp( m_Mount[nPos].czDeviceName, pczDeviceName, strlen(pczDeviceName)))
-        {
-            if(nBusType == m_Mount[nPos].nBusType)
-            {
-                return true;
-            }
-            
-            memset( &m_Mount[nPos], 0, sizeof(m_Mount[nPos]) );
-            m_Mount[nPos].nBusType = nBusType;
-            nLength = (ULONG)strlen(pczBasePath)+1;
-            nLength = min( nLength, (MAX_BASEPATH-1) );
-            strncpy( m_Mount[nPos].czBasePath, pczBasePath, nLength );
-            nLength = (ULONG)strlen( pczDeviceName)+1;
-            nLength = min(nLength, (MAX_DEVICE_SIZE-1) );
-            strncpy( m_Mount[nPos].czDeviceName, pczDeviceName, nLength );
-            
-            printf( "DLP][%s] Exist, BusType=%d, Device=%s, BasePath=%s. Count=%d \n", __FUNCTION__, nBusType, pczDeviceName, pczBasePath, m_nMountPos );
-            return true;
-        }
-    }
-    
-    m_Mount[nPos].nBusType = nBusType;
-    nLength = (ULONG)strlen(pczBasePath)+1;
-    nLength = min( nLength, (MAX_BASEPATH-1) );
-    strncpy( m_Mount[nPos].czBasePath, pczBasePath, nLength );
-    
-    nLength = (ULONG)strlen( pczDeviceName)+1;
-    nLength = min(nLength, (MAX_DEVICE_SIZE-1) );
-    strncpy( m_Mount[nPos].czDeviceName, pczDeviceName, nLength );
-    
-    m_nMountPos++;
-    
-    printf( "[DLP][%s] New-Append. BusType=%d, Device=%s, BasePath=%s. Count=%d \n", __FUNCTION__, nBusType, pczDeviceName, pczBasePath, m_nMountPos );
     return TRUE;
 }
 
