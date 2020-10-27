@@ -37,8 +37,7 @@ bool CPWDiskStub::addPid(pid_t pid) {
 }
 
 bool CPWDiskStub::removePid(pid_t pid) {
-	result = g_AppKext.PWDisk_PWProcessID_Remove(pid);
-	return (0 == result)?true:false;
+	return false;
 }
 
 bool CPWDiskStub::removeAllPid(void) {
