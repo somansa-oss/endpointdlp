@@ -67,15 +67,6 @@ CPIFullDiskAccess::GetFDACheckInterval(void)
 boolean_t
 CPIFullDiskAccess::IsPolicyExistCopyPrevent()
 {
-    if(PolicyMan.getCurrentDLPPolicy( nsPISecObject::dlptypePreventPlus, nsPISecObject::dlpsubtypeCopyPreventPlus ))
-    {
-        return true;
-    }
-    
-    if(PolicyMan.getCurrentDLPPolicy( nsPISecObject::dlptypePreventPlus, nsPISecObject::dlpsubtypeCopyExPreventPlus ))
-    {
-        return true;
-    }
     return false;
 }
 
@@ -83,10 +74,6 @@ CPIFullDiskAccess::IsPolicyExistCopyPrevent()
 boolean_t
 CPIFullDiskAccess::IsPolicyExistShareFolderPrevent()
 {
-    if(PolicyMan.getCurrentDLPPolicy( nsPISecObject::dlptypePreventPlus, nsPISecObject::dlpsubtypeSharedFolderPreventPlus ))
-    {
-        return true;
-    }
     return false;
 }
 
@@ -94,18 +81,6 @@ CPIFullDiskAccess::IsPolicyExistShareFolderPrevent()
 boolean_t
 CPIFullDiskAccess::ThreadStart()
 {
-    int nReturn=0;
-    if(!m_pFDAThread && (true == IsPolicyExistCopyPrevent() || true == IsPolicyExistShareFolderPrevent()) )
-    {
-        nReturn = pthread_create( &m_pFDAThread, NULL, CPIFullDiskAccess::FullDiskAccessCheckThread, (void*)this );
-        if(nReturn < 0)
-        {
-            return false;
-        }
-        m_bFDAThreadExit = false;
-        DEBUG_LOG( "[DLP][%s] Start. ", __FUNCTION__ );
-        return true;
-    }
     return false;
 }
 
