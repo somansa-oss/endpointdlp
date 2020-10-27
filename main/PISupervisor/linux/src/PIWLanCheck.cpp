@@ -66,21 +66,13 @@ bool CPIWLanCheck::LibWLanLibGetIfaceName()
 
 bool CPIWLanCheck::LibWLanLibPolicyCheck()
 {
-    if(!m_pWLanLibPolicyCheck)
-    {
-        return false;
-    }
-    return m_pWLanLibPolicyCheck();
+    return false;
 }
 
 
 bool CPIWLanCheck::LibWLanLibSetPolicySSID( vector<string> vecPolicySSID )
 {
-    if(!m_pWLanLibSetPolicySSID)
-    {
-        return false;
-    }
-    return m_pWLanLibSetPolicySSID( vecPolicySSID );
+    return false;
 }
 
 
