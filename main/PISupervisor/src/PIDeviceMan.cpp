@@ -1961,7 +1961,11 @@ bool CPIDeviceMan::addProcessBlockLog(CPIApplicationControl::CResult& applicatio
 	deviceLog.disableResult = true;
 	deviceLog.processId 	= application.pid;
 	deviceLog.processName 	= application.processName; 
+#ifndef LINUX
+	deviceLog.fileName 		= application.filePath;
+#else
 	deviceLog.fileName 		= "";
+#endif
 	deviceLog.guid 			= application.guid;
 
 	CPIActionProcessDeviceLog::getInstance().addDeviceLog(deviceLog);
