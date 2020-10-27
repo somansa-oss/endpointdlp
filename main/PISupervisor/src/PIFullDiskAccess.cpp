@@ -88,14 +88,6 @@ CPIFullDiskAccess::ThreadStart()
 boolean_t
 CPIFullDiskAccess::ThreadStop()
 {
-    if(!m_pFDAThread)
-    {
-        return false;
-    }
-    pthread_cancel( m_pFDAThread );
-    m_pFDAThread = NULL;
-    m_bFDAThreadExit = true;
-    DEBUG_LOG( "[DLP][%s] Exit. ", __FUNCTION__ );
     return true;
 }
 
@@ -103,60 +95,7 @@ CPIFullDiskAccess::ThreadStop()
 boolean_t
 CPIFullDiskAccess::SetFullDiskAccessCheck(void)
 {
-    ULONG        nBusType = 0;
-    int          nPos=0, nMaxPos=0, nResult=0, nResponse=0;
-    boolean_t    bPermission = true;
-    boolean_t    bCopyPrevent=false, bShareFolderPrevent=false;
-    // char         czCommand[MAX_PATH] = {0};
-    MOUNT_VOLUME Mount = {0};
-    
-    if(m_nMountPos <= 0)
-    {
-        return false;
-    }
-    
-    bCopyPrevent = IsPolicyExistCopyPrevent();
-    bShareFolderPrevent = IsPolicyExistShareFolderPrevent();
-    
-    os_log(OS_LOG_DEFAULT, "[DLP][%s]", __FUNCTION__ );
-    
-    nMaxPos = m_nMountPos;
-    for(nPos=0; nPos<nMaxPos; nPos++)
-    {
-        if(nPos >= MAX_MOUNT)
-        {
-            break;
-        }
-        memset( &Mount, 0, sizeof(Mount) );
-        memcpy( &Mount, &m_Mount[nPos], sizeof(Mount) );
-        nBusType = Mount.nBusType;
-        
-        if(true == bShareFolderPrevent || true == bCopyPrevent)
-        {   // ShareFolderPrevent
-            bPermission = IsDiskAccessPermission( Mount.czBasePath );
-        }
-        else
-        {
-            os_log(OS_LOG_DEFAULT, "[DLP][%s] Policy Not Exist. ", __FUNCTION__ );
-        }
-        
-        if(false == bPermission)
-        {
-            // memset( czCommand, 0, sizeof(czCommand) );
-            // sprintf( czCommand, "diskutil unmount \"%s\"", Mount.czBasePath );
-            // nResult = system( czCommand );
-            // if(nResult != 0) nResult = system( czCommand );
-            //
-            nResult = unmount( Mount.czBasePath, MNT_CMDFLAGS );
-            os_log(OS_LOG_DEFAULT, "[DLP][%s] nResult=%d, Error=%d", __FUNCTION__, nResult, errno );
-            if(nResult == 0)
-            {
-                PIAgentStub.notifyNeedFullDiskAccessAuth( nResponse );
-            }
-        }
-    }
-    MountCtx_Clear();
-    return bPermission;
+    return false;
 }
 
 
