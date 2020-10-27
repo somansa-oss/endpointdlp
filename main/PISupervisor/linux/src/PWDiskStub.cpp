@@ -65,24 +65,7 @@ bool CPWDiskStub::unmount(void) {
 }
 
 bool CPWDiskStub::getDiskSize(double& totalSize, double& freeSize) {
-	PWDISK_SIZE DiskSize;
-	memset( &DiskSize, 0, sizeof(DiskSize) );
-	bool bSuc = g_AppKext.PWdisk_GetDiskVolumePath( DiskSize.czVolumePath, sizeof(DiskSize.czVolumePath) );
-	if(true == bSuc ) {
-		bSuc = g_AppKext.PWDisk_GetDiskSize( &DiskSize );
-	}
-
-	if( true == bSuc ) {
-		result = 0;
-		totalSize = DiskSize.nTotalSize;
-		freeSize = DiskSize.nFreeSize;
-	} else {
-		result = -1;
-		totalSize = 0;
-		freeSize = 0;
-	}
-	
-	return bSuc;
+	return false;
 }
 
 bool CPWDiskStub::convertDiskSize(void) {
