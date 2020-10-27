@@ -16,25 +16,11 @@ std::string IPIWallControl::getImageFileName(void) const {
 }
 
 bool IPIWallControl::setBinPath(std::string binPath) {
-	if(0 == binPath.length()) {
-		return false;
-	}
-
-	runScriptFile = binPath + "/smsdisk_cmd.sh";
 	return true;
 }
 
 
 bool IPIWallControl::setImageFilePath(std::string imagePath, std::string imageName) {
-	if( (0 == imagePath.length() ) || (0 == imageName.length()) ) {
-		return false;
-	}
-
-	this->imageName = imageName;
-	this->imagePath = imagePath;
-	imageFilePath = imagePath + "/" + imageName;
-	util.makeDir(imagePath, 0755);
-	volumeName = "/Volumes/" + getImageFileName();
 	return true;
 }
 
