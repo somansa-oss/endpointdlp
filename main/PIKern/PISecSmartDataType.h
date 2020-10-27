@@ -253,18 +253,18 @@ typedef struct _DRV_CTX
 #ifndef LINUX
 typedef struct _ALLOWPROCESSNAME
 {
-    char  czAllowedProcessName[NT_PROCNAMELEN + 1];	 // ?�문자�? ( ?? EXECEL.EXE )
+    char  czAllowedProcessName[NT_PROCNAMELEN + 1];	 // ?�문?��? ( ?? EXECEL.EXE )
 } ALLOWPROCESSNAME, *PALLOWPROCESSNAME;
 
 typedef struct _ALLOWFOLDERNAME
 {
-    char  czAllowedFolderName[NT_PROCNAMELEN + 1];	 // ?�문자�? ( ?? EXECEL.EXE )
+    char  czAllowedFolderName[NT_PROCNAMELEN + 1];	 // ?�문?��? ( ?? EXECEL.EXE )
 } ALLOWFOLDERNAME, *PALLOWFOLDERNAME;
 
 
 typedef struct _ALLOWFILEEXTNAME
 {
-    char   czAllowedExtName[NT_FILE_EXT_LEN];	 // ?�문자�? ( ?? .EXE )
+    char   czAllowedExtName[NT_FILE_EXT_LEN];	 // ?�문?��? ( ?? .EXE )
 } ALLOWFILEEXTNAME, *PALLOWFILEEXTNAME;
 
 
@@ -552,6 +552,16 @@ typedef enum _DLP_POLICY_TYPE_ENUM
     POLICY_PRINT,
     POLICY_UPLOAD,
 } DLP_POLICY_TYPE_ENUM;
+
+typedef struct _PROC_INFO
+{
+    int  pid;
+    int  uid;
+    int  ppid;
+    char process_name[MAX_PROC_NAME];
+    char pprocess_name[MAX_PROC_NAME];
+    char process_path[MAX_PROC_NAME];
+} PROC_INFO, *PPROC_INFO;
 
 /* ********************************************************************************************************** */
 
