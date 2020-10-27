@@ -25,24 +25,15 @@ CPIWLanCheck::CPIWLanCheck()
   m_pWLanLibSetPolicySSID(NULL),
   m_pWLanLibGetBlockSSID(NULL)
 {
-    LibInit( NULL );
-    m_strBlockSSID = "";
 }
 
 CPIWLanCheck::~CPIWLanCheck()
 {
-    LibUninit();
 }
 
 
 bool CPIWLanCheck::LibUninit()
 {
-    if(m_pHandle)
-    {
-        dlclose( m_pHandle );
-        m_pHandle = NULL;
-    }
-    return true;
 }
 
 
