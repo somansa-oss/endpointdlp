@@ -68,16 +68,8 @@ bool CPWDiskStub::getDiskSize(double& totalSize, double& freeSize) {
 	return false;
 }
 
-bool CPWDiskStub::convertDiskSize(void) {
-	PWDISK_SIZE DiskSize;
-	memset( &DiskSize, 0, sizeof(DiskSize) );
-	bool bSuc = g_AppKext.PWDisk_DuplicateDiskSize(&DiskSize);
-	if(true == bSuc ) {
-		bSuc = g_AppKext.PWDisk_ConvertDiskSize(&DiskSize, 1); // increase by 1GB
-	}
-
-	result = (true==bSuc)?0:-1;
-	return bSuc;
+bool CPWDiskStub::convertDiskSize(void) {	
+	return false;
 }
 
 bool CPWDiskStub::getDiskVolumePath(std::string& volumePath) {
