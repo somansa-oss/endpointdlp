@@ -15,26 +15,6 @@ CPWDiskStub::~CPWDiskStub()
 
 bool CPWDiskStub::initialize(KERNEL_EVENTHANDLER kernel_eventhandler)
 {
-    for(int i=0; i<3; i++)
-    {
-        load();
-        if(true == isActive())
-        {
-            break;
-        }
-    }
-	
-	if( false == isActive() )
-    {
-		return false;
-	}
-    
-    result = g_AppKext.KextModule_Startup( kernel_eventhandler, true );
-	if(result < 0)
-    {
-		return false;
-	}
-	initialized = true;
 	return true;
 }
 
