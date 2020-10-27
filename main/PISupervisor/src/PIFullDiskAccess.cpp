@@ -102,38 +102,7 @@ CPIFullDiskAccess::SetFullDiskAccessCheck(void)
 void*
 CPIFullDiskAccess::FullDiskAccessCheckThread( void*  pParam )
 {
-    CPIFullDiskAccess* pFullDiskAccess = NULL;
-    int nCheckInterval = DEFAULT_INTERVAL;
-    
-    DEBUG_LOG( "[DLP][%s] Start.", __FUNCTION__ );
-    pFullDiskAccess = (CPIFullDiskAccess*)pParam;
-    if(!pFullDiskAccess)
-    {
-        DEBUG_LOG( "[DLP][%s] Invalid Pointer.", __FUNCTION__ );
-        return NULL;
-    }
-    
-    if(false == pFullDiskAccess->GetFDAEnable())
-    {
-        DEBUG_LOG( "[DLP][%s] FullDiskAccessCheck enable=%d. Thread Exit.", __FUNCTION__, pFullDiskAccess->GetFDAEnable() );
-        return NULL;
-    }
-    
-    nCheckInterval = pFullDiskAccess->GetFDACheckInterval();
-    if(nCheckInterval <= 0)
-    {
-        nCheckInterval = DEFAULT_INTERVAL;
-    }
-    
-    do
-    {
-        pFullDiskAccess->SetFullDiskAccessCheck();
-        sleep( nCheckInterval );
-    } while( false == pFullDiskAccess->m_bFDAThreadExit );
-    
-    pthread_exit( (void*)1);
-    DEBUG_LOG( "[DLP][%s] Stop. ", __FUNCTION__ );
-    return ((void*)1);
+    return NULL;
 }
 
    
