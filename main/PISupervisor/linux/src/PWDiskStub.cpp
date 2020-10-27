@@ -46,31 +46,13 @@ bool CPWDiskStub::removeAllPid(void) {
 
 void CPWDiskStub::load(void)
 {
-    system("kextload -v 6 /Library/Extensions/PWDisk.kext");
 }
 
 void CPWDiskStub::unload(void)
 {
-    // system("kextunload -v 6 /Library/Extensions/PWDisk.kext");
 }
 
 bool CPWDiskStub::isActive(void) {
-	std::string command, temp;
-	command = "kextstat | grep com.somansa.PWDisk";
-	temp = util.readCommandOutput(command);
-
-	if( true == temp.empty() ) {
-		return false;
-	}
-
-	std::istringstream is(temp);
-	std::string token;
-	std::getline(is, token);
-
-	if( std::string::npos != token.find("PWDisk") ) {
-		return true;
-	}
-
 	return false;
 }
 
