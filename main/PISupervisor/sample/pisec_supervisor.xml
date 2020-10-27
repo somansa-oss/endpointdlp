@@ -1,0 +1,13 @@
+<pisecurity>
+<filelog depth="0"/>
+<socket use_unsigned_type="false" use_big_endian="false" save_packet="false"/>
+<client ttlcycle="10"/>
+<agent_auto_restart use="false"/>
+<filemonitor_auto_restart use="false"/>
+<block_hid use="false" cc_spec="false"/>
+<cdsu_auto_restart use="false"/>
+<drive_managemen use="false"/>
+<drive_policy_default_block use="false"/>
+<nonregister_usbdisk_read_block use="false"/>
+<QuarantineLimit use="false"/>
+</pisecurity>

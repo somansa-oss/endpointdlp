@@ -1,0 +1,412 @@
+<pisec_policy_info>
+<policy_list site_revision="2963">
+<pisec_policy xml_version="1.1.0.0">
+<policyset>
+	<policy type="offline">
+		<!--
+<dlppolicy type="copy_prevent+" use="true" dlppolicy_name="copy prevent tskim1" dlppolicy_guid="9e0240d8-c765-46f0-9d55-df2057eede7a" dlppolicy_type="1" dlppolicy_subtype="1" dlppolicy_revision="64">
+<controls type="none" target_file="all">
+<control inspect="none" type="block"/>
+<control inspect="found" type="block"/>
+<control inspect="not_found" type="allow"/>
+</controls>
+<log>
+<block use="false" type="none">
+<save_filecopy use="false" type="none" max_limit_use="true" max_limit="500"/>
+</block>
+<allow use="false" type="none">
+<save_filecopy use="false" type="none" max_limit_use="true" max_limit="500"/>
+</allow>
+</log>
+<notify type="always"/>
+<advanced warning_onfilecopy="false"/>
+<media_list type="-1" type_desc="all"/>
+</dlppolicy>
+<dlppolicy type="shared_folder_prevent+" use="true" dlppolicy_name="601-shared_folder-내용기반 데이터 검사 수행, 탐지된 파일 승인후 허용" dlppolicy_guid="d2794218-7c11-482b-b7ab-e2ed35294344" dlppolicy_type="1" dlppolicy_subtype="256" dlppolicy_revision="3">
+<controls type="inspect" target_file="all">
+<control inspect="none" type="approval"/>
+<control inspect="found" type="block"/>
+<control inspect="not_found" type="block"/>
+</controls>
+<log>
+<block use="true" type="conditional">
+<condition type="inspect_notfound"/>
+<condition type="inspect_found"/>
+<save_filecopy use="false" type="none" max_limit_use="true" max_limit="500"/>
+</block>
+<allow use="false" type="none">
+<save_filecopy use="false" type="none" max_limit_use="true" max_limit="500"/>
+</allow>
+</log>
+<notify type="always"/>
+<advanced warning_onfilecopy="false"/>
+<media_list type="-1" type_desc="all"/>
+</dlppolicy>
+--> 
+<dlppolicy type="upload_prevent+" use="true" dlppolicy_name="tskim1 Upload Prevent+" dlppolicy_guid="583adc80-d06c-4a64-bb69-dfc5b5d6f130" dlppolicy_type="1" dlppolicy_subtype="32" dlppolicy_revision="9">
+<controls type="none" target_file="all">
+<control inspect="none" type="block"/>
+<control inspect="found" type="block"/>
+<control inspect="not_found" type="allow"/>
+</controls>
+<log>
+<block use="false" type="none">
+<save_filecopy use="false" type="none" max_limit_use="true" max_limit="500"/>
+</block>
+<allow use="false" type="none">
+<save_filecopy use="false" type="none" max_limit_use="true" max_limit="500"/>
+</allow>
+</log>
+<notify type="block"/>
+<advanced warning_onfilecopy="false" use_bodycontrol="false"/>
+<Privacy-i_NetAppInfos XMLVersion="1.0.0.1">
+<NetAppInfos SchemaVersion="1.0.0.1">
+<ProtocolBase Use="1">
+<NetAppInfo Category="WebMail" Name="Naver" ID="111001" ProtocolID="111003" ScriptName="Naver.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebMail" Name="Daum" ID="111002" ProtocolID="111003" ScriptName="Daum.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebMail" Name="Nate" ID="111003" ProtocolID="111003" ScriptName="Nate.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebMail" Name="Outlook.com" ID="111004" ProtocolID="111003" ScriptName="Outlook_com.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebMail" Name="Gmail" ID="111005" ProtocolID="111003" ScriptName="Gmail.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebMail" Name="Yahoo" ID="111006" ProtocolID="111003" ScriptName="Yahoo.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebBoard" Name="Naver Blog" ID="112001" ProtocolID="111003" ScriptName="Naver_Blog.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebBoard" Name="Daum Blog" ID="112002" ProtocolID="111003" ScriptName="Daum_Blog.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebBoard" Name="Cyworld" ID="112003" ProtocolID="111003" ScriptName="Cyworld.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebBoard" Name="Facebook" ID="112004" ProtocolID="111003" ScriptName="Facebook.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="UCC" Name="YouTube" ID="113001" ProtocolID="111003" ScriptName="Youtube.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebHard" Name="DacomHard" ID="121002" ProtocolID="121002" ScriptName="DacomHard.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebHard" Name="Naver Cloud" ID="121003" ProtocolID="121003" ScriptName="Naver_Cloud.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebHard" Name="Google Drive" ID="121004" ProtocolID="121004" ScriptName="Google_Drive.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="Messenger" Name="Skype" ID="131001" ProtocolID="131001" ScriptName="MSN.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="Messenger" Name="NateOn" ID="131002" ProtocolID="131002" ScriptName="NateOn.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="Messenger" Name="MissLee" ID="131003" ProtocolID="131003" ScriptName="MissLee.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="Messenger" Name="Yahoo Messenger" ID="131004" ProtocolID="131004" ScriptName="Yahoo_Messenger.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="RFC" Name="SMTP" ID="141001" ProtocolID="111001" ScriptName="SMTP.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="RFC" Name="FTP" ID="141002" ProtocolID="111002" ScriptName="FTP.xml" Description="" Check="0" Enable="1"/>
+</ProtocolBase>
+<ProtocolBase_UserDefine Use="1" ListType="1">
+<NetAppInfo Category="WebMail" Name="somansa" ID="191001" ProtocolID="111003" ScriptName="" Description="" Check="0" Enable="1">
+<Rule ListType="1" Host="notes.somansa.com"/>
+</NetAppInfo>
+</ProtocolBase_UserDefine>
+<ProgramBase Use="1"/>
+<ProgramBase_UserDefine Use="1"/>
+</NetAppInfos>
+</Privacy-i_NetAppInfos>
+<filter>
+<mail_filter_by_domain use="false" check_sender="false"/>
+</filter>
+</dlppolicy>
+<dlppolicy type="print_prevent+" use="true" dlppolicy_name="print prevent tskim1" dlppolicy_guid="1da9a9fe-bf67-4661-a4bb-dafe3e1c69d3" dlppolicy_type="1" dlppolicy_subtype="16" dlppolicy_revision="1">
+<controls type="inspect" target_file="all">
+<control inspect="none" type="allow"/>
+<control inspect="found" type="block"/>
+<control inspect="not_found" type="allow"/>
+</controls>
+<log>
+<block use="true" type="conditional">
+<condition type="inspect_found"/>
+<save_filecopy use="false" type="none" max_limit_use="true" max_limit="500"/>
+</block>
+<allow use="true" type="conditional">
+<condition type="inspect_notfound"/>
+<save_filecopy use="true" type="conditional" max_limit_use="true" max_limit="500">
+<condition type="inspect_notfound"/>
+</save_filecopy>
+</allow>
+</log>
+<notify type="block"/>
+<advanced warning_onprint="false" show_serialnumber="false" option_savecopy_foundpage="false" option_patternmaskinguse="false" use_watermark="false" watermark_file="none" difference_watermark="false"/>
+</dlppolicy>
+<dlppolicy type="application_prevent+" use="true" dlppolicy_name="tskim1 Application Control" dlppolicy_guid="6b267412-c0fe-42b2-bd22-6bd3f36a686f" dlppolicy_type="1" dlppolicy_subtype="8" dlppolicy_revision="26">
+<controls type="none" target_file="all">
+<control inspect="none" type="block"/>
+<control inspect="found" type="block"/>
+<control inspect="not_found" type="allow"/>
+</controls>
+<log>
+<block use="false" type="none">
+<save_filecopy use="false" type="none" max_limit_use="true" max_limit="500"/>
+</block>
+<allow use="false" type="none">
+<save_filecopy use="false" type="none" max_limit_use="true" max_limit="500"/>
+</allow>
+</log>
+<notify type="block"/>
+<control_process log_block="true">
+<process guid="9e1f4dc3-ef7f-455f-a2f8-11bc0ea5b5dd" type="2" display="test_tskim1" name="test_tskim1.exe" check_binary_string=""/>
+<process guid="3fd470ce-4a46-41b9-8444-d32f9fd2b59c" type="2" display="(Anti-RootKit) Unlocker" name="Unlocker.exe" check_binary_string="55006E006C006F0063006B00000000000000000000000000000001500101020141000E0001000000FFFF800055006E006C006F0063006B00200041006C006C00"/>
+<process guid="1acada36-3cf6-4f3e-96c2-f508e94a2bc4" type="2" display="메모장" name="notepad.exe" check_binary_string=""/>
+</control_process>
+<PIFileAccessControl Enable="true"/>
+</dlppolicy>
+<dlppolicy type="clipboard_prevent+" use="true" dlppolicy_name="clipboard tskim1" dlppolicy_guid="38fa8090-2006-4771-a325-f805d24e6480" dlppolicy_type="1" dlppolicy_subtype="64" dlppolicy_revision="9">
+<controls type="inspect" target_file="all">
+<control inspect="none" type="block"/>
+<control inspect="found" type="block"/>
+<control inspect="not_found" type="allow"/>
+</controls>
+<log>
+<block use="true" type="conditional">
+<condition type="inspect_found"/>
+<save_filecopy use="false" type="none" max_limit_use="true" max_limit="500"/>
+</block>
+<allow use="false" type="none">
+<save_filecopy use="false" type="none" max_limit_use="true" max_limit="500"/>
+</allow>
+</log>
+<notify type="block"/>
+<control_paste_by_process>
+<process type="2" display="카카오톡 PC메신저" name="KakaoTalk.exe"/>
+<process type="2" display="네이트온" name="NateOnMain.exe"/>
+</control_paste_by_process>
+</dlppolicy>
+<dlppolicy type="media_control" use="true" dlppolicy_name="media control tskim1" dlppolicy_guid="f2aa4545-2b31-424c-b967-ed520f3359f0" dlppolicy_type="2" dlppolicy_subtype="6" dlppolicy_revision="45">
+<control etcstorage_control_type="107" commdevice_control_type="7" log_block="true"/>
+<notify type="block"/>
+</dlppolicy>
+</policy>
+<policy type="online">
+<dlppolicy type="copy_prevent+" use="true" dlppolicy_name="copy prevent tskim1" dlppolicy_guid="9e0240d8-c765-46f0-9d55-df2057eede7a" dlppolicy_type="1" dlppolicy_subtype="1" dlppolicy_revision="64">
+<controls type="none" target_file="all">
+<control inspect="none" type="block"/>
+<control inspect="found" type="block"/>
+<control inspect="not_found" type="allow"/>
+</controls>
+<log>
+<block use="true" type="all">
+<save_filecopy use="false" type="none" max_limit_use="true" max_limit="500"/>
+</block>
+<allow use="false" type="none">
+<save_filecopy use="true" type="all" max_limit_use="true" max_limit="500"/>
+</allow>
+</log>
+<notify type="always"/>
+<advanced warning_onfilecopy="false"/>
+<media_list type="-1" type_desc="all"/>
+</dlppolicy>
+<dlppolicy type="shared_folder_prevent+" use="true" dlppolicy_name="601-shared_folder-내용기반 데이터 검사 수행, 탐지된 파일 승인후 허용" dlppolicy_guid="d2794218-7c11-482b-b7ab-e2ed35294344" dlppolicy_type="1" dlppolicy_subtype="256" dlppolicy_revision="3">
+<controls type="inspect" target_file="all">
+<control inspect="none" type="approval"/>
+<control inspect="found" type="approval"/>
+<control inspect="not_found" type="block"/>
+</controls>
+<log>
+<block use="true" type="conditional">
+<condition type="inspect_notfound"/>
+<save_filecopy use="false" type="none" max_limit_use="true" max_limit="500"/>
+</block>
+<allow use="true" type="conditional">
+<condition type="inspect_found"/>
+<save_filecopy use="true" type="conditional" max_limit_use="true" max_limit="500">
+<condition type="inspect_found"/>
+</save_filecopy>
+</allow>
+</log>
+<notify type="always"/>
+<advanced warning_onfilecopy="false"/>
+<media_list type="-1" type_desc="all"/>
+</dlppolicy>
+<dlppolicy type="upload_prevent+" use="true" dlppolicy_name="tskim1 Upload Prevent+" dlppolicy_guid="583adc80-d06c-4a64-bb69-dfc5b5d6f130" dlppolicy_type="1" dlppolicy_subtype="32" dlppolicy_revision="9">
+<controls type="none" target_file="all">
+<control inspect="none" type="block"/>
+<control inspect="found" type="block"/>
+<control inspect="not_found" type="allow"/>
+</controls>
+<log>
+<block use="true" type="all">
+<save_filecopy use="false" type="none" max_limit_use="true" max_limit="500"/>
+</block>
+<allow use="false" type="none">
+<save_filecopy use="false" type="none" max_limit_use="true" max_limit="500"/>
+</allow>
+</log>
+<notify type="block"/>
+<advanced warning_onfilecopy="false" use_bodycontrol="false"/>
+<Privacy-i_NetAppInfos XMLVersion="1.0.0.1">
+<NetAppInfos SchemaVersion="1.0.0.1">
+<ProtocolBase Use="1">
+<NetAppInfo Category="WebMail" Name="Naver" ID="111001" ProtocolID="111003" ScriptName="Naver.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebMail" Name="Daum" ID="111002" ProtocolID="111003" ScriptName="Daum.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebMail" Name="Nate" ID="111003" ProtocolID="111003" ScriptName="Nate.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebMail" Name="Outlook.com" ID="111004" ProtocolID="111003" ScriptName="Outlook_com.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebMail" Name="Gmail" ID="111005" ProtocolID="111003" ScriptName="Gmail.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebMail" Name="Yahoo" ID="111006" ProtocolID="111003" ScriptName="Yahoo.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebBoard" Name="Naver Blog" ID="112001" ProtocolID="111003" ScriptName="Naver_Blog.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebBoard" Name="Daum Blog" ID="112002" ProtocolID="111003" ScriptName="Daum_Blog.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebBoard" Name="Cyworld" ID="112003" ProtocolID="111003" ScriptName="Cyworld.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebBoard" Name="Facebook" ID="112004" ProtocolID="111003" ScriptName="Facebook.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="UCC" Name="YouTube" ID="113001" ProtocolID="111003" ScriptName="Youtube.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebHard" Name="DacomHard" ID="121002" ProtocolID="121002" ScriptName="DacomHard.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebHard" Name="Naver Cloud" ID="121003" ProtocolID="121003" ScriptName="Naver_Cloud.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="WebHard" Name="Google Drive" ID="121004" ProtocolID="121004" ScriptName="Google_Drive.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="Messenger" Name="Skype" ID="131001" ProtocolID="131001" ScriptName="MSN.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="Messenger" Name="NateOn" ID="131002" ProtocolID="131002" ScriptName="NateOn.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="Messenger" Name="MissLee" ID="131003" ProtocolID="131003" ScriptName="MissLee.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="Messenger" Name="Yahoo Messenger" ID="131004" ProtocolID="131004" ScriptName="Yahoo_Messenger.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="RFC" Name="SMTP" ID="141001" ProtocolID="111001" ScriptName="SMTP.xml" Description="" Check="0" Enable="1"/>
+<NetAppInfo Category="RFC" Name="FTP" ID="141002" ProtocolID="111002" ScriptName="FTP.xml" Description="" Check="0" Enable="1"/>
+</ProtocolBase>
+<ProtocolBase_UserDefine Use="1" ListType="1">
+<NetAppInfo Category="WebMail" Name="somansa" ID="191001" ProtocolID="111003" ScriptName="" Description="" Check="0" Enable="1">
+<Rule ListType="1" Host="notes.somansa.com"/>
+</NetAppInfo>
+</ProtocolBase_UserDefine>
+<ProgramBase Use="1"/>
+<ProgramBase_UserDefine Use="1"/>
+</NetAppInfos>
+</Privacy-i_NetAppInfos>
+<filter>
+<mail_filter_by_domain use="false" check_sender="false"/>
+</filter>
+</dlppolicy>
+<dlppolicy type="print_prevent+" use="true" dlppolicy_name="print prevent tskim1" dlppolicy_guid="1da9a9fe-bf67-4661-a4bb-dafe3e1c69d3" dlppolicy_type="1" dlppolicy_subtype="16" dlppolicy_revision="1">
+<controls type="inspect" target_file="all">
+<control inspect="none" type="allow"/>
+<control inspect="found" type="approval"/>
+<control inspect="not_found" type="allow"/>
+</controls>
+<log>
+<block use="false" type="none">
+<save_filecopy use="false" type="none" max_limit_use="true" max_limit="500"/>
+</block>
+<allow use="true" type="conditional">
+<condition type="inspect_notfound"/>
+<condition type="inspect_found"/>
+<save_filecopy use="true" type="conditional" max_limit_use="true" max_limit="500">
+<condition type="inspect_notfound"/>
+<condition type="inspect_found"/>
+</save_filecopy>
+</allow>
+</log>
+<notify type="block"/>
+<advanced warning_onprint="false" show_serialnumber="false" option_savecopy_foundpage="false" option_patternmaskinguse="false" use_watermark="false" watermark_file="none" difference_watermark="false"/>
+</dlppolicy>
+<dlppolicy type="application_prevent+" use="true" dlppolicy_name="tskim1 Application Control" dlppolicy_guid="6b267412-c0fe-42b2-bd22-6bd3f36a686f" dlppolicy_type="1" dlppolicy_subtype="8" dlppolicy_revision="26">
+<controls type="none" target_file="all">
+<control inspect="none" type="block"/>
+<control inspect="found" type="block"/>
+<control inspect="not_found" type="allow"/>
+</controls>
+<log>
+<block use="false" type="none">
+<save_filecopy use="false" type="none" max_limit_use="true" max_limit="500"/>
+</block>
+<allow use="false" type="none">
+<save_filecopy use="false" type="none" max_limit_use="true" max_limit="500"/>
+</allow>
+</log>
+<notify type="block"/>
+<control_process log_block="true">
+<process guid="9e1f4dc3-ef7f-455f-a2f8-11bc0ea5b5dd" type="2" display="test_tskim1" name="test_tskim1.exe" check_binary_string=""/>
+<process guid="3fd470ce-4a46-41b9-8444-d32f9fd2b59c" type="2" display="(Anti-RootKit) Unlocker" name="Unlocker.exe" check_binary_string="55006E006C006F0063006B00000000000000000000000000000001500101020141000E0001000000FFFF800055006E006C006F0063006B00200041006C006C00"/>
+<process guid="1acada36-3cf6-4f3e-96c2-f508e94a2bc4" type="2" display="메모장" name="notepad.exe" check_binary_string=""/>
+</control_process>
+<PIFileAccessControl Enable="true"/>
+</dlppolicy>
+<dlppolicy type="clipboard_prevent+" use="true" dlppolicy_name="clipboard tskim1" dlppolicy_guid="38fa8090-2006-4771-a325-f805d24e6480" dlppolicy_type="1" dlppolicy_subtype="64" dlppolicy_revision="9">
+<controls type="inspect" target_file="all">
+<control inspect="none" type="block"/>
+<control inspect="found" type="block"/>
+<control inspect="not_found" type="allow"/>
+</controls>
+<log>
+<block use="true" type="conditional">
+<condition type="inspect_found"/>
+<save_filecopy use="false" type="none" max_limit_use="true" max_limit="500"/>
+</block>
+<allow use="false" type="none">
+<save_filecopy use="false" type="none" max_limit_use="true" max_limit="500"/>
+</allow>
+</log>
+<notify type="block"/>
+<control_paste_by_process>
+<process type="2" display="카카오톡 PC메신저" name="KakaoTalk.exe"/>
+<process type="2" display="네이트온" name="NateOnMain.exe"/>
+</control_paste_by_process>
+</dlppolicy>
+<dlppolicy type="media_control" use="true" dlppolicy_name="media control tskim1" dlppolicy_guid="f2aa4545-2b31-424c-b967-ed520f3359f0" dlppolicy_type="2" dlppolicy_subtype="6" dlppolicy_revision="45">
+<control etcstorage_control_type="107" commdevice_control_type="7" log_block="true"/>
+<notify type="block"/>
+</dlppolicy>
+</policy>
+</policyset>
+<common>
+</common>
+<ndis_class_list>
+<ndis_class keyword="WirelessLAN" name="WLAN"/>
+<ndis_class keyword="Intel(R) Centrino(R)" name="WLAN"/>
+<ndis_class keyword="WiFi" name="WLAN"/>
+<ndis_class keyword="WLAN" name="WLAN"/>
+<ndis_class keyword="Wi-Fi" name="WLAN"/>
+<ndis_class keyword="802.11" name="WLAN"/>
+<ndis_class keyword="Wireless" name="WLAN"/>
+<ndis_class keyword="WWAN" name="WWAN"/>
+<ndis_class keyword="Wireless WAN" name="WWAN"/>
+<ndis_class keyword="WirelessWAN" name="WWAN"/>
+<ndis_class keyword="3G" name="WWAN"/>
+<ndis_class keyword="RNDIS" name="WWAN"/>
+<ndis_class keyword="Apple" name="WWAN"/>
+<ndis_class keyword="Android" name="WWAN"/>
+<ndis_class keyword="Tethering" name="WWAN"/>
+<ndis_class keyword="EVDO" name="WWAN"/>
+<ndis_class keyword="EV-DO" name="WWAN"/>
+<ndis_class keyword="GPRS" name="WWAN"/>
+<ndis_class keyword="UMTS" name="WWAN"/>
+<ndis_class keyword="GSM" name="WWAN"/>
+<ndis_class keyword="AirCard" name="WWAN"/>
+<ndis_class keyword="Tether" name="WWAN"/>
+<ndis_class keyword="PdaNet" name="WWAN"/>
+<ndis_class keyword="Remote NDIS" name="WWAN"/>
+<ndis_class keyword="EV-DO" name="WWAN"/>
+<ndis_class keyword="EV-DO" name="WWAN"/>
+<ndis_class keyword="EV-DO" name="WWAN"/>
+<ndis_class keyword="EV-DO" name="WWAN"/>
+<ndis_class keyword="EV-DO" name="WWAN"/>
+<ndis_class keyword="EV-DO" name="WWAN"/>
+<ndis_class keyword="EV-DO" name="WWAN"/>
+<ndis_class keyword="EV-DO" name="WWAN"/>
+<ndis_class keyword="EV-DO" name="WWAN"/>
+<ndis_class keyword="EV-DO" name="WWAN"/>
+<ndis_class keyword="EV-DO" name="WWAN"/>
+<ndis_class keyword="EV-DO" name="WWAN"/>
+<ndis_class keyword="EV-DO" name="WWAN"/>
+<ndis_class keyword="EV-DO" name="WWAN"/>
+<ndis_class keyword="EV-DO" name="WWAN"/>
+<ndis_class keyword="EV-DO" name="WWAN"/>
+<ndis_class keyword="EV-DO" name="WWAN"/>
+<ndis_class keyword="EV-DO" name="WWAN"/>
+<ndis_class keyword="EV-DO" name="WWAN"/>
+<ndis_class keyword="EV-DO" name="WWAN"/>
+<ndis_class keyword="HSUPA" name="WWAN"/>
+<ndis_class keyword="EV-DO" name="WWAN"/>
+<ndis_class keyword="HSDPA" name="WWAN"/>
+<ndis_class keyword="HSPA" name="WWAN"/>
+<ndis_class keyword="Wibro" name="WWAN"/>
+<ndis_class keyword="WIMAX" name="WWAN"/>
+<ndis_class keyword="Mobile" name="WWAN"/>
+<ndis_class keyword="CDMA" name="WWAN"/>
+</ndis_class_list>
+<usbmobile_class_list/>
+</pisec_policy>
+<preventplus_policy xml_version="1.0.0.1">
+<dlppolicy type="copy_prevent+" dlppolicy_name="copy prevent tskim1" dlppolicy_guid="9e0240d8-c765-46f0-9d55-df2057eede7a" dlppolicy_type="1" dlppolicy_subtype="1" dlppolicy_revision="64" >
+<![CDATA[]]>
+</dlppolicy>
+<dlppolicy type="shared_folder_prevent+" dlppolicy_name="601-shared_folder-내용기반 데이터 검사 수행, 탐지된 파일 승인후 허용" dlppolicy_guid="d2794218-7c11-482b-b7ab-e2ed35294344" dlppolicy_type="1" dlppolicy_subtype="256" dlppolicy_revision="3" >
+<![CDATA[]]>
+</dlppolicy>
+<dlppolicy type="upload_prevent+" dlppolicy_name="tskim1 Upload Prevent+" dlppolicy_guid="583adc80-d06c-4a64-bb69-dfc5b5d6f130" dlppolicy_type="1" dlppolicy_subtype="32" dlppolicy_revision="9" >
+<![CDATA[]]>
+</dlppolicy>
+<dlppolicy type="print_prevent+" dlppolicy_name="print prevent tskim1" dlppolicy_guid="1da9a9fe-bf67-4661-a4bb-dafe3e1c69d3" dlppolicy_type="1" dlppolicy_subtype="16" dlppolicy_revision="9" >
+<![CDATA[]]>
+</dlppolicy>
+<dlppolicy type="application_prevent+" dlppolicy_name="tskim1 Application Control" dlppolicy_guid="6b267412-c0fe-42b2-bd22-6bd3f36a686f" dlppolicy_type="1" dlppolicy_subtype="8" dlppolicy_revision="26" >
+<![CDATA[]]>
+</dlppolicy>
+<dlppolicy type="clipboard_prevent+" dlppolicy_name="clipboard tskim1" dlppolicy_guid="38fa8090-2006-4771-a325-f805d24e6480" dlppolicy_type="1" dlppolicy_subtype="64" dlppolicy_revision="9" >
+<![CDATA[]]>
+</dlppolicy>
+</preventplus_policy>
+</policy_list>
+</pisec_policy_info>

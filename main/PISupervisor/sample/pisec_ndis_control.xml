@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ndis_class_list>
+<ndis_class keyword="Wi-Fi" name="WLAN"/>
+<ndis_class keyword="iPhone USB" name="WWAN"/>
+</ndis_class_list>

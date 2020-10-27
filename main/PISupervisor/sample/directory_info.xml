@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<directory>
+	<bin>/usr/local/Privacy-i/pisupervisor</bin>
+	<config>/usr/local/Privacy-i/discover/ProgramData/config</config>
+	<log>/usr/local/Privacy-i/discover/ProgramData/log</log>
+	<serveri>/usr/local/Privacy-i/discover</serveri>
+</directory>
