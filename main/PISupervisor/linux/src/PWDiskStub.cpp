@@ -57,8 +57,7 @@ bool CPWDiskStub::isActive(void) {
 }
 
 bool CPWDiskStub::mount(void) {
-	result = g_AppKext.PWDisk_PWProcess_load();
-	return (0 == result)?true:false;
+	return false;
 }
 
 bool CPWDiskStub::unmount(void) {
