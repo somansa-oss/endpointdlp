@@ -41,46 +41,6 @@ bool CPIWallControlApple::createIMG(void) {
 }
 
 bool CPIWallControlApple::mountIMG(void) {
-	//hdiutil mount ~/SmsDisk.dmg 
-	//or
-	//hdiutil attach ~/SmsDisk.dmg
-	
-	if( 0 == getImageFilePath().length() ) {
-		DEBUG_LOG1("invalid image_file_path");
-		ERROR_LOG1("invalid image_file_path");
-		return false;
-	}
-
-	if( 0 != access(getImageFilePath().c_str(), 0x00) ) {
-		DEBUG_LOG1("image_file not found");
-		ERROR_LOG1("image_file not found");
-		return false;
-	}
-
-	std::string command, temp;
-
-	// attach
-	//command = "hdiutil attach ";
-	//command += getImageFilePath();
-	//command += " 2>&1";
-	
-	command = runScriptFile;
-	command += " mount ";
-	command += getImageFilePath();
-
-	temp = util.readCommandOutput(command);
-
-	DEBUG_LOG( "command:%s", command.c_str());
-	DEBUG_LOG( "[result] - %s", temp.c_str());
-
-	if( true == temp.empty() ) {
-		return false;
-	}
-
-	if( std::string::npos != temp.find(getImageFileName()) ) {
-		return true;
-	}
-
 	return false;
 }
 
