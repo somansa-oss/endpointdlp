@@ -81,31 +81,7 @@ bool CPWDiskStub::quarantineFile(std::string filePath, std::string& qtFilePath) 
 }
 
 bool CPWDiskStub::releaseQuarantinedFile(std::string qtFilePath, std::string dstPath, std::string& relFilePath) {
-	bool bSuc = false;
-	int  nRetFilePath = 0;
-	char czQtFilePath[MAX_PATH];
-	char czDstFilePath[MAX_PATH];
-	char czRetFilePath[MAX_PATH];
-	int nErrCode = 0;
-
-	nRetFilePath = sizeof(czRetFilePath);
-	memset( czQtFilePath, 0, sizeof(czQtFilePath) );
-	memset( czDstFilePath, 0, sizeof(czDstFilePath) );
-	memset( czRetFilePath, 0, sizeof(czRetFilePath) );
-
-	strcpy( czQtFilePath, qtFilePath.c_str());
-	strcpy( czDstFilePath, dstPath.c_str());
-	
-	bSuc = g_AppKext.PWDisk_ProcessQuarantineFile_Release( czQtFilePath, czDstFilePath, czRetFilePath, nRetFilePath, nErrCode );
-
-	if( true == bSuc ) {
-		relFilePath = czRetFilePath;
-		result = 0;
-	} else {
-		result = nErrCode;
-	}
-
-	return bSuc;
+	return false;
 }
 
 bool CPWDiskStub::deleteQuarantinedFile(std::string qtFilePath) {
