@@ -12,11 +12,7 @@ IPIWallControl::~IPIWallControl() {
 }
 
 std::string IPIWallControl::getImageFileName(void) const {
-	std::istringstream is(imageName);
-	std::string token; 
- 	std::getline(is, token, '.'); 
-
-	return token;
+	return "";
 }
 
 bool IPIWallControl::setBinPath(std::string binPath) {
