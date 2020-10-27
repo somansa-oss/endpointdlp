@@ -48,7 +48,7 @@ bool CPIWLanCheck::LibUninit()
 
 bool CPIWLanCheck::LibInit(const char* pczDyLibName)
 {
-    char czLibName[MAX_PATH];
+    char czLibName[MAX_PATH] = {0};
     
     memset(czLibName, 0, sizeof(czLibName));
     if(!pczDyLibName)
