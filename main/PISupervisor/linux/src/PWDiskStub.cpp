@@ -61,8 +61,7 @@ bool CPWDiskStub::mount(void) {
 }
 
 bool CPWDiskStub::unmount(void) {
-	result = g_AppKext.PWDisk_PWProcess_unload();
-	return (0 == result)?true:false;
+	return false;
 }
 
 bool CPWDiskStub::getDiskSize(double& totalSize, double& freeSize) {
