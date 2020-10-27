@@ -20,22 +20,15 @@ bool CPWDiskStub::initialize(KERNEL_EVENTHANDLER kernel_eventhandler)
 
 bool CPWDiskStub::finalize(void)
 {
-	result = g_AppKext.KextModule_Cleanup( true );
-	if( true == isActive() )
-    {
-		// unload();
-	}
 	return true;
 }
 
 void CPWDiskStub::clear(void)
 {
-	//not used
 }
 
 bool CPWDiskStub::applyPolicy(unsigned long command, void* in, unsigned long size)
 {
-	//not used
 	return true;
 }
 
