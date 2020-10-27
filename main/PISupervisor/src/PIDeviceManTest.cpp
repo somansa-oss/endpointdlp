@@ -66,6 +66,7 @@ void CPIDeviceManTest::printPreventPlus(void) {
 }
 
 void CPIDeviceManTest::copyPreventPlus(void) {
+#ifndef LINUX
 	std::string filePath = "/tmp/test_data.txt";
 	std::string tempFilePath = "Volumes/TESTUSB/test_data.txt";
 	unsigned int processId = 0;
@@ -75,5 +76,6 @@ void CPIDeviceManTest::copyPreventPlus(void) {
 	PIAgentStub.analyzeFileForCopyPreventPlus(filePath, tempFilePath, deviceCategory, processId, result);
 	
 	DEBUG_LOG("result:%s(%d)", (1 == result) ? "block" : "allow", result);
+#endif
 }
 #endif
