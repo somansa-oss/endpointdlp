@@ -73,18 +73,7 @@ bool CPWDiskStub::convertDiskSize(void) {
 }
 
 bool CPWDiskStub::getDiskVolumePath(std::string& volumePath) {
-    char  czVolumePath[MAX_PATH];
-	memset( czVolumePath, 0, sizeof(czVolumePath) );
-	bool bSuc = g_AppKext.PWdisk_GetDiskVolumePath( czVolumePath, sizeof(czVolumePath) );
-	
-	if( true == bSuc ) {
-		volumePath = czVolumePath;
-		result = 0;
-	} else {
-		result = -1;
-	}
-	
-	return bSuc;
+	return false;
 }
 
 bool CPWDiskStub::quarantineFile(std::string filePath, std::string& qtFilePath) {
