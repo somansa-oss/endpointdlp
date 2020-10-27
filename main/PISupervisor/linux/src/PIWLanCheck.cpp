@@ -36,65 +36,10 @@ bool CPIWLanCheck::LibUninit()
 {
 }
 
-
 bool CPIWLanCheck::LibInit(const char* pczDyLibName)
 {
-    char czLibName[MAX_PATH] = {0};
-    
-    memset(czLibName, 0, sizeof(czLibName));
-    if(!pczDyLibName)
-    {
-        strcpy( czLibName, PIWLANLIB_PATH );
-    }
-    else
-    {
-        strcpy( czLibName, pczDyLibName );
-    }
-    
-    if(m_pHandle)
-    {
-        dlclose( m_pHandle );
-        m_pHandle = NULL;
-    }
-    
-    m_pHandle = dlopen( czLibName, RTLD_NOW );
-    if(!m_pHandle)
-    {
-        printf("[DLPApp][%s] Fail. LibName=%s errno=%d. errstr=%s \n", __FUNCTION__, czLibName, errno, dlerror() );
-        return false;
-    }
-    
-    
-    m_pWLanLibPolicyCheck = (fpWLanLibPolicyCheck)dlsym( m_pHandle, "WLanLibPolicyCheck" );
-    if(!m_pWLanLibPolicyCheck)
-    {
-        printf("[DLPApp][%s] GetFunctionPointer( WLanLibPolicyCheck ) errno=%d errstr=%s. \n", __FUNCTION__, errno, dlerror() );
-        return false;
-    }
-    
-    m_pWLanLibSetPolicySSID = (fpWLanLibSetPolicySSID)dlsym( m_pHandle, "WLanLibSetPolicySSID" );
-    if(!m_pWLanLibSetPolicySSID)
-    {
-        printf("[DLPApp][%s] GetFunctionPointer( WLanLibSetPolicySSID ) errno=%d errstr=%s. \n", __FUNCTION__, errno, dlerror() );
-        return false;
-    }
-    
-    m_pWLanLibGetBlockSSID = (fpWLanLibGetBlockSSID)dlsym( m_pHandle, "WLanLibGetBlockSSID" );
-    if(!m_pWLanLibGetBlockSSID)
-    {
-        printf("[DLPApp][%s] GetFunctionPointer( WLanLibGetBlockSSID ) errno=%d errstr=%s. \n", __FUNCTION__, errno, dlerror() );
-        return false;
-    }
-    
-    m_pWLanLibGetIfaceName = (fpWLanLibGetIfaceName)dlsym( m_pHandle, "WLanLibGetIfaceName" );
-    if(!m_pWLanLibGetIfaceName)
-    {
-        printf("[DLPApp][%s] GetFunctionPointer( WLanLibGetIfaceName ) errno=%d errstr=%s. \n", __FUNCTION__, errno, dlerror() );
-        return false;
-    }
     return true;
 }
-
 
 string
 CPIWLanCheck::GetBlockSSID()
