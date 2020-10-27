@@ -25,16 +25,6 @@ bool IPIWallControl::setImageFilePath(std::string imagePath, std::string imageNa
 }
 
 bool IPIWallControl::isMounted(void) {
-	if( 0 == getVolumeName().length() ) {
-		DEBUG_LOG1("invalid_volume name");
-		ERROR_LOG1("invalid_volume name");
-		return false;
-	}
-
-	if( 0 != access(getVolumeName().c_str(), 0x00) ) {
-		return false;
-	}
-
 	return true;
 }
 
@@ -47,51 +37,6 @@ CPIWallControlApple::~CPIWallControlApple() {
 }
 
 bool CPIWallControlApple::createIMG(void) {
-	//hdiutil create SmsDisk.dmg –Size 1g –fs HFS+ -volname SmsDisk –format UDRW –srcfolder ./SmsDisk –compact
-	//hdiutil create SmsDisk.dmg –Size 1g –fs HFS+ -volname SmsDisk –format UDRW –compact
-
-	if( 0 == getImageName().length() ) {
-		DEBUG_LOG1("invalid image_name");
-		ERROR_LOG1("invalid image_name");
-		return false;
-	}
-
-	if( 0 == getImageFileName().length() ) {
-		DEBUG_LOG1("invalid image_file_name");
-		ERROR_LOG1("invalid image_file_name");
-		return false;
-	}
-
-	std::string command, temp;
-
-	//command = "hdiutil create ";
-	//command += getImageFilePath();
-	//command += " –Size 1g –fs HFS+ -volname ";
-	//command += getImageFileName();
-	//command += " 2>&1";
-
-	command = runScriptFile;
-	command += " create ";
-	command += getImageFilePath();
-	command += " ";
-	command += getImageFileName();
-
-	temp = util.readCommandOutput(command);
-
-	DEBUG_LOG( "command:%s", command.c_str());
-	DEBUG_LOG( "[result] - %s", temp.c_str());
-
-	if( true == temp.empty() ) {
-		return false;
-	}
-
-	std::string lower = temp;
-	util.toLower(lower);
-
-	if( std::string::npos != lower.find("created") ) {
-		return true;
-	}
-
 	return false;
 }
 
