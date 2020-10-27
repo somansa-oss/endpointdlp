@@ -45,37 +45,6 @@ bool CPIWallControlApple::mountIMG(void) {
 }
 
 bool CPIWallControlApple::unmountIMG(void) {
-	//hdiutil unmount  /Volumes/SmsDisk
-	//or
-	//hdiutil detach /Volumes/SmsDisk
-
-	std::string command, temp;
-
-	// detach 
-	//command = "hdiutil detach /Volumes/";
-	//command += getImageFileName();
-	//command += " 2>&1";
-	
-	command = runScriptFile;
-	command += " unmount ";
-	command += getVolumeName();
-	
-	temp = util.readCommandOutput(command);
-
-	DEBUG_LOG( "command:%s", command.c_str());
-	DEBUG_LOG( "[result] - %s", temp.c_str());
-
-	if( true == temp.empty() ) {
-		return false;
-	}
-
-	std::string lower = temp;
-	util.toLower(lower);
-
-	if( std::string::npos != lower.find("fail") ) {
-		return false;
-	}
-	
 	return true;
 }
 
