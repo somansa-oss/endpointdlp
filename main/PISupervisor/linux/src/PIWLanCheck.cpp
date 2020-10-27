@@ -55,20 +55,12 @@ CPIWLanCheck::GetIfaceName(void)
 
 bool CPIWLanCheck::LibWLanLibGetBlockSSID()
 {
-    if(!m_pWLanLibGetBlockSSID)
-    {
-        return false;
-    }
-    return m_pWLanLibGetBlockSSID( m_strBlockSSID );
+    return false;
 }
 
 bool CPIWLanCheck::LibWLanLibGetIfaceName()
 {
-    if(!m_pWLanLibGetIfaceName)
-    {
-        return false;
-    }
-    return m_pWLanLibGetIfaceName( m_strIfaceName );
+    return false;
 }
 
 
