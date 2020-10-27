@@ -13,19 +13,12 @@
 #include <sys/mount.h>
 
 
-#define min(a, b) ((a) < (b) ? (a) : (b))
-#define max(a, b) ((a) > (b) ? (a) : (b))
-
 CPIFullDiskAccess::CPIFullDiskAccess() : m_nMountPos(0), m_bFDAThreadExit(false), m_pFDAThread(NULL)
 {
-    memset( &m_Mount, 0, sizeof(m_Mount) );
-    pthread_mutex_init( &m_FDAMutex, NULL );
 }
 
 CPIFullDiskAccess::~CPIFullDiskAccess()
 {
-    m_bFDAThreadExit = false;
-    pthread_mutex_destroy( &m_FDAMutex );
 }
 
 
