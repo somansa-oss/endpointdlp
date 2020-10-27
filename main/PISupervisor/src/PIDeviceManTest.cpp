@@ -22,6 +22,7 @@ CPIDeviceManTest::~CPIDeviceManTest()
 
 void CPIDeviceManTest::copyPreventPlusDeviceLog(void)
 {
+#ifndef LINUX
 	CPIDeviceLog deviceLog;
 	deviceLog.deviceType 	= CPIDeviceLog::typeDrive;
 	deviceLog.policyType 	= MEDIA_CD_DVD;
@@ -48,6 +49,7 @@ void CPIDeviceManTest::copyPreventPlusDeviceLog(void)
 	}
 	
 	CPIActionProcessDeviceLog::getInstance().addDeviceLog(deviceLog);
+#endif
 }
 
 void CPIDeviceManTest::printPreventPlus(void) {
