@@ -22,6 +22,7 @@ CPIDeviceManTest::~CPIDeviceManTest()
 
 void CPIDeviceManTest::copyPreventPlusDeviceLog(void)
 {
+#ifndef LINUX
 	CPIDeviceLog deviceLog;
 	deviceLog.deviceType 	= CPIDeviceLog::typeDrive;
 	deviceLog.policyType 	= MEDIA_CD_DVD;
@@ -48,9 +49,11 @@ void CPIDeviceManTest::copyPreventPlusDeviceLog(void)
 	}
 	
 	CPIActionProcessDeviceLog::getInstance().addDeviceLog(deviceLog);
+#endif
 }
 
 void CPIDeviceManTest::printPreventPlus(void) {
+#ifndef LINUX
 	std::string pdfPath = "/tmp/test_print.pdf";
 	unsigned int processId = 0;
 	
@@ -59,9 +62,11 @@ void CPIDeviceManTest::printPreventPlus(void) {
 	PIAgentStub.analyzeFileForPreventPlus(pdfPath, pdfPath, processId, ActionTypePrint, result);
 	
 	DEBUG_LOG("result:%s(%d)", (1 == result) ? "block" : "allow", result);
+#endif
 }
 
 void CPIDeviceManTest::copyPreventPlus(void) {
+#ifndef LINUX
 	std::string filePath = "/tmp/test_data.txt";
 	std::string tempFilePath = "Volumes/TESTUSB/test_data.txt";
 	unsigned int processId = 0;
@@ -71,5 +76,6 @@ void CPIDeviceManTest::copyPreventPlus(void) {
 	PIAgentStub.analyzeFileForCopyPreventPlus(filePath, tempFilePath, deviceCategory, processId, result);
 	
 	DEBUG_LOG("result:%s(%d)", (1 == result) ? "block" : "allow", result);
+#endif
 }
 #endif
