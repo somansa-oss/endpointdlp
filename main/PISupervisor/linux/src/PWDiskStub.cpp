@@ -33,8 +33,7 @@ bool CPWDiskStub::applyPolicy(unsigned long command, void* in, unsigned long siz
 }
 
 bool CPWDiskStub::addPid(pid_t pid) {
-	result = g_AppKext.PWDisk_PWProcessID_Add(pid);
-	return (0 == result)?true:false;
+	return false;
 }
 
 bool CPWDiskStub::removePid(pid_t pid) {
