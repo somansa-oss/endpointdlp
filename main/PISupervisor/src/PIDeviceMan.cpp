@@ -22,6 +22,48 @@
 
 using namespace nsPISecObject;
 
+bool IsOverBigSur()
+{
+#ifndef LINUX
+    FILE* fpOut = popen("sw_vers -productVersion", "r");
+    char cBuf[8] = { 0, };
+    DEBUG_LOG("IsOverBigSur %d", 1);
+    if (fpOut)
+    {
+        fgets(cBuf, sizeof(cBuf), fpOut);
+        pclose(fpOut);
+        
+        std::string sVersionInfo = cBuf;
+        
+        size_t nFirst = sVersionInfo.find_first_of('.');
+        size_t nLast  = sVersionInfo.find_last_of('.');
+        
+        if (nFirst == std::string::npos || nLast == std::string::npos)
+            return false;
+        
+        int nMajor = atoi(sVersionInfo.substr(0, nFirst).c_str());
+        int nMinor = 0;
+        
+        if (nFirst != nLast)
+            nMinor = atoi(sVersionInfo.substr(nFirst + 1, nLast).c_str());
+        else
+            nMinor = atoi(sVersionInfo.substr(nFirst + 1, sVersionInfo.length() - 1).c_str());
+        
+        printf("Version Info nMajor: %d / nMinor: %d", nMajor, nMinor);
+        
+        if (nMajor >= 11 || nMinor >= 16)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+#endif    
+    return false;
+}
+
 ////////////////////////////////////////
 // class CPIDeviceMan
 CPIDeviceMan::CPIDeviceMan() : m_bProtect(false)
