@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <usbmobile_list>
-	<usbmobile type="Mtp" base_path="/tmp" keyword="B194-45E9-AF95-28D184093173"/>
-	<usbmobile type="Mtp" base_path="/dev/cu.SAMSUNG_MDM" keyword="/dev/cu.SAMSUNG_MDM"/>
-	<usbmobile type="Mtp" base_path="/dev/cu.lgusb" keyword="/dev/cu.lgusb"/>
-	<usbmobile type="Ptp" base_path="/var/run/usbmuxd" keyword=""/>
-	<usbmobile type="Ptp" base_path="/var/folders/" keyword="T/ics"/>
 	<usbmobile type="Ptp" base_path="/var/folders/" keyword="T/icdd"/>
 </usbmobile_list>
 
