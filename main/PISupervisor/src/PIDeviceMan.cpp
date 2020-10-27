@@ -68,7 +68,16 @@ bool IsOverBigSur()
 // class CPIDeviceMan
 CPIDeviceMan::CPIDeviceMan() : m_bProtect(false)
 {
-	//pthread_mutex_init(&mutexProcessCheck, 0);
+#ifndef LINUX
+    if (IsOverBigSur())
+    {
+        stub = &(CPIESFStub::getInstance());
+    }
+    else
+    {
+        stub = &(CPISecSmartDrvStub::getInstance());
+    }
+#endif
 }
 
 CPIDeviceMan::~CPIDeviceMan() {	
