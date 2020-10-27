@@ -34,108 +34,12 @@ void CPIFullDiskAccess::MountCtx_Clear(void)
 boolean_t
 CPIFullDiskAccess::MountCtx_Update(char* pczDeviceName, char* pczBasePath, ULONG nBusType)
 {
-    return TRUE;
+    return true;
 }
 
 boolean_t
 CPIFullDiskAccess::IsDiskAccessPermission( char* czPath )
 {
-    struct statfs fileStat = { 0, };
-    char czRand[8] = { '.', 0, };
-    if(!czPath)
-    {
-        os_log(OS_LOG_DEFAULT, "[DLP][%s] Invalid Paramenters.", __FUNCTION__ );
-        return true;
-    }
-    
-    if(statfs(czPath, &fileStat) == 0)
-    {
-        os_log(OS_LOG_DEFAULT, "[DLP][%s] [%s]-FileSystem Type: [%s]", __FUNCTION__ , czPath, fileStat.f_fstypename);
-    
-        if(0 == strcmp(fileStat.f_fstypename, "ntfs") || 0 == strcmp(fileStat.f_fstypename, "cd9660"))
-        {
-            int res = open(czPath, O_RDONLY);
-            if (res >= 0)
-                return true;
-            else
-                return false;
-        }
-    }
-    
-    /*struct statfs fileStat;
-    char czRand[8] = { '.', 0, };
-    if(!czPath)
-    {
-        os_log(OS_LOG_DEFAULT, "[DLP][%s] Invalid Paramenters.", __FUNCTION__ );
-        return true;
-    }*/
-    
-    for (int i = 1; i < 7; i++)
-    {
-        czRand[i] = 'a' + rand() % 26;
-    }
-    
-    size_t nSize = strlen(czPath) + strlen(czRand) + 1;
-    char* czFullPath = (char *)malloc(nSize);
-    if( !czFullPath )
-    {
-        os_log(OS_LOG_DEFAULT, "[DLP][%s] MemoryAllocation.", __FUNCTION__ );
-        return true;
-    }
-    
-    memset(czFullPath, 0, nSize);
-    sprintf(czFullPath, "%s/%s", czPath, czRand);
-    os_log(OS_LOG_DEFAULT, "[DLP][%s] czRand: %s", __FUNCTION__, czRand );
-    os_log(OS_LOG_DEFAULT, "[DLP][%s] czPath: %s", __FUNCTION__, czPath );
-    os_log(OS_LOG_DEFAULT, "[DLP][%s] czFullPath: %s", __FUNCTION__, czFullPath);
-    
-    int nRes = open(czFullPath, O_CREAT);
-    os_log(OS_LOG_DEFAULT, "[DLP][%s] %s / O_CREAT nRes: %d", __FUNCTION__, czRand, nRes);
-    if (nRes == -1)
-    {
-        free(czFullPath);
-        return false;
-    }
-    else
-    {
-        close(nRes);
-    }
-    
-    nRes = open(czFullPath, O_WRONLY);
-    os_log(OS_LOG_DEFAULT, "[DLP][%s] %s / O_WRONLY nRes: %d", __FUNCTION__, czRand, nRes);
-    if (write(nRes, "\0", 2) == -1)
-    {
-        close(nRes);
-        free(czFullPath);
-        return false;
-    }
-    else
-    {
-        close(nRes);
-    }
-    
-    nRes = open(czFullPath, O_RDONLY);
-    os_log(OS_LOG_DEFAULT, "[DLP][%s] %s / O_RDONLY nRes: %d", __FUNCTION__, czRand, nRes);
-    char cTemp[2] = { 0, };
-    if(read(nRes, cTemp, 2) == -1)
-    {
-        close(nRes);
-        free(czFullPath);
-        return false;
-    }
-    else
-    {
-        close(nRes);
-    }
-    
-    if(remove(czFullPath) == -1)
-    {
-        free(czFullPath);
-        return false;
-    }
-    
-    free(czFullPath);
-    os_log(OS_LOG_DEFAULT, "[DLP][%s] %s return true.", __FUNCTION__, czRand);
     return true;
 }
 
