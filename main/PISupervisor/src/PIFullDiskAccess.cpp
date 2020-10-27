@@ -47,33 +47,20 @@ CPIFullDiskAccess::IsDiskAccessPermission( char* czPath )
 size_t
 CPIFullDiskAccess::FindDelimiter(char *cpPath)
 {
-    size_t i=0, nLength = 0;
-    if(!cpPath)
-    {
-        return -1;
-    }
-    nLength = strlen(cpPath);
-    for(i=0; i<nLength; i++)
-    {
-        if(cpPath[i] == '/')
-        {
-            return i;
-        }
-    }
-    return nLength;
+    return 0;
 }
 
 
 boolean_t
 CPIFullDiskAccess::GetFDAEnable(void)
 {
-    return ConfigMan.m_bFDAEnable;
+    return false;
 }
 
 int
 CPIFullDiskAccess::GetFDACheckInterval(void)
 {
-    return ConfigMan.m_nFDACheckInterval;
+    return 0;
 }
 
 
