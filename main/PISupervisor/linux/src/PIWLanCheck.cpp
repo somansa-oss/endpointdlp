@@ -78,16 +78,7 @@ bool CPIWLanCheck::LibWLanLibSetPolicySSID( vector<string> vecPolicySSID )
 
 bool CPIWLanCheck::SetWLanSSIDControl( std::vector<std::string> vecWLanPermitList )
 {
-    bool bBlock = false;
-
-    LibWLanLibSetPolicySSID( vecWLanPermitList );
-
-    bBlock = LibWLanLibPolicyCheck();
-    if(true == bBlock)
-    {
-        LibWLanLibGetBlockSSID();
-    }
-    return bBlock;
+    return false;
 }
 
 
