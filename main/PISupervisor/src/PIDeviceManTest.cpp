@@ -53,6 +53,7 @@ void CPIDeviceManTest::copyPreventPlusDeviceLog(void)
 }
 
 void CPIDeviceManTest::printPreventPlus(void) {
+#ifndef LINUX
 	std::string pdfPath = "/tmp/test_print.pdf";
 	unsigned int processId = 0;
 	
@@ -61,6 +62,7 @@ void CPIDeviceManTest::printPreventPlus(void) {
 	PIAgentStub.analyzeFileForPreventPlus(pdfPath, pdfPath, processId, ActionTypePrint, result);
 	
 	DEBUG_LOG("result:%s(%d)", (1 == result) ? "block" : "allow", result);
+#endif
 }
 
 void CPIDeviceManTest::copyPreventPlus(void) {
