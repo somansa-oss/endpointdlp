@@ -77,29 +77,7 @@ bool CPWDiskStub::getDiskVolumePath(std::string& volumePath) {
 }
 
 bool CPWDiskStub::quarantineFile(std::string filePath, std::string& qtFilePath) {
-
-	bool bSuc = false;
-	int  nOutQtFilePath=0;
-	char czFilePath[MAX_PATH];
-	char czOutQtFilePath[MAX_PATH];
-	int nErrCode = 0;
-
-	memset( czFilePath, 0, sizeof(czFilePath) );
-	memset( czOutQtFilePath, 0, sizeof(czOutQtFilePath) );
-
-	strcpy( czFilePath, filePath.c_str());
-	nOutQtFilePath = (int)sizeof(czOutQtFilePath);
-
-	bSuc = g_AppKext.PWDisk_ProcessQuarantineFile( czFilePath, czOutQtFilePath, nOutQtFilePath, nErrCode );
-
-	if( true == bSuc ) {
-		qtFilePath = czOutQtFilePath;
-		result = 0;
-	} else {
-		result = nErrCode;
-	}
-
-	return bSuc;
+	return false;
 }
 
 bool CPWDiskStub::releaseQuarantinedFile(std::string qtFilePath, std::string dstPath, std::string& relFilePath) {
