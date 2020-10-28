@@ -19,6 +19,8 @@ add_executable(mount_monitor         mount_monitor.c
 
 add_executable(get_device_info	get_device_info.cpp )
 
+add_executable(inotify_watch	inotify_watch.c )
+
 target_include_directories(mount_monitor PUBLIC
 	.  
 	/usr/include/libmount
