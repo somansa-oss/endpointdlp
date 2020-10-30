@@ -27,6 +27,7 @@ You accept and agree to the following terms and conditions for Your present and 
 >8. You agree to notify SOMANSA of any facts or circumstances of which you become aware that would make these representations inaccurate in any respect.
 
 
-Please fill this form if you want to be a contributor of this project. 
-https://docs.google.com/forms/d/1x3hcCxbm-CzauQ81KIFrl9jQTsNZTARkWgfq3_-l87A/edit?usp=sharing
+### Please fill this form if you want to be a contributor of this project. 
+
+https://docs.google.com/forms/d/1x3hcCxbm-CzauQ81KIFrl9jQTsNZTARkWgfq3_-l87A/prefill
 
