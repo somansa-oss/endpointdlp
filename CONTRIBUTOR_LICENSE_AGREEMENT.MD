@@ -25,3 +25,9 @@ You accept and agree to the following terms and conditions for Your present and 
 >7. Should You wish to submit work that is not Your original creation, You may submit it to SOMANSA separately from any Contribution, identifying the complete details of its source and of any license or other restriction (including, but not limited to, related patents, trademarks, and license agreements) of which you are personally aware, and conspicuously marking the work as "Submitted on behalf of a third-party: [named here]".
 
 >8. You agree to notify SOMANSA of any facts or circumstances of which you become aware that would make these representations inaccurate in any respect.
+
+
+### Please fill this form if you want to be a contributor of this project. 
+
+https://docs.google.com/forms/d/1x3hcCxbm-CzauQ81KIFrl9jQTsNZTARkWgfq3_-l87A/prefill
+
