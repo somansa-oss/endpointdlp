@@ -462,12 +462,12 @@ bool CPIDeviceControlLinux::controlRemovableStorage(void)
 				system(command.c_str());
 
 				result = true;
-				deviceNameList.push_back("Removable");
+				deviceNameList.push_back( ent->mnt_dir );
 				break;
 			}
 			else
 			{
-				//printf("Not CD/DVD: %s %s %s %s \n", ent->mnt_fsname, ent->mnt_dir, ent->mnt_type, ent->mnt_opts);
+				//printf("Not Removable Storage: %s %s %s %s \n", ent->mnt_fsname, ent->mnt_dir, ent->mnt_type, ent->mnt_opts);
 			}
 		}
 		endmntent(aFile);
@@ -789,8 +789,9 @@ bool CPIDeviceController::getDeviceLog(CPIDeviceLog::VECTOR& deviceLogList)
 #ifdef LINUX	
     if("Drive\\Removable" == rule.virtualType)
     {
-        deviceLog.deviceType = CPIDeviceLog::typeDevice;
+        deviceLog.deviceType = CPIDeviceLog::typeDrive;
         deviceLog.accessType = accessRead;
+		deviceLog.virtualType = "Drive\\RemovableMedia";
     }
 #endif
 
@@ -800,6 +801,12 @@ bool CPIDeviceController::getDeviceLog(CPIDeviceLog::VECTOR& deviceLogList)
 		for( ; itr != deviceControl.deviceNameList.end(); ++itr )
         {
             deviceLog.deviceName = *itr;
+#ifdef LINUX	
+			if("Drive\\Removable" == rule.virtualType)
+			{			
+				deviceLog.fileName = deviceLog.deviceName;
+			}
+#endif			
 			deviceLogList.push_back(deviceLog);
 		}
 
