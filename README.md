@@ -26,7 +26,7 @@
 * 문의사항: 소만사 이상진 수석연구원(sjinlee@somansa.com)
 * 커뮤니케이션 채널
 
-  -> [Slack 가입 링크][https://join.slack.com/t/somansa-opensource/shared_invite/zt-ikibhul1-PT~Z9R9w5xrEA8LT_pyuDg]
+  -> [Slack 가입 링크](https://join.slack.com/t/somansa-opensource/shared_invite/zt-ikibhul1-PT~Z9R9w5xrEA8LT_pyuDg)
     
   -> Google Groups: sjinlee@somansa.com 으로 메일 주시면 초대장을 보내드립니다. 
 
