@@ -1,5 +1,6 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/somansa-oss/endpointdlp)
-
+![GitHub top language](https://img.shields.io/github/languages/top/somansa-oss/endpointdlp)
+![GitHub license](https://img.shields.io/badge/license-Apache%202.0-blue)
 # endpointdlp
 
 개방형OS에서의 엔드포인트 정보유출방지(Endpoint DLP) 보안 소프트웨어
