@@ -64,6 +64,6 @@ Visual Studio Code ( 이후 Code )를 설치하는 가장 간단한 방법은 �
 ---------
 소스 빌드를 위해서는, 앞서 설치한 code를 실행하고, 메뉴 중에서 File > Open Folder 를 클릭하여 폴더를 열면 됩니다. 
 
-![code폴더열기](docs/1120003.png)
+![code폴더열기](docs/1120003.png = 250x)
 
 
