@@ -40,6 +40,7 @@
 > $ git clone https://github.com/somansa-oss/endpointdlp.git
 
 소스 clone이 끝나면, 아래와 같이 endpointdlp 라는 폴더가 생성되었음을 확인할 수 있습니다.
- 
+
+![소스다운로드확인](docs/1120001.png)
 
 이제 소스를 내려 받았다면, 다음 단계로 아래와 같이 개발환경을 설정할 수 있습니다.
