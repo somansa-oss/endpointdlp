@@ -43,7 +43,7 @@
 
 ![소스다운로드확인](docs/1120001.png)
 
-이제 소스를 내려 받았다면, [How to Develop Endpoint DLP](https://github.com/somansa-oss/endpointdlp/blob/master/HOW_TO_DEVELOP.md) 에서 개발환경 구축 방법을 따라해보세요.
+이제 소스를 내려 받았다면, [How to Develop](https://github.com/somansa-oss/endpointdlp/blob/master/HOW_TO_DEVELOP.md) 에서 개발환경 구축 방법을 따라해보세요.
 
 
 
