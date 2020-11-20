@@ -132,9 +132,66 @@ Install 버튼을 클릭하면, CMake 플러그인이 설치가 됩니다. 그�
 
 ### 런타임 디버깅
 ---------
+개방형OS에서 Visual Studio Code를 이용하면, 실행중인 프로세스를 디버깅하는 런타임 디버깅 환경이 지원됩니다. 메뉴 중에서 Run > Open Configuration 을 클릭합니다. 그러면, 아래와 같이 실행 및 디버깅 환경을 셋팅할 수 있는 launch.json 파일이 보입니다.
+
+ ![code런타임디버깅](docs/1120011.png)
+
+이 파일의 내용을 아래와 같이 수정해 주세요. 여기서 중요한 것은 program에서 실제 현재 빌드 환경의 경로를 정확하게 입력해야 한다는 점입니다. /home/somansa/opensource 디렉토리 밑에 소스를 내려 받아서 빌드한 예입니다. 이 경로는 소스 저장 위치에 따라서 적절하게 수정이 필요합니다.
 
 
+    ```{.json}
+    {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "(gdb) 시작",
+                "type": "cppdbg",
+                "request": "launch",
+                "program": "/home/somansa/opensource/endpointdlp/main/build/PIKern/PIKern",
+                "args": [],
+                "stopAtEntry": false,
+                "cwd": "${workspaceFolder}",
+                "environment": [],
+                "externalConsole": false,
+                "MIMode": "gdb",
+                "miDebuggerServerAddress": "127.0.0.1:8844",
+                "setupCommands": [
+                    {
+                        "description": "gdb에 자동 서식 지정 사용",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    }
+                ]
+            }
+        ]
+    }
 
-### 소스 수정 및 적용
----------
+아울러, 런타임 디버깅을 위해 gdbserver를 이용했습니다. 여기서 같은 PC에서 실행되기 때문에 miDebuggerServerAddress의 IP가 127.0.0.1이며, 포트(Port)는 8844로 임의로 설정했습니다.
+
+이제 PIKern 프로세스를 실행시키고, gdbserver 를 아래와 같이 실행시킵니다. 여기서는 ps 명령을 이용하여, 실행된 PIKern 프로세스의 process id를 구하고, 이를 이용하여 디버깅을 하고 있습니다.
+
+>  $ cd /usr/local/Privacy-I
+>  $ sudo PIKern &
+>  $ ps -eaf | grep PIKern
+> 
+> root      39834  90707  0 14:29 pts/4    00:00:00 sudo ./PIKern
+> root      39897  39834  0 14:29 pts/4    00:00:00 ./PIKern
+> somansa   39969  34022  0 14:29 pts/6    00:00:00 grep PIKern
+> 
+> $ sudo gdbserver 127.0.0.1:8844 --attach 39897
+
+위의 예제에서는 PIKern 프로세스의 process id가 39897이기 때문에, gdbserver에서 attach 하는 process id 또한 39897로 설정하였습니다. 이 id는 실행될 때마다 달라진다는 점에 주의해 주세요.
+
+이제 마지막 단계입니다. 아래 그림과 같이, 앞서 code에서 RUN “(gdb)시작” 버튼을 클릭해 주세요.
+
+ ![code런타임디버깅](docs/1120012.png)
+
+그러면, 아래 그림과 같이, 프로세스에 attach되어, 원격 디버깅이 가능해진 상태라는 것을 알 수 있습니다. 소스에서 오른쪽 마우스를 클릭하여 Breakpoint를 추가할 수 있습니다. 다만, 경우에 따라서, 디버깅 하는 동안에는 동적으로 Breakpoint의 추가/변경이 안될 수 있으며, 이럴 때는 디버깅을 중지한 다음에 Breakpoint를 추가/변경 하고, 다시 재디버깅을 하면 됩니다.
+
+ ![code런타임디버깅](docs/1120013.png)
+
+개방형OS에서의 gdb에 대한 추가적인 설명은 다른 자료를 참고 부탁드리며, 만약 gdbserver가 설치되어 있지 않다면, 아래 명령을 통해 설치 가능합니다.
+$ sudo apt-get install gdbserver
+
+
 
