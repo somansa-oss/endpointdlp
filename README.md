@@ -114,14 +114,17 @@ Install 버튼을 클릭하면, CMake 플러그인이 설치가 됩니다. 그�
 
 > $ sudo cp ~/opensource/endpointdlp/main/PISupervisor/build/PISupervisor    /usr/local/Privacy-i
 
-모듈 복사가 성공했으면, 아래와 같이 명령을 수행하여, 각 모듈을 실행시킬 수 있습니다.
+모듈 복사가 성공했으면, 아래와 같이 명령을 수행하여, 각각 모듈을 실행시킬 수 있습니다. 먼저, 아래는 PIKern을 실행시키는 명령입니다.
 
 > $ cd /usr/local/Privacy-I
 
-> $ sudo PIKern &
+> $ sudo PIKern
 
-> $ sudo PISupervisor &
+다음은 PISupervisor를 실행시키는 명령입니다. 단, 두개 모듈을 실행시키는 순서는 PIKern  PISupervisor 입니다. 순서를 지켜서 실행시켜야 합니다.
 
+> $ cd /usr/local/Privacy-I
+
+> $ sudo PISupervisor
 
 
 * PISupervisor 모듈을 실행시켰을 때, 오류 메시지가 나오는데, 무시 가능하며, 곧 수정 예정입니다.
