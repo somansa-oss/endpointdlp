@@ -25,7 +25,7 @@
 ----------
 * 개발 언어: C
 * 개발 환경: VSCode
-* 라이선스: Apache 2.0
+* 라이선스: [Apache 2.0](https://github.com/somansa-oss/endpointdlp/blob/master/LICENSE)
 * 문의사항: 소만사 이상진 수석연구원(sjinlee@somansa.com)
 * 커뮤니케이션 채널
 
