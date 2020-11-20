@@ -111,13 +111,20 @@ Install 버튼을 클릭하면, CMake 플러그인이 설치가 됩니다. 그�
 이제 앞서 빌드한 2개의 모듈을 복사합니다. 단, 여기서는 다운로드 받은 원래 소스의 위치가 ~/opensource/endpoint 라고 가정하였습니다.
 
 > $ sudo cp ~/opensource/endpointdlp/main/build/PIKern/PIKern    /usr/local/Privacy-I
+
 > $ sudo cp ~/opensource/endpointdlp/main/PISupervisor/build/PISupervisor    /usr/local/Privacy-i
 
 모듈 복사가 성공했으면, 아래와 같이 명령을 수행하여, 각 모듈을 실행시킬 수 있습니다.
 
 > $ cd /usr/local/Privacy-I
+
 > $ sudo PIKern &
+
 > $ sudo PISupervisor &
+
+
+
+* PISupervisor 모듈을 실행시켰을 때, 오류 메시지가 나오는데, 무시 가능하며, 곧 수정 예정입니다.
 
 
 ### 런타임 디버깅
