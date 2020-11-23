@@ -7,7 +7,7 @@
 #include <pthread.h>
 #include "LogWriter.h"
 
-CPCSecurity::CPCSecurity() : m_pSFThread(NULL), m_bThreadExit(true)
+CPCSecurity::CPCSecurity() : m_pSFThread((pthread_t)NULL), m_bThreadExit(true)
 {
     pthread_mutex_init( &m_SFMutex, NULL );
 }
@@ -117,7 +117,7 @@ bool CPCSecurity::PCSecurity_SFThread_Stop()
     if(!m_pSFThread) return false;
     
     pthread_cancel( m_pSFThread );
-    m_pSFThread = NULL;
+    m_pSFThread = (pthread_t)NULL;
     m_bThreadExit = true;
     INFO_LOG1("PCSecuritySFolderThreadProc Request-Stop.");
     return true;
