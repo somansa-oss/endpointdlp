@@ -7,7 +7,8 @@ set(CMAKE_VERBOSE_MAKEFILE "YES")
 
 ADD_DEFINITIONS ( -DLINUX )
 
-LINK_LIBRARIES ( -pthread -ldl -llsf-media -ludev  )
+#LINK_LIBRARIES ( -pthread -ldl -llsf-media -ludev  )
+LINK_LIBRARIES ( -pthread -ldl  -ludev  )
 
 # add the executable
 add_executable(PISupervisor src/PISuperivorMain.cpp  
