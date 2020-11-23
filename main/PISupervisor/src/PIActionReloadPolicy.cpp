@@ -3,6 +3,10 @@
 
 #include <map>
 
+#ifdef LINUX
+#include <string>
+#endif
+
 #include "PIActionReloadPolicy.h"
 #include "PIDocument.h"
 
