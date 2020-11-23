@@ -3,7 +3,11 @@
 
 #ifdef LINUX
 #include <unistd.h>     // getuid
+
+#ifdef LSF_ENABLED
 #include <lsf-api/media-api.h>
+#endif
+
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -131,6 +135,7 @@ bool CPIDeviceControlLinux::enableDevice(const char * media_type)
 {
 	bool result = false;
 
+#ifdef LSF_ENABLED
 	lsf_media_error_t *error = NULL;
 	LSF_MEDIA_STATE state = LSF_MEDIA_NONE; 
 	LSF_MEDIA_RESULT r = LSF_MEDIA_FAIL;
@@ -170,6 +175,7 @@ bool CPIDeviceControlLinux::enableDevice(const char * media_type)
 		DEBUG_LOG( "command:lsf_media_set_state(%d),result-error[%s]", media_type, error->message);
 		lsf_media_free_error(error);
 	}
+#endif
 
 	return result;
 }
@@ -178,6 +184,7 @@ bool CPIDeviceControlLinux::controlDevice(const char *media_type, const char *pv
 {
 	bool result = false;
 
+#ifdef LSF_ENABLED
 	lsf_media_error_t *error = NULL;
 	LSF_MEDIA_STATE state = LSF_MEDIA_NONE; 
 	LSF_MEDIA_RESULT r = LSF_MEDIA_FAIL;
@@ -219,6 +226,7 @@ bool CPIDeviceControlLinux::controlDevice(const char *media_type, const char *pv
 		DEBUG_LOG( "command:lsf_media_set_state(%d),result-error[%s]", media_type, error->message);
 		lsf_media_free_error(error);
 	}
+#endif
 
 	return result;
 }
@@ -263,7 +271,11 @@ bool CPIDeviceControlLinux::controlWLAN(void)
 
 bool CPIDeviceControlLinux::controlWWAN(void)
 {
+#ifdef LSF_ENABLED
 	return controlDevice(LSF_MEDIA_USB_NETWORK, "WWLAN");
+#else
+	return controlDevice(0, "WWLAN");
+#endif
 }
 
 bool CPIDeviceControlLinux::controlBluetooth(void)
@@ -541,7 +553,11 @@ bool CPIDeviceControlLinux::enableWLAN(void)
 
 bool CPIDeviceControlLinux::enableWWLAN(void)
 {
+#ifdef LSF_ENABLED
 	return enableDevice(LSF_MEDIA_USB_NETWORK);
+#else
+	return enableDevice(0);
+#endif
 }
 
 bool CPIDeviceControlLinux::enableBluetooth()
