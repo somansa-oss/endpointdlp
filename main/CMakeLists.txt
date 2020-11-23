@@ -8,7 +8,8 @@ set(CMAKE_VERBOSE_MAKEFILE "YES")
 
 ADD_DEFINITIONS ( -DLINUX )
 
-LINK_LIBRARIES ( -pthread -ldl -llsf-media )
+#LINK_LIBRARIES ( -pthread -ldl -llsf-media )
+LINK_LIBRARIES ( -pthread -ldl  )
 
 add_subdirectory( PIKern )
 
