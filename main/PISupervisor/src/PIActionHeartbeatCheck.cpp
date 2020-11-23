@@ -3,6 +3,10 @@
 
 #include <map>
 
+#ifdef LINUX
+#include <string>
+#endif
+
 #include "PIActionHeartbeatCheck.h"
 #include "PIDocument.h"
 #include "PIEventHandler.h"
