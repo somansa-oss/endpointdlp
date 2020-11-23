@@ -1,6 +1,10 @@
 #ifndef	_PIACTIONAPPLYPOLICY_H
 #define	_PIACTIONAPPLYPOLICY_H
 
+#ifdef LINUX
+#include <string>
+#endif
+
 #include "PIAction.h"
 #include "PIObject.h"
 
