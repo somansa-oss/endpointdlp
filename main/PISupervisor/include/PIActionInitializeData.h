@@ -1,6 +1,10 @@
 #ifndef	_PIACTIONINITIALIZEDATA_H
 #define	_PIACTIONINITIALIZEDATA_H
 
+#ifdef LINUX
+#include <string>
+#endif
+
 #include "PIAction.h"
 #include "PIObject.h"
 
