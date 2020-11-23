@@ -3,6 +3,10 @@
 
 #include <map>
 
+#ifdef LINUX
+#include <string>
+#endif
+
 #include "PIActionProcessDeviceLog.h"
 #include "PIDocument.h"
 #include <sys/time.h>
