@@ -3,7 +3,11 @@
 
 #ifdef LINUX
 #include <unistd.h>     // getuid
+
+#ifdef LSF_USED
 #include <lsf-api/media-api.h>
+#endif
+
 #include <assert.h>
 #include <stdio.h>
 #endif
@@ -268,6 +272,7 @@ std::string base_name(std::string const &path)
     return path.substr(path.find_last_of("/") + 1);
 }
 
+#ifdef LSF_USED
 static bool enableDevice(const char * media_type)
 {
 	bool result = false;
@@ -362,6 +367,7 @@ static bool controlDevice(const char *media_type, const char *pvi_media_type, in
 
 	return result;
 }
+#endif
 
 static int
 event_process (struct fanotify_event_metadata *event,
@@ -867,7 +873,7 @@ void CPIESF::fnAddNotify(void* pzArg)
     pthread_mutex_lock( &(CPIESF::getInstance().mutexClient) );
 
     // e.g.
-    // [VolCtx_Update] NewAdd BusType=7, Device=/dev/disk2s2, BasePath=/Volumes/새 볼륨. Count=2
+    // [VolCtx_Update] NewAdd BusType=7, Device=/dev/disk2s2, BasePath=/Volumes/?�ᅢ ?�ᅩ??��?�ᆷ. Count=2
     monitors[ n_monitors ].path = strdup ( pDevice->czBasePath );
     if (monitors[ n_monitors ].path != NULL)
     {
