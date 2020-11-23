@@ -3,6 +3,10 @@
 
 #include <map>
 
+#ifdef LINUX
+#include <string>
+#endif
+
 #include "PIActionControlDevice.h"
 #include "PIDocument.h"
 
