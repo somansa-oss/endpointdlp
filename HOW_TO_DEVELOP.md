@@ -29,7 +29,7 @@ Visual Studio Code ( 이후 Code )를 설치하는 가장 간단한 방법은 �
 | PIKern | endpointdlp/main | 커널 통제 모듈 |
 | PISupervisor | endpointdlp/main/PISupervisor | 커널 통제 인터페이스 모듈 |
 
-이제부터는 위의 2개 모듈 중에서 PIKern을 기준으로 빌드 과정을 살펴보도록 하겠습니다. 앞서 살펴본 바와 같이, 폴더 endpointdlp/main 을 선택하고, “확인” 버튼을 클릭합니다.
+이제부터는 위의 2개 모듈 중에서 PIKern을 기준으로 빌드 과정을 살펴보도록 하겠습니다. PKIKern은 커널 이벤트를 전달받아서, 통제 기능을 수행하는 모듈입니다. 앞서 살펴본 바와 같이, 폴더 endpointdlp/main 을 선택하고, “확인” 버튼을 클릭합니다.
 
 ![code폴더열기](docs/1120004_2.png)
 
