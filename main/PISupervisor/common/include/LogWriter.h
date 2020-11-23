@@ -4,6 +4,11 @@
 #include"include_system.h"
 #include"include_commonlib.h"
 
+#ifdef LINUX
+#include <string>
+#endif
+
+
 class CLogWriter {
 	public:
 		CLogWriter();
