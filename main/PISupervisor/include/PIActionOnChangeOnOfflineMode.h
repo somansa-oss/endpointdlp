@@ -1,6 +1,10 @@
 #ifndef	_PIACTIONONCHANGEONOFFLINEMODE_H
 #define	_PIACTIONONCHANGEONOFFLINEMODE_H
 
+#ifdef LINUX
+#include <string>
+#endif
+
 #include "PIAction.h"
 #include "PIObject.h"
 
