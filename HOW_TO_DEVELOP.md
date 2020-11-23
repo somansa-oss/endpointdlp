@@ -45,7 +45,7 @@ Install 버튼을 클릭하면, CMake 플러그인이 설치가 됩니다. 그�
 
 ![code폴더열기](docs/1120007.png)
 
-이제 정말로 빌드를 해볼까요? 아래 그림과 같이 왼쪽 Pane의 CMakelists.txt 파일을 선택한 뒤, 오른쪽 마우스 클릭을 하면, 메뉴가 보입니다. 여기서 “Build All Projects”를 선택해 봅시다.
+혹시 추가로 IntelliSense 에 대해서 CMake 통합(CMake Integration)을 할지 여부에 대해서 물어보면, 허락(Allow)하는 것이 좋습니다. 이제 정말로 빌드를 해볼까요? 아래 그림과 같이 왼쪽 Pane의 CMakelists.txt 파일을 선택한 뒤, 오른쪽 마우스 클릭을 하면, 메뉴가 보입니다. 여기서 “Build All Projects”를 선택해 봅시다.
 
 ![code폴더열기](docs/1120008.png)
 
