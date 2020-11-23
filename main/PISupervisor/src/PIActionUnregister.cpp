@@ -3,6 +3,10 @@
 
 #include <map>
 
+#ifdef LINUX
+#include <string>
+#endif
+
 #include "PIActionUnregister.h"
 #include "PIDocument.h"
 #include "PIEventHandler.h"
